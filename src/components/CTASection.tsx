@@ -20,7 +20,7 @@ const CTASection = () => {
           <h2 className="text-foreground text-center font-display text-4xl md:text-5xl lg:text-[60px] font-normal leading-[100%]">
             Real calm. Join freely.
           </h2>
-          <DownloadButtons className="flex-col sm:flex-col" />
+          <DownloadButtons className="!flex-col" />
         </div>
       </div>
     </section>

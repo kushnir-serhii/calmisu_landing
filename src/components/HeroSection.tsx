@@ -25,7 +25,7 @@ const DownloadButtons = ({ className = "" }: { className?: string }) => (
 
 const HeroSection = () => {
   return (
-    <section className="flex flex-col items-center pt-16 md:pt-[120px] px-6 md:px-[140px] gap-10 overflow-hidden">
+    <section className="flex flex-col items-center pt-8 md:pt-16 px-6 md:px-[140px] gap-10 overflow-hidden">
       {/* Content */}
       <div className="flex flex-col items-center gap-5 w-full max-w-[1160px]">
         <div className="flex flex-col items-center gap-2 w-full">

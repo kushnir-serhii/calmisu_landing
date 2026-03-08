@@ -40,7 +40,7 @@ const HeroSection = () => {
         phoneRef.current.style.transform = `translateY(${scrollProgress * -0.15}px)`;
       }
       if (cloudRef.current) {
-        cloudRef.current.style.transform = `translateY(${scrollProgress * 0.08}px)`;
+        cloudRef.current.style.transform = `translateY(${Math.max(0, scrollProgress * 0.25)}px)`;
       }
     };
 
@@ -86,7 +86,7 @@ const HeroSection = () => {
           ref={cloudRef}
           src="/images/hero-cloud.webp"
           alt=""
-          className="absolute w-full left-0 bottom-0 object-contain will-change-transform transition-transform duration-100 ease-out"
+          className="absolute w-full left-0 bottom-[15%] object-contain will-change-transform transition-transform duration-100 ease-out z-10"
           loading="lazy"
         />
       </div>

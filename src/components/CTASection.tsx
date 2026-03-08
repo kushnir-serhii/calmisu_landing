@@ -9,8 +9,8 @@ const CTASection = () => {
           <img
             src="/images/cta-app.webp"
             alt="Calmisu app"
-            className="absolute w-[1106px] h-[768px] object-contain"
-            style={{ transform: "rotate(10.98deg)", left: "-294px", top: "-244px" }}
+            className="absolute w-[550px] h-auto object-contain"
+            style={{ transform: "rotate(11deg)", left: "-80px", top: "-40px" }}
             loading="lazy"
           />
         </div>

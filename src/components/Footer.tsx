@@ -1,3 +1,5 @@
+import { useEffect, useRef, useState } from "react";
+
 const footerLinks = [
   { label: "Features", href: "#features" },
   { label: "FAQ", href: "#faq" },
@@ -7,6 +9,28 @@ const footerLinks = [
 ];
 
 const Footer = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [offset, setOffset] = useState(60);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      // Progress 0 (just entering viewport) to 1 (fully visible)
+      const progress = Math.min(
+        Math.max((windowHeight - rect.top) / (windowHeight + rect.height), 0),
+        1
+      );
+      // Move from 60px down to -27px (final position)
+      setOffset(60 - progress * 87);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <footer className="w-full bg-gray-50 flex flex-col items-center pt-16 gap-20 overflow-hidden">
       {/* Nav links */}
@@ -23,14 +47,15 @@ const Footer = () => {
       </nav>
 
       {/* Giant brand name + bamboo */}
-      <div className="relative w-full h-[300px] sm:h-[400px] md:h-[489px]">
+      <div ref={containerRef} className="relative w-full h-[300px] sm:h-[400px] md:h-[489px]">
         <div className="text-center font-display text-[80px] sm:text-[150px] md:text-[250px] lg:text-[335px] leading-[150%] text-gray-100 select-none">
           Calmisu
         </div>
         <img
           src="/images/footer-bamboo.webp"
           alt=""
-          className="absolute bottom-[-27px] left-0 w-full h-[353px] object-cover"
+          className="absolute left-0 w-full h-[353px] object-cover will-change-transform"
+          style={{ bottom: `${offset}px` }}
           loading="lazy"
         />
       </div>

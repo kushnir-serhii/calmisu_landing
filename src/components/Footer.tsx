@@ -24,7 +24,7 @@ const Footer = () => {
 
       {/* Calmisu SVG text */}
       <svg
-        className="w-full max-w-[1160px] px-6 md:px-0 self-center"
+        className="w-full text-gray-100"
         viewBox="0 0 1160 246"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

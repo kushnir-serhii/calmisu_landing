@@ -10,7 +10,7 @@ const footerLinks = [
 
 const Footer = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [offset, setOffset] = useState(60);
+  const [offset, setOffset] = useState(100);
 
   useEffect(() => {
     const handleScroll = () => {

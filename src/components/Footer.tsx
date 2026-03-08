@@ -24,7 +24,7 @@ const Footer = () => {
 
       {/* Giant brand name + bamboo */}
       <div className="relative w-full h-[300px] sm:h-[400px] md:h-[489px]">
-        <div className="text-center font-display text-[80px] sm:text-[150px] md:text-[250px] lg:text-[335px] leading-[150%] text-border select-none">
+        <div className="text-center font-display text-[80px] sm:text-[150px] md:text-[250px] lg:text-[335px] leading-[150%] text-gray-100 select-none">
           Calmisu
         </div>
         <img

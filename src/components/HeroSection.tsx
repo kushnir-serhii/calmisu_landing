@@ -86,7 +86,7 @@ const HeroSection = () => {
           ref={cloudRef}
           src="/images/hero-cloud.webp"
           alt=""
-          className="absolute w-full left-0 bottom-0 object-contain will-change-transform transition-transform duration-100 ease-out"
+          className="absolute w-full left-0 bottom-[15%] object-contain will-change-transform transition-transform duration-100 ease-out z-10"
           loading="lazy"
         />
       </div>

@@ -28,19 +28,19 @@ const ChatSection = () => {
       className="w-full px-6 md:px-[140px] py-[120px] overflow-hidden"
     >
       <div className="relative flex justify-center items-center min-h-[400px] md:min-h-[650px]">
-        {/* Phone - upper right area */}
+        {/* Phone - upper left area */}
         <img
           src="/images/chat-illustration.webp"
           alt="Calmisu AI chat"
-          className="w-[50%] max-w-[766px] relative ml-[15%] -mt-[5%] will-change-transform"
+          className="w-[50%] max-w-[766px] relative -mr-[10%] will-change-transform"
           style={{ transform: `translateY(${phoneY}px)` }}
           loading="lazy"
         />
-        {/* Cloud - in front, bottom-left overlapping the phone */}
+        {/* Cloud - in front, bottom-right overlapping the phone */}
         <img
           src="/images/cloud-small.webp"
           alt=""
-          className="absolute z-10 w-[55%] max-w-[791px] bottom-[5%] left-[5%] will-change-transform"
+          className="absolute z-10 w-[55%] max-w-[791px] bottom-[0%] right-[5%] will-change-transform"
           style={{ transform: `translate(${cloudX}px, ${cloudY}px)` }}
           loading="lazy"
         />

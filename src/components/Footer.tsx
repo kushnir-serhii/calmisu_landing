@@ -57,8 +57,8 @@ const Footer = () => {
       <img
         src="/images/footer-bamboo.webp"
         alt=""
-        className="w-full object-contain will-change-transform -mt-[200px] sm:-mt-[250px] md:-mt-[350px]"
-        style={{ transform: `translateY(${translateY}px)` }}
+        className="w-full object-contain will-change-transform -mt-[200px] sm:-mt-[250px] md:-mt-[350px] transition-transform duration-700 ease-out motion-reduce:transition-none"
+        style={{ transform: `translateY(${isFooterVisible ? 20 : -40}px)` }}
         loading="lazy"
       />
     </footer>

@@ -32,7 +32,7 @@ const ChatSection = () => {
         <img
           src="/images/chat-illustration.webp"
           alt="Calmisu AI chat"
-          className="w-[65%] max-w-[996px] relative -mr-[10%] will-change-transform"
+          className="w-[80%] max-w-[996px] relative -mr-[10%] will-change-transform"
           style={{ transform: `translateY(${phoneY}px)` }}
           loading="lazy"
         />

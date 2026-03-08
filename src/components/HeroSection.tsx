@@ -40,7 +40,7 @@ const HeroSection = () => {
         phoneRef.current.style.transform = `translateY(${scrollProgress * -0.15}px)`;
       }
       if (cloudRef.current) {
-        cloudRef.current.style.transform = `translateY(${scrollProgress * 0.08}px)`;
+        cloudRef.current.style.transform = `translateY(${Math.max(0, scrollProgress * 0.25)}px)`;
       }
     };
 

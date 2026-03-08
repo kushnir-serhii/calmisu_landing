@@ -54,8 +54,8 @@ const Footer = () => {
         <img
           src="/images/footer-bamboo.webp"
           alt=""
-          className="absolute left-0 w-full h-[353px] object-cover will-change-transform"
-          style={{ bottom: `${offset}px` }}
+          className="absolute bottom-0 left-0 w-full h-[353px] object-cover will-change-transform transition-none"
+          style={{ transform: `translateY(${offset}%)` }}
           loading="lazy"
         />
       </div>

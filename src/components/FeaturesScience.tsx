@@ -17,7 +17,7 @@ const FeaturesScience = () => {
     <section className="w-full px-6 md:px-[140px] pb-[120px]">
       <div className="flex flex-col lg:flex-row items-center gap-10 w-full">
         {/* Left: phone mockup */}
-        <div className="flex w-full max-w-[480px] lg:w-[40%] justify-center items-end rounded-3xl bg-muted overflow-hidden shrink-0">
+        <div className="flex w-full lg:w-1/2 justify-center items-end rounded-3xl overflow-hidden shrink-0">
           <img src="/images/phone-breathe.png" alt="Breathing exercise" className="w-full object-contain" loading="lazy" />
         </div>
 

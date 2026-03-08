@@ -58,7 +58,7 @@ const Footer = () => {
           src="/images/footer-bamboo.webp"
           alt=""
           className="relative w-full object-contain will-change-transform"
-          style={{ transform: `translateY(${offset}%)`, marginTop: "-15%" }}
+          style={{ transform: `translateY(${offset}%)`, marginTop: "-15%", opacity }}
           loading="lazy"
         />
       </div>

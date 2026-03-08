@@ -10,20 +10,18 @@ const footerLinks = [
 
 const Footer = () => {
   const footerRef = useRef<HTMLElement>(null);
-  const [offset, setOffset] = useState(40);
-  const [opacity, setOpacity] = useState(0);
+  const [offset, setOffset] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
       if (!footerRef.current) return;
       const rect = footerRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
-      // How far into the viewport the footer top has traveled (0 = just entered, 1 = scrolled well in)
       const visibleAmount = windowHeight - rect.top;
       const progress = Math.min(Math.max(visibleAmount / (windowHeight * 0.5), 0), 1);
       const eased = 1 - Math.pow(1 - progress, 3);
-      setOffset(30 - eased * 30);
-      setOpacity(eased);
+      // Starts at 0 (covering Calmisu), moves down to reveal it
+      setOffset(eased * 20);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -55,7 +53,7 @@ const Footer = () => {
           src="/images/footer-bamboo.webp"
           alt=""
           className="relative w-full object-contain will-change-transform"
-          style={{ transform: `translateY(${offset}%)`, marginTop: "-15%", opacity }}
+          style={{ transform: `translateY(${offset}%)`, marginTop: "-30%" }}
           loading="lazy"
         />
       </div>

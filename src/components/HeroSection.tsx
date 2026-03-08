@@ -38,7 +38,7 @@ const HeroSection = () => {
           </div>
           {/* Heading */}
           <h1 className="text-foreground text-center font-display text-5xl md:text-7xl lg:text-[80px] font-normal leading-[90%]">
-            Calm the storm. Find your center.
+            Calm the storm.<br />Find your center.
           </h1>
         </div>
         <p className="max-w-[737px] text-foreground text-center font-body text-lg font-light leading-[150%]">

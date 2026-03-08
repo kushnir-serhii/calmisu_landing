@@ -49,7 +49,7 @@ const HeroSection = () => {
       <DownloadButtons />
 
       {/* Hero images - proportional to Figma: illustrations area within 1440x1315, images start ~35% from top */}
-      <div className="relative w-full max-w-[1440px] aspect-[1440/855] mt-0">
+      <div className="relative w-screen aspect-[1440/855] mt-0">
         <img src="/images/hero-sky.webp" alt="" className="absolute w-[100.5%] left-[-0.3%] bottom-0 object-cover" loading="lazy" />
         <img src="/images/hero-app.webp" alt="Calmisu app preview" className="absolute w-full left-0 bottom-[5%] object-contain" loading="lazy" />
         <img src="/images/hero-cloud.webp" alt="" className="absolute w-[91%] left-[-2.5%] bottom-[-5%] -rotate-[7.5deg] object-contain opacity-80" loading="lazy" />

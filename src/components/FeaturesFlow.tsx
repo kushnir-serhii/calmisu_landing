@@ -34,19 +34,8 @@ const FeaturesFlow = () => {
         </div>
 
         {/* Right: activity grid */}
-        <div className="flex w-full lg:w-1/2 aspect-square justify-center items-center rounded-3xl bg-brand-light overflow-hidden shrink-0">
-          <div className="grid grid-cols-2 gap-2">
-            {[
-              { src: "/images/activity-ground.webp", alt: "Grounding" },
-              { src: "/images/activity-kanji.webp", alt: "Kanji" },
-              { src: "/images/activity-breathe.webp", alt: "Breathing" },
-              { src: "/images/activity-sound.webp", alt: "Sound" },
-            ].map((card, i) => (
-              <div key={i} className="flex w-[160px] h-[160px] p-4 flex-col justify-center items-center rounded-2xl border border-brand-light bg-background overflow-hidden">
-                <img src={card.src} alt={card.alt} className="w-[120px] h-[120px] object-contain" loading="lazy" />
-              </div>
-            ))}
-          </div>
+        <div className="flex w-full lg:w-1/2 justify-center items-end rounded-3xl overflow-hidden shrink-0">
+          <img src="/images/activities.png" alt="Calming activities" className="w-full object-contain" loading="lazy" />
         </div>
       </div>
     </section>

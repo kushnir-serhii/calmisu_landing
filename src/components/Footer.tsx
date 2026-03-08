@@ -10,20 +10,23 @@ const footerLinks = [
 
 const Footer = () => {
   const footerRef = useRef<HTMLElement>(null);
-  const [offset, setOffset] = useState(100);
+  const [offset, setOffset] = useState(40);
+  const [opacity, setOpacity] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
       if (!footerRef.current) return;
       const rect = footerRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
-      // Only trigger when footer enters the bottom 30% of the viewport
-      const triggerStart = windowHeight * 0.3;
+      const triggerStart = windowHeight * 0.4;
       const progress = Math.min(
         Math.max((triggerStart - rect.top) / triggerStart, 0),
         1
       );
-      setOffset(100 - progress * 100);
+      // Ease out cubic for gentle deceleration
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setOffset(40 - eased * 40);
+      setOpacity(eased);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });

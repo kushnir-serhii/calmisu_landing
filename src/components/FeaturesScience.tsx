@@ -17,11 +17,8 @@ const FeaturesScience = () => {
     <section className="w-full px-6 md:px-[140px] pb-[120px]">
       <div className="flex flex-col lg:flex-row items-center gap-10 w-full">
         {/* Left: phone mockup */}
-        <div className="flex w-full max-w-[590px] justify-center items-center rounded-3xl bg-muted overflow-hidden pt-[46px] px-[120px] pb-0 relative">
-          <div className="relative w-[313px] h-[680px]">
-            <img src="/images/phone-screen.webp" alt="Breathing exercise" className="absolute inset-0 w-[316px] h-[684px] -left-[2px] -top-[3px] rounded-[34px] object-cover" loading="lazy" />
-            <img src="/images/iphone-bezel.webp" alt="" className="absolute -left-[19px] -top-[18px] w-[350px] h-[715px]" loading="lazy" />
-          </div>
+        <div className="flex w-full lg:w-1/2 justify-center items-center rounded-3xl bg-muted overflow-hidden pt-[46px] px-[120px] pb-0 relative shrink-0">
+          <img src="/images/phone-breathe.png" alt="Breathing exercise" className="w-[350px] object-contain" loading="lazy" />
         </div>
 
         {/* Right: text */}

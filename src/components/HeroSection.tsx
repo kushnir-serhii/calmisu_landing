@@ -1,3 +1,5 @@
+import { useEffect, useRef } from "react";
+
 const AppleIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M18.7099 19.5C17.8799 20.74 16.9999 21.95 15.6599 21.97C14.3199 22 13.8899 21.18 12.3699 21.18C10.8399 21.18 10.3699 21.95 9.09985 22C7.78985 22.05 6.79985 20.68 5.95985 19.47C4.24985 17 2.93985 12.45 4.69985 9.39C5.56985 7.87 7.12985 6.91 8.81985 6.88C10.0999 6.86 11.3199 7.75 12.1099 7.75C12.8899 7.75 14.3699 6.68 15.9199 6.84C16.5699 6.87 18.3899 7.1 19.5599 8.82C19.4699 8.88 17.3899 10.1 17.4099 12.63C17.4399 15.65 20.0599 16.66 20.0899 16.67C20.0599 16.74 19.6699 18.11 18.7099 19.5ZM12.9999 3.5C13.7299 2.67 14.9399 2.04 15.9399 2C16.0699 3.17 15.5999 4.35 14.8999 5.19C14.2099 6.04 13.0699 6.7 11.9499 6.61C11.7999 5.46 12.3599 4.26 12.9999 3.5Z" fill="currentColor"/>
@@ -24,8 +26,30 @@ const DownloadButtons = ({ className = "" }: { className?: string }) => (
 );
 
 const HeroSection = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const phoneRef = useRef<HTMLImageElement>(null);
+  const cloudRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!sectionRef.current) return;
+      const rect = sectionRef.current.getBoundingClientRect();
+      const scrollProgress = -rect.top;
+
+      if (phoneRef.current) {
+        phoneRef.current.style.transform = `translateY(${scrollProgress * 0.15}px)`;
+      }
+      if (cloudRef.current) {
+        cloudRef.current.style.transform = `translateY(${scrollProgress * 0.08}px)`;
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <section className="flex flex-col items-center pt-8 md:pt-16 px-6 md:px-[140px] gap-10 overflow-hidden">
+    <section ref={sectionRef} className="flex flex-col items-center pt-8 md:pt-16 px-6 md:px-[140px] gap-10 overflow-hidden">
       {/* Content */}
       <div className="flex flex-col items-center gap-5 w-full max-w-[1160px]">
         <div className="flex flex-col items-center gap-2 w-full">
@@ -48,11 +72,23 @@ const HeroSection = () => {
 
       <DownloadButtons />
 
-      {/* Hero images - proportional to Figma: illustrations area within 1440x1315, images start ~35% from top */}
+      {/* Hero images */}
       <div className="relative w-screen aspect-[1440/855] mt-0">
         <img src="/images/hero-sky.webp" alt="" className="absolute w-[100.5%] left-[-0.3%] bottom-0 object-cover" loading="lazy" />
-        <img src="/images/hero-app.webp" alt="Calmisu app preview" className="absolute w-full left-0 bottom-[5%] object-contain" loading="lazy" />
-        <img src="/images/hero-cloud.webp" alt="" className="absolute w-[91%] left-[-2.5%] bottom-[-5%] -rotate-[7.5deg] object-contain opacity-80" loading="lazy" />
+        <img
+          ref={phoneRef}
+          src="/images/hero-app.webp"
+          alt="Calmisu app preview"
+          className="absolute w-full left-0 bottom-[5%] object-contain will-change-transform transition-transform duration-100 ease-out"
+          loading="lazy"
+        />
+        <img
+          ref={cloudRef}
+          src="/images/hero-cloud.webp"
+          alt=""
+          className="absolute w-full left-0 bottom-0 object-contain will-change-transform transition-transform duration-100 ease-out"
+          loading="lazy"
+        />
       </div>
     </section>
   );

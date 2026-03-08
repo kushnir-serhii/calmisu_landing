@@ -58,6 +58,10 @@ export default {
           200: "hsl(var(--brand-blue-200))",
           star: "hsl(var(--brand-star))",
         },
+        gray: {
+          50: "hsl(var(--gray-50))",
+          100: "hsl(var(--gray-100))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",

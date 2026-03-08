@@ -35,7 +35,7 @@ const FeaturesFlow = () => {
 
         {/* Right: activity grid */}
         <div className="flex w-full lg:w-1/2 justify-center items-end rounded-3xl overflow-hidden shrink-0">
-          <img src="/images/activities.png" alt="Calming activities" className="w-full object-contain" loading="lazy" />
+          <img src="/images/activities.webp" alt="Calming activities" className="w-full object-contain" loading="lazy" />
         </div>
       </div>
     </section>

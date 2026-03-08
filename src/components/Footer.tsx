@@ -10,7 +10,7 @@ const footerLinks = [
 
 const Footer = () => {
   return (
-    <footer className="w-full bg-gray-50 flex flex-col items-center pt-16 pb-[120px] gap-20 overflow-hidden relative">
+    <footer className="w-full bg-gray-50 flex flex-col items-center pt-16 gap-10 overflow-hidden relative">
       {/* Nav links */}
       <nav className="flex flex-wrap justify-between px-6 md:px-[140px] w-full max-w-[1440px]">
         {footerLinks.map((link) => (
@@ -25,19 +25,19 @@ const Footer = () => {
       </nav>
 
       {/* Calmisu logo and bamboo stacked */}
-      <div className="relative w-full max-w-[1440px] flex flex-col items-center">
+      <div className="relative w-full flex flex-col items-center">
         {/* Calmisu SVG */}
         <img
           src={CalmisuLogo}
           alt="Calmisu"
-          className="w-full text-gray-100 px-6 md:px-[140px]"
+          className="w-full text-gray-100"
         />
         
         {/* Bamboo illustration overlapping */}
         <img
           src="/images/footer-bamboo.webp"
           alt="Bamboo illustration"
-          className="w-full object-contain -mt-[60px] md:-mt-[120px]"
+          className="w-full object-cover -mt-[60px] md:-mt-[120px]"
           loading="lazy"
         />
       </div>

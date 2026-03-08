@@ -55,7 +55,7 @@ const HeroSection = () => {
         <div className="flex flex-col items-center gap-2 w-full">
           {/* Pill */}
           <div className="flex py-3 px-4 justify-center items-center gap-1 rounded-full bg-brand-100">
-            <div className="flex p-1 items-center rounded-full bg-brand-200">
+            <div className="flex p-1 items-center rounded-full bg-brand-200 animate-[pulse_3s_ease-in-out_infinite]">
               <svg width="8" height="8" viewBox="0 0 8 8" fill="none"><circle cx="4" cy="4" r="4" fill="hsl(var(--brand-blue))"/></svg>
             </div>
             <span className="text-brand font-body text-lg font-normal leading-[150%]">mental wellness app</span>

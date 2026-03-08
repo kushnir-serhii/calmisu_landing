@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { Play, Pause } from "lucide-react";
 import { DownloadButtons } from "./HeroSection";
 import riverMeditationAudio from "@/assets/river_meditation.mp3";
+import infinityBg from "@/assets/infinity.webp";
 
 const CTASection = () => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -23,13 +24,20 @@ const CTASection = () => {
       <div className="flex flex-col lg:flex-row items-center w-full min-h-[589px] rounded-[30px] bg-brand-100 overflow-hidden">
         {/* Left: Music player card - 50% */}
         <div className="flex w-full lg:w-1/2 h-[589px] rounded-[30px] overflow-hidden relative justify-center items-center p-8">
-          <div className="relative w-full max-w-[400px] aspect-square bg-gradient-to-br from-blue-200 via-teal-100 to-green-100 rounded-2xl overflow-hidden shadow-lg">
-            {/* Background image/pattern */}
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-300/30 via-teal-200/30 to-green-200/30"></div>
+          <div className="relative w-full max-w-[400px] aspect-square rounded-2xl overflow-hidden shadow-lg">
+            {/* Background image */}
+            <img 
+              src={infinityBg} 
+              alt="Bamboo Forest background" 
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            
+            {/* Overlay for better text readability */}
+            <div className="absolute inset-0 bg-black/10"></div>
             
             {/* Content */}
             <div className="relative z-10 flex flex-col items-center justify-center h-full p-8 text-center">
-              <h3 className="text-foreground text-2xl font-display font-normal mb-2">
+              <h3 className="text-white text-2xl font-display font-normal mb-2 drop-shadow-lg">
                 Bamboo Forest
               </h3>
               
@@ -45,7 +53,7 @@ const CTASection = () => {
                 )}
               </button>
               
-              <p className="text-gray-700 text-sm leading-relaxed max-w-[280px]">
+              <p className="text-white text-sm leading-relaxed max-w-[280px] drop-shadow-lg">
                 You can sit or lie down, keep your eyes open or closed.
                 However you are is enough.
               </p>

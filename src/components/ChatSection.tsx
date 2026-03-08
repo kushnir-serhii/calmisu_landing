@@ -40,7 +40,7 @@ const ChatSection = () => {
         <img
           src="/images/cloud-small.webp"
           alt=""
-          className="absolute z-10 w-[55%] max-w-[791px] bottom-[0%] right-[5%] will-change-transform"
+          className="absolute z-10 w-[75%] max-w-[791px] bottom-[0%] right-[5%] will-change-transform"
           style={{ transform: `translate(${cloudX}px, ${cloudY}px)` }}
           loading="lazy"
         />

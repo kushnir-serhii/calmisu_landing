@@ -10,20 +10,20 @@ const footerLinks = [
 
 const Footer = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [offset, setOffset] = useState(60);
+  const [offset, setOffset] = useState(100);
 
   useEffect(() => {
     const handleScroll = () => {
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
-      // Progress 0 (just entering viewport) to 1 (fully visible)
+      // Start when container enters viewport, end when mostly visible
       const progress = Math.min(
-        Math.max((windowHeight - rect.top) / (windowHeight + rect.height), 0),
+        Math.max((windowHeight - rect.top) / (windowHeight * 0.6), 0),
         1
       );
-      // Move from 60px down to -27px (final position)
-      setOffset(60 - progress * 87);
+      // Start fully below (translate 100%) → rise to final position
+      setOffset(100 - progress * 100);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -54,8 +54,8 @@ const Footer = () => {
         <img
           src="/images/footer-bamboo.webp"
           alt=""
-          className="absolute left-0 w-full h-[353px] object-cover will-change-transform"
-          style={{ bottom: `${offset}px` }}
+          className="absolute bottom-0 left-0 w-full h-[353px] object-cover will-change-transform transition-none"
+          style={{ transform: `translateY(${offset}%)` }}
           loading="lazy"
         />
       </div>

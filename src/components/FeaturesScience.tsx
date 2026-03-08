@@ -18,7 +18,7 @@ const FeaturesScience = () => {
       <div className="flex flex-col lg:flex-row items-center gap-10 w-full">
         {/* Left: phone mockup */}
         <div className="flex w-full lg:w-1/2 justify-center items-end rounded-3xl overflow-hidden shrink-0">
-          <img src="/images/phone-breathe.png" alt="Breathing exercise" className="w-full object-contain" loading="lazy" />
+          <img src="/images/phone-breathe.webp" alt="Breathing exercise" className="w-full object-contain" loading="lazy" />
         </div>
 
         {/* Right: text */}

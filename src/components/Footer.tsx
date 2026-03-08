@@ -10,25 +10,27 @@ const footerLinks = [
 
 const Footer = () => {
   const footerRef = useRef<HTMLElement>(null);
-  const [translateY, setTranslateY] = useState(-80);
+  const [isFooterVisible, setIsFooterVisible] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (!footerRef.current) return;
-      const rect = footerRef.current.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
-      // visibleAmount: 0 when footer top is at bottom of viewport, increases as you scroll
-      const visibleAmount = windowHeight - rect.top;
-      const footerHeight = rect.height;
-      // progress: 0→1 as the footer scrolls into view
-      const progress = Math.min(Math.max(visibleAmount / footerHeight, 0), 1);
-      // Bamboo starts at -80px (overlapping Calmisu) and moves to 0 (natural position)
-      setTranslateY(-80 + progress * 80);
-    };
+    if (!footerRef.current) return;
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsFooterVisible(true);
+        }
+      },
+      {
+        threshold: 0.25,
+      }
+    );
+
+    observer.observe(footerRef.current);
+
+    return () => {
+      observer.disconnect();
+    };
   }, []);
 
   return (
@@ -55,8 +57,8 @@ const Footer = () => {
       <img
         src="/images/footer-bamboo.webp"
         alt=""
-        className="w-full object-contain will-change-transform -mt-[200px] sm:-mt-[250px] md:-mt-[350px]"
-        style={{ transform: `translateY(${translateY}px)` }}
+        className="w-full object-contain will-change-transform -mt-[200px] sm:-mt-[250px] md:-mt-[350px] transition-transform duration-700 ease-out motion-reduce:transition-none"
+        style={{ transform: `translateY(${isFooterVisible ? 20 : -40}px)` }}
         loading="lazy"
       />
     </footer>

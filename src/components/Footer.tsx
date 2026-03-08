@@ -9,20 +9,20 @@ const footerLinks = [
 ];
 
 const Footer = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const footerRef = useRef<HTMLElement>(null);
   const [offset, setOffset] = useState(100);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
+      if (!footerRef.current) return;
+      const rect = footerRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
-      // Start when container enters viewport, end when mostly visible
+      // Only trigger when footer enters the bottom 30% of the viewport
+      const triggerStart = windowHeight * 0.3;
       const progress = Math.min(
-        Math.max((windowHeight - rect.top) / (windowHeight * 0.6), 0),
+        Math.max((triggerStart - rect.top) / triggerStart, 0),
         1
       );
-      // Start fully below (translate 100%) → rise to final position
       setOffset(100 - progress * 100);
     };
 
@@ -32,7 +32,7 @@ const Footer = () => {
   }, []);
 
   return (
-    <footer className="w-full bg-gray-50 flex flex-col items-center pt-16 gap-20 overflow-hidden">
+    <footer ref={footerRef} className="w-full bg-gray-50 flex flex-col items-center pt-16 gap-10 overflow-hidden">
       {/* Nav links */}
       <nav className="flex flex-wrap justify-between px-6 w-full max-w-[1121px]">
         {footerLinks.map((link) => (
@@ -47,15 +47,15 @@ const Footer = () => {
       </nav>
 
       {/* Giant brand name + bamboo */}
-      <div ref={containerRef} className="relative w-full h-[300px] sm:h-[400px] md:h-[489px]">
-        <div className="text-center font-display text-[80px] sm:text-[150px] md:text-[250px] lg:text-[335px] leading-[150%] text-gray-100 select-none">
+      <div className="relative w-full">
+        <div className="text-center font-display text-[80px] sm:text-[150px] md:text-[250px] lg:text-[335px] leading-[100%] text-gray-100 select-none">
           Calmisu
         </div>
         <img
           src="/images/footer-bamboo.webp"
           alt=""
-          className="absolute bottom-0 left-0 w-full h-[353px] object-cover will-change-transform transition-none"
-          style={{ transform: `translateY(${offset}%)` }}
+          className="relative w-full object-contain will-change-transform"
+          style={{ transform: `translateY(${offset}%)`, marginTop: "-15%" }}
           loading="lazy"
         />
       </div>

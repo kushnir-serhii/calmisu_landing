@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { Play, Pause } from "lucide-react";
 import { DownloadButtons } from "./HeroSection";
 import riverMeditationAudio from "@/assets/river_meditation.mp3";
+import infinityBg from "@/assets/infinity.webp";
 
 const CTASection = () => {
   const [isPlaying, setIsPlaying] = useState(false);

@@ -17,13 +17,13 @@ const Footer = () => {
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
-      // Progress 0 (just entering viewport) to 1 (fully visible)
+      // Start when container enters viewport, end when mostly visible
       const progress = Math.min(
-        Math.max((windowHeight - rect.top) / (windowHeight + rect.height), 0),
+        Math.max((windowHeight - rect.top) / (windowHeight * 0.6), 0),
         1
       );
-      // Move from 60px down to -27px (final position)
-      setOffset(60 - progress * 87);
+      // Start fully below (translate 100%) → rise to final position
+      setOffset(100 - progress * 100);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });

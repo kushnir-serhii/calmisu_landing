@@ -8,7 +8,7 @@ const footerLinks = [
 
 const Footer = () => {
   return (
-    <footer className="w-full bg-muted flex flex-col items-center pt-16 gap-20 overflow-hidden">
+    <footer className="w-full bg-gray-50 flex flex-col items-center pt-16 gap-20 overflow-hidden">
       {/* Nav links */}
       <nav className="flex flex-wrap justify-between px-6 w-full max-w-[1121px]">
         {footerLinks.map((link) => (

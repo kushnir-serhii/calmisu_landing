@@ -37,7 +37,7 @@ const HeroSection = () => {
       const scrollProgress = -rect.top;
 
       if (phoneRef.current) {
-        phoneRef.current.style.transform = `translateY(${scrollProgress * 0.15}px)`;
+        phoneRef.current.style.transform = `translateY(${scrollProgress * -0.15}px)`;
       }
       if (cloudRef.current) {
         cloudRef.current.style.transform = `translateY(${scrollProgress * 0.08}px)`;

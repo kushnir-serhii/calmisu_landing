@@ -6,6 +6,7 @@ import ReviewsSection from "@/components/ReviewsSection";
 import ChatSection from "@/components/ChatSection";
 import FAQSection from "@/components/FAQSection";
 import CTASection from "@/components/CTASection";
+import Footer from "@/components/Footer";
 
 const Index = () => {
   return (
@@ -18,6 +19,7 @@ const Index = () => {
       <ChatSection />
       <FAQSection />
       <CTASection />
+      <Footer />
     </div>
   );
 };

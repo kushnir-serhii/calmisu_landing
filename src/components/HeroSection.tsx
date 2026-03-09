@@ -49,7 +49,7 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="flex flex-col items-center pt-6 sm:pt-8 md:pt-16 px-5 sm:px-8 md:px-[140px] gap-8 md:gap-10 overflow-hidden">
+    <section ref={sectionRef} className="flex flex-col items-center pt-6 sm:pt-8 md:pt-16 px-6 sm:px-8 md:px-[140px] gap-8 md:gap-10 overflow-hidden">
       {/* Content */}
       <div className="flex flex-col items-center gap-4 md:gap-5 w-full max-w-[1160px]">
         <div className="flex flex-col items-center gap-2 w-full">

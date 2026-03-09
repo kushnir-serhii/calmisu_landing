@@ -44,12 +44,12 @@ const CTASection = () => {
               {/* Play/Pause Button */}
               <button
                 onClick={togglePlay}
-                className="w-20 h-20 bg-white/80 hover:bg-white backdrop-blur-sm rounded-full flex items-center justify-center transition-all duration-300 shadow-lg hover:shadow-xl mb-6"
+                className="w-20 h-20 bg-white/10 hover:bg-white/20 backdrop-blur-[10px] rounded-full flex items-center justify-center transition-all duration-300 mb-6"
               >
                 {isPlaying ? (
-                  <Pause className="w-8 h-8 text-gray-700" />
+                  <Pause className="w-8 h-8 text-white" fill="white" />
                 ) : (
-                  <Play className="w-8 h-8 text-gray-700 ml-1" />
+                  <Play className="w-8 h-8 text-white ml-1" fill="white" />
                 )}
               </button>
               

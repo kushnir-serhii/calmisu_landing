@@ -12,7 +12,7 @@ const Footer = () => {
   return (
     <footer className="w-full bg-gray-50 flex flex-col items-center pt-10 sm:pt-16 gap-8 sm:gap-10 overflow-hidden relative">
       {/* Nav links */}
-      <nav className="flex flex-wrap justify-center sm:justify-between gap-x-6 gap-y-3 px-5 sm:px-8 md:px-[140px] w-full max-w-[1440px]">
+      <nav className="flex flex-wrap justify-center sm:justify-between gap-x-6 gap-y-3 px-6 sm:px-8 md:px-[140px] w-full max-w-[1440px]">
         {footerLinks.map((link) => (
           <a
             key={link.label}

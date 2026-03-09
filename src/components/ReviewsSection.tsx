@@ -31,7 +31,7 @@ const reviews = [
 
 const ReviewsSection = () => {
   return (
-    <section className="relative w-full px-4 sm:px-6 md:px-[120px] py-12 sm:py-16 md:py-20 rounded-2xl sm:rounded-3xl overflow-hidden">
+    <section className="relative w-full px-6 sm:px-6 md:px-[120px] py-12 sm:py-16 md:py-20 rounded-2xl sm:rounded-3xl overflow-hidden">
       {/* Background */}
       <img src="/images/reviews-water-bg.webp" alt="" className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
 

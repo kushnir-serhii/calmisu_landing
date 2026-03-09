@@ -28,7 +28,7 @@ const FAQSection = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="w-full px-5 sm:px-8 md:px-16 lg:px-[140px] py-16 sm:py-20 md:py-[120px] rounded-b-2xl sm:rounded-b-3xl" style={{ background: "linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--brand-blue-light)) 66.87%)" }}>
+    <section id="faq" className="w-full px-6 sm:px-8 md:px-16 lg:px-[140px] py-16 sm:py-20 md:py-[120px] rounded-b-2xl sm:rounded-b-3xl" style={{ background: "linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--brand-blue-light)) 66.87%)" }}>
       <div className="flex flex-col lg:flex-row items-start gap-8 md:gap-10 w-full">
         <div className="flex-1 lg:sticky lg:top-24">
           <h2 className="text-foreground font-display text-3xl sm:text-4xl md:text-5xl lg:text-[60px] font-normal leading-[100%]">

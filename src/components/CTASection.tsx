@@ -20,7 +20,7 @@ const CTASection = () => {
   };
 
   return (
-    <section id="download" className="w-full px-5 sm:px-8 md:px-16 lg:px-[140px] py-16 sm:py-20 md:py-[120px]">
+    <section id="download" className="w-full px-6 sm:px-8 md:px-16 lg:px-[140px] py-16 sm:py-20 md:py-[120px]">
       <div className="flex flex-col lg:flex-row items-center w-full min-h-[auto] lg:min-h-[589px] rounded-2xl sm:rounded-[30px] bg-brand-100 overflow-hidden">
         {/* Left: Music player card */}
         <div className="flex w-full lg:w-1/2 h-[350px] sm:h-[450px] lg:h-[589px] rounded-2xl sm:rounded-[30px] overflow-hidden relative justify-center items-center p-6 sm:p-8">

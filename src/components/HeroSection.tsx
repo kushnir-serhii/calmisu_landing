@@ -61,7 +61,7 @@ const HeroSection = () => {
             <span className="text-brand font-body text-base sm:text-lg font-normal leading-[150%]">mental wellness app</span>
           </div>
           {/* Heading */}
-          <h1 className="text-foreground text-center font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[80px] font-normal leading-[90%]">
+          <h1 className="text-foreground text-center font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[80px] font-normal leading-[90%] my-[4px]">
             Calm the storm.<br />Find your center.
           </h1>
         </div>

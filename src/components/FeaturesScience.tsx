@@ -14,30 +14,30 @@ const sciencePoints = [
 
 const FeaturesScience = () => {
   return (
-    <section className="w-full px-6 md:px-[140px] pb-[120px]">
-      <div className="flex flex-col lg:flex-row items-center gap-10 w-full">
+    <section className="w-full px-5 sm:px-8 md:px-16 lg:px-[140px] pb-16 sm:pb-20 md:pb-[120px]">
+      <div className="flex flex-col-reverse lg:flex-row items-center gap-8 md:gap-10 w-full">
         {/* Left: phone mockup */}
         <div className="flex w-full lg:w-1/2 justify-center items-end rounded-3xl overflow-hidden shrink-0">
           <img src="/images/phone-breathe.webp" alt="Breathing exercise" className="w-full object-contain" loading="lazy" />
         </div>
 
         {/* Right: text */}
-        <div className="flex flex-col items-start gap-12 flex-1">
-          <div className="flex flex-col items-start gap-6 max-w-[577px]">
-            <h2 className="text-foreground font-display text-4xl md:text-5xl lg:text-[60px] font-normal leading-[100%]">
+        <div className="flex flex-col items-start gap-8 md:gap-12 flex-1">
+          <div className="flex flex-col items-start gap-4 md:gap-6 max-w-[577px]">
+            <h2 className="text-foreground font-display text-3xl sm:text-4xl md:text-5xl lg:text-[60px] font-normal leading-[100%]">
               Built on what actually helps
             </h2>
-            <p className="text-foreground font-body text-lg font-light leading-[150%]">
+            <p className="text-foreground font-body text-base sm:text-lg font-light leading-[150%]">
               Every feature in Calmisu is grounded in established neuroscience and evidence-based self-regulation techniques.
             </p>
           </div>
-          <div className="flex flex-col items-start gap-6 w-full">
+          <div className="flex flex-col items-start gap-4 md:gap-6 w-full">
             {sciencePoints.map((p, i) => (
-              <div key={i} className="flex items-center gap-4 w-full">
-                <div className="flex w-10 h-10 justify-center items-center rounded-lg bg-muted shrink-0">
+              <div key={i} className="flex items-start sm:items-center gap-3 sm:gap-4 w-full">
+                <div className="flex w-9 h-9 sm:w-10 sm:h-10 justify-center items-center rounded-lg bg-muted shrink-0 mt-0.5 sm:mt-0">
                   {p.icon}
                 </div>
-                <p className="flex-1 text-foreground font-body text-lg font-light leading-[140%]">
+                <p className="flex-1 text-foreground font-body text-base sm:text-lg font-light leading-[140%]">
                   <span className="font-medium">{p.bold}</span>{p.rest}
                 </p>
               </div>

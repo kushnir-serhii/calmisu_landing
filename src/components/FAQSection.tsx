@@ -28,24 +28,28 @@ const FAQSection = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="w-full px-6 md:px-[140px] py-[120px] rounded-b-3xl" style={{ background: "linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--brand-blue-light)) 66.87%)" }}>
-      <div className="flex flex-col lg:flex-row items-start gap-10 w-full">
-        <div className="flex-1">
-          <h2 className="text-foreground font-display text-4xl md:text-5xl lg:text-[60px] font-normal leading-[100%]">
+    <section id="faq" className="w-full px-5 sm:px-8 md:px-16 lg:px-[140px] py-16 sm:py-20 md:py-[120px] rounded-b-2xl sm:rounded-b-3xl" style={{ background: "linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--brand-blue-light)) 66.87%)" }}>
+      <div className="flex flex-col lg:flex-row items-start gap-8 md:gap-10 w-full">
+        <div className="flex-1 lg:sticky lg:top-24">
+          <h2 className="text-foreground font-display text-3xl sm:text-4xl md:text-5xl lg:text-[60px] font-normal leading-[100%]">
             Got questions? Here's clarity.
           </h2>
         </div>
-        <div className="flex flex-col items-start gap-3 w-full max-w-[590px]">
+        <div className="flex flex-col items-start gap-3 w-full lg:max-w-[590px]">
           {faqData.map((item, i) => (
-            <div key={i} className="flex p-6 flex-col gap-6 w-full rounded-2xl bg-background cursor-pointer" onClick={() => setOpenIndex(openIndex === i ? null : i)}>
-              <div className="flex justify-between items-start w-full">
-                <span className="text-foreground font-body text-xl md:text-2xl font-normal leading-[150%]">{item.question}</span>
-                <div className="flex w-10 h-10 justify-center items-center rounded-lg bg-brand-light shrink-0">
-                  {openIndex === i ? <ChevronUp size={24} /> : <ChevronDown size={24} />}
+            <div
+              key={i}
+              className="flex p-4 sm:p-6 flex-col gap-4 sm:gap-6 w-full rounded-xl sm:rounded-2xl bg-background cursor-pointer touch-manipulation transition-shadow hover:shadow-sm"
+              onClick={() => setOpenIndex(openIndex === i ? null : i)}
+            >
+              <div className="flex justify-between items-start gap-3 w-full">
+                <span className="text-foreground font-body text-lg sm:text-xl md:text-2xl font-normal leading-[140%] sm:leading-[150%]">{item.question}</span>
+                <div className="flex w-9 h-9 sm:w-10 sm:h-10 justify-center items-center rounded-lg bg-brand-light shrink-0">
+                  {openIndex === i ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                 </div>
               </div>
               {openIndex === i && item.answer && (
-                <p className="text-foreground font-body text-lg font-light leading-[140%]">{item.answer}</p>
+                <p className="text-foreground font-body text-base sm:text-lg font-light leading-[140%]">{item.answer}</p>
               )}
             </div>
           ))}

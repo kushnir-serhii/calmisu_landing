@@ -18,21 +18,21 @@ const ChatSection = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const phoneY = (scrollProgress - 0.5) * -40;
-  const cloudY = (scrollProgress - 0.5) * 30;
-  const cloudX = (scrollProgress - 0.5) * -15;
+  const phoneY = (scrollProgress - 0.5) * -30;
+  const cloudY = (scrollProgress - 0.5) * 20;
+  const cloudX = (scrollProgress - 0.5) * -10;
 
   return (
     <section
       ref={sectionRef}
-      className="w-full px-6 md:px-[140px] py-[120px] overflow-hidden"
+      className="w-full px-5 sm:px-8 md:px-[140px] py-16 sm:py-20 md:py-[120px] overflow-hidden"
     >
-      <div className="relative flex justify-center items-center min-h-[400px] md:min-h-[650px]">
+      <div className="relative flex justify-center items-center min-h-[280px] sm:min-h-[400px] md:min-h-[650px]">
         {/* Phone - upper left area */}
         <img
           src="/images/chat-illustration.webp"
           alt="Calmisu AI chat"
-          className="w-[80%] max-w-[996px] relative -mr-[10%] will-change-transform"
+          className="w-[90%] sm:w-[80%] max-w-[996px] relative -mr-[5%] sm:-mr-[10%] will-change-transform"
           style={{ transform: `translateY(${phoneY}px)` }}
           loading="lazy"
         />
@@ -40,7 +40,7 @@ const ChatSection = () => {
         <img
           src="/images/cloud-small.webp"
           alt=""
-          className="absolute z-10 w-[75%] max-w-[791px] bottom-[0%] right-[5%] will-change-transform"
+          className="absolute z-10 w-[80%] sm:w-[75%] max-w-[791px] bottom-[0%] right-[0%] sm:right-[5%] will-change-transform"
           style={{ transform: `translate(${cloudX}px, ${cloudY}px)` }}
           loading="lazy"
         />

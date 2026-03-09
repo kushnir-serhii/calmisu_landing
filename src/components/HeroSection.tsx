@@ -13,12 +13,12 @@ const PlayStoreIcon = () => (
 );
 
 const DownloadButtons = ({ className = "" }: { className?: string }) => (
-  <div className={`flex flex-col sm:flex-row items-center gap-3 ${className}`}>
-    <button className="flex w-[260px] h-[54px] px-6 justify-center items-center gap-2 rounded-xl bg-foreground text-background font-body text-lg font-normal leading-[150%] hover:opacity-90 transition-opacity">
+  <div className={`flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto ${className}`}>
+    <button className="flex w-full sm:w-[260px] h-[54px] px-6 justify-center items-center gap-2 rounded-xl bg-foreground text-background font-body text-base sm:text-lg font-normal leading-[150%] hover:opacity-90 transition-opacity touch-manipulation">
       Download for IOS
       <AppleIcon />
     </button>
-    <button className="flex w-[261px] h-[54px] px-6 justify-center items-center gap-2 rounded-xl bg-foreground text-background font-body text-lg font-normal leading-[150%] hover:opacity-90 transition-opacity">
+    <button className="flex w-full sm:w-[261px] h-[54px] px-6 justify-center items-center gap-2 rounded-xl bg-foreground text-background font-body text-base sm:text-lg font-normal leading-[150%] hover:opacity-90 transition-opacity touch-manipulation">
       Download for Android
       <PlayStoreIcon />
     </button>
@@ -49,23 +49,23 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="flex flex-col items-center pt-8 md:pt-16 px-6 md:px-[140px] gap-10 overflow-hidden">
+    <section ref={sectionRef} className="flex flex-col items-center pt-6 sm:pt-8 md:pt-16 px-5 sm:px-8 md:px-[140px] gap-8 md:gap-10 overflow-hidden">
       {/* Content */}
-      <div className="flex flex-col items-center gap-5 w-full max-w-[1160px]">
+      <div className="flex flex-col items-center gap-4 md:gap-5 w-full max-w-[1160px]">
         <div className="flex flex-col items-center gap-2 w-full">
           {/* Pill */}
-          <div className="flex py-3 px-4 justify-center items-center gap-1 rounded-full bg-brand-100">
+          <div className="flex py-2 sm:py-3 px-3 sm:px-4 justify-center items-center gap-1 rounded-full bg-brand-100">
             <div className="flex p-1 items-center rounded-full bg-brand-200 animate-[pulse_3s_ease-in-out_infinite]">
               <svg width="8" height="8" viewBox="0 0 8 8" fill="none"><circle cx="4" cy="4" r="4" fill="hsl(var(--brand-blue))"/></svg>
             </div>
-            <span className="text-brand font-body text-lg font-normal leading-[150%]">mental wellness app</span>
+            <span className="text-brand font-body text-base sm:text-lg font-normal leading-[150%]">mental wellness app</span>
           </div>
           {/* Heading */}
-          <h1 className="text-foreground text-center font-display text-5xl md:text-7xl lg:text-[80px] font-normal leading-[90%]">
+          <h1 className="text-foreground text-center font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[80px] font-normal leading-[90%]">
             Calm the storm.<br />Find your center.
           </h1>
         </div>
-        <p className="max-w-[737px] text-foreground text-center font-body text-lg font-light leading-[150%]">
+        <p className="max-w-[737px] text-foreground text-center font-body text-base sm:text-lg font-light leading-[150%] px-2">
           Calmisu guides you through anxiety with a structured calming flow — breathing, grounding, calligraphy, and meditation — each step deepening the last.
         </p>
       </div>

@@ -1,3 +1,6 @@
+import { useState, useEffect } from "react";
+import { Menu, X } from "lucide-react";
+
 const CalmisLogo = () => (
   <svg className="shrink-0" width="149" height="27" viewBox="0 0 149 27" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M9.17003 7.63915C3.75523 7.82305 2.29086 12.7985 2.29937 15.3527C-3.57517 19.4649 3.04007 25.365 8.37824 23.1684C9.91073 25.4927 23.601 28.7109 31.2634 23.1684C38.9259 25.5182 42.5272 15.5315 35.8609 14.1012C36.4228 8.35431 32.4894 5.26381 27.9941 6.05558C22.7581 -4.92725 9.91073 1.15161 9.17003 7.63915Z" fill="hsl(var(--brand-blue))"/>
@@ -12,17 +15,60 @@ const CalmisLogo = () => (
   </svg>
 );
 
+const navItems = ["Features", "FAQ", "About", "Download"];
+
 const Header = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  // Lock body scroll when menu is open
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [isMenuOpen]);
+
   return (
-    <header className="flex w-full px-6 md:px-[120px] py-4 justify-between items-center border-b border-secondary bg-background sticky top-0 z-50">
+    <header className="flex w-full px-5 md:px-[120px] py-4 justify-between items-center border-b border-secondary bg-background sticky top-0 z-50">
       <CalmisLogo />
-      <nav className="hidden md:flex items-center gap-16">
-        {["Features", "FAQ", "About", "Download"].map((item) => (
-          <a key={item} href={`#${item.toLowerCase()}`} className="text-foreground text-center font-body text-xl font-normal leading-[150%] hover:text-brand transition-colors">
+
+      {/* Desktop nav */}
+      <nav className="hidden md:flex items-center gap-10 lg:gap-16">
+        {navItems.map((item) => (
+          <a key={item} href={`#${item.toLowerCase()}`} className="text-foreground text-center font-body text-lg lg:text-xl font-normal leading-[150%] hover:text-brand transition-colors">
             {item}
           </a>
         ))}
       </nav>
+
+      {/* Mobile hamburger */}
+      <button
+        onClick={() => setIsMenuOpen(!isMenuOpen)}
+        className="md:hidden flex items-center justify-center w-10 h-10 rounded-lg touch-manipulation"
+        aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+      >
+        {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+      </button>
+
+      {/* Mobile drawer */}
+      {isMenuOpen && (
+        <div className="fixed inset-0 top-[61px] z-40 bg-background md:hidden animate-in fade-in slide-in-from-top-2 duration-200">
+          <nav className="flex flex-col items-center gap-2 pt-6 px-5">
+            {navItems.map((item) => (
+              <a
+                key={item}
+                href={`#${item.toLowerCase()}`}
+                onClick={() => setIsMenuOpen(false)}
+                className="w-full text-center py-4 text-foreground font-body text-xl font-normal leading-[150%] hover:text-brand transition-colors rounded-xl hover:bg-muted active:bg-muted"
+              >
+                {item}
+              </a>
+            ))}
+          </nav>
+        </div>
+      )}
     </header>
   );
 };

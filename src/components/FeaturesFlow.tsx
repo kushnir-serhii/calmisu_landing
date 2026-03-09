@@ -7,25 +7,25 @@ const features = [
 
 const FeaturesFlow = () => {
   return (
-    <section id="features" className="w-full px-6 md:px-[140px] py-[120px]">
-      <div className="flex flex-col lg:flex-row items-center gap-10 w-full">
+    <section id="features" className="w-full px-5 sm:px-8 md:px-16 lg:px-[140px] py-16 sm:py-20 md:py-[120px]">
+      <div className="flex flex-col lg:flex-row items-center gap-8 md:gap-10 w-full">
         {/* Left: text */}
-        <div className="flex flex-col items-start gap-12 flex-1">
-          <div className="flex flex-col items-start gap-6 max-w-[577px]">
-            <h2 className="text-foreground font-display text-4xl md:text-5xl lg:text-[60px] font-normal leading-[100%]">
+        <div className="flex flex-col items-start gap-8 md:gap-12 flex-1">
+          <div className="flex flex-col items-start gap-4 md:gap-6 max-w-[577px]">
+            <h2 className="text-foreground font-display text-3xl sm:text-4xl md:text-5xl lg:text-[60px] font-normal leading-[100%]">
               A flow that actually works
             </h2>
-            <p className="text-foreground font-body text-lg font-light leading-[150%]">
+            <p className="text-foreground font-body text-base sm:text-lg font-light leading-[150%]">
               Each step in the Calming Flow is designed to build on the last, progressively regulating your nervous system.
             </p>
           </div>
-          <div className="flex flex-col items-start gap-6 w-full">
+          <div className="flex flex-col items-start gap-4 md:gap-6 w-full">
             {features.map((f, i) => (
-              <div key={i} className="flex items-center gap-4 w-full">
-                <div className="flex w-10 h-10 justify-center items-center rounded-lg bg-muted shrink-0">
-                  <span className="text-foreground font-body text-xl font-normal leading-[140%]">{f.num}</span>
+              <div key={i} className="flex items-start sm:items-center gap-3 sm:gap-4 w-full">
+                <div className="flex w-9 h-9 sm:w-10 sm:h-10 justify-center items-center rounded-lg bg-muted shrink-0 mt-0.5 sm:mt-0">
+                  <span className="text-foreground font-body text-lg sm:text-xl font-normal leading-[140%]">{f.num}</span>
                 </div>
-                <p className="flex-1 text-foreground font-body text-lg font-light leading-[140%]">
+                <p className="flex-1 text-foreground font-body text-base sm:text-lg font-light leading-[140%]">
                   <span className="font-medium">{f.title}</span> {f.desc}
                 </p>
               </div>

@@ -10,14 +10,14 @@ const footerLinks = [
 
 const Footer = () => {
   return (
-    <footer className="w-full bg-gray-50 flex flex-col items-center pt-16 gap-10 overflow-hidden relative">
+    <footer className="w-full bg-gray-50 flex flex-col items-center pt-10 sm:pt-16 gap-8 sm:gap-10 overflow-hidden relative">
       {/* Nav links */}
-      <nav className="flex flex-wrap justify-between px-6 md:px-[140px] w-full max-w-[1440px]">
+      <nav className="flex flex-wrap justify-center sm:justify-between gap-x-6 gap-y-3 px-5 sm:px-8 md:px-[140px] w-full max-w-[1440px]">
         {footerLinks.map((link) => (
           <a
             key={link.label}
             href={link.href}
-            className="text-foreground text-base md:text-xl font-body leading-[150%] hover:opacity-70 transition-opacity"
+            className="text-foreground text-sm sm:text-base md:text-xl font-body leading-[150%] hover:opacity-70 transition-opacity"
           >
             {link.label}
           </a>
@@ -26,18 +26,15 @@ const Footer = () => {
 
       {/* Calmisu logo and bamboo stacked */}
       <div className="relative w-full flex flex-col items-center">
-        {/* Calmisu SVG */}
         <img
           src={CalmisuLogo}
           alt="Calmisu"
           className="w-full text-gray-100"
         />
-        
-        {/* Bamboo illustration overlapping */}
         <img
           src="/images/footer-bamboo.webp"
           alt="Bamboo illustration"
-          className="w-full object-cover -mt-[60px] md:-mt-[120px]"
+          className="w-full object-cover -mt-[30px] sm:-mt-[60px] md:-mt-[120px]"
           loading="lazy"
         />
       </div>

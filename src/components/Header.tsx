@@ -31,7 +31,7 @@ const Header = () => {
   }, [isMenuOpen]);
 
   return (
-    <header className="flex w-full px-5 md:px-[120px] py-4 justify-between items-center border-b border-secondary bg-background sticky top-0 z-50">
+    <header className="flex w-full px-6 md:px-[120px] py-4 justify-between items-center border-b border-secondary bg-background sticky top-0 z-50">
       <CalmisLogo />
 
       {/* Desktop nav */}

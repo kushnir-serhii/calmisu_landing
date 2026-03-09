@@ -13,7 +13,7 @@ const PlayStoreIcon = () => (
 );
 
 const DownloadButtons = ({ className = "" }: { className?: string }) => (
-  <div className={`flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto ${className}`}>
+  <div className={`flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto px-6 sm:px-0 ${className}`}>
     <button className="flex w-full sm:w-[260px] h-[54px] px-6 justify-center items-center gap-2 rounded-xl bg-foreground text-background font-body text-base sm:text-lg font-normal leading-[150%] hover:opacity-90 transition-opacity touch-manipulation">
       Download for IOS
       <AppleIcon />

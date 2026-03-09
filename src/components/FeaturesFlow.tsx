@@ -7,7 +7,7 @@ const features = [
 
 const FeaturesFlow = () => {
   return (
-    <section id="features" className="w-full px-5 sm:px-8 md:px-16 lg:px-[140px] py-16 sm:py-20 md:py-[120px]">
+    <section id="features" className="w-full px-6 sm:px-8 md:px-16 lg:px-[140px] py-16 sm:py-20 md:py-[120px]">
       <div className="flex flex-col lg:flex-row items-center gap-8 md:gap-10 w-full">
         {/* Left: text */}
         <div className="flex flex-col items-start gap-8 md:gap-12 flex-1">

@@ -25,7 +25,7 @@ const ChatSection = () => {
   return (
     <section
       ref={sectionRef}
-      className="w-full px-5 sm:px-8 md:px-[140px] py-16 sm:py-20 md:py-[120px] overflow-hidden"
+      className="w-full px-6 sm:px-8 md:px-[140px] py-16 sm:py-20 md:py-[120px] overflow-hidden"
     >
       <div className="relative flex justify-center items-center min-h-[280px] sm:min-h-[400px] md:min-h-[650px]">
         {/* Phone - upper left area */}

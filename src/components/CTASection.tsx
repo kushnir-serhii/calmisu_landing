@@ -20,14 +20,17 @@ const CTASection = () => {
   };
 
   return (
-    <section id="download" className="w-full px-6 sm:px-8 md:px-16 lg:px-[140px] py-16 sm:py-20 md:py-[120px]">
+    <section
+      id="download"
+      className="w-full px-6 sm:px-8 md:px-16 lg:px-[140px] py-16 sm:py-20 md:py-[120px]"
+    >
       <div className="flex flex-col lg:flex-row items-center w-full min-h-[auto] lg:min-h-[589px] rounded-2xl sm:rounded-[30px] bg-brand-100 overflow-hidden">
         {/* Left: Music player card */}
         <div className="flex w-full lg:w-1/2 h-[350px] sm:h-[450px] lg:h-[589px] rounded-2xl sm:rounded-[30px] overflow-hidden relative justify-center items-center p-6 sm:p-8">
           <div className="relative w-full max-w-[320px] sm:max-w-[400px] aspect-square rounded-2xl overflow-hidden shadow-lg">
-            <img 
-              src={infinityBg} 
-              alt="Bamboo Forest background" 
+            <img
+              src={infinityBg}
+              alt="Bamboo Forest background"
               className="absolute inset-0 w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-black/10"></div>
@@ -37,17 +40,23 @@ const CTASection = () => {
               </h3>
               <button
                 onClick={togglePlay}
-                className="w-16 h-16 sm:w-20 sm:h-20 bg-white/10 hover:bg-white/20 backdrop-blur-[10px] rounded-full flex items-center justify-center transition-all duration-300 mb-4 sm:mb-6 touch-manipulation"
+                className="w-16 h-16 sm:w-20 sm:h-20 bg-white/10 hover:bg-white/20 backdrop-blur-[10px] rounded-full flex items-center justify-center transition-all duration-300 mb-4 sm:mb-6 touch-manipulation outline-none"
               >
                 {isPlaying ? (
-                  <Pause className="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="white" />
+                  <Pause
+                    className="w-6 h-6 sm:w-8 sm:h-8 text-white"
+                    fill="white"
+                  />
                 ) : (
-                  <Play className="w-6 h-6 sm:w-8 sm:h-8 text-white ml-0.5 sm:ml-1" fill="white" />
+                  <Play
+                    className="w-6 h-6 sm:w-8 sm:h-8 text-white ml-0.5 sm:ml-1"
+                    fill="white"
+                  />
                 )}
               </button>
-              <p className="text-white text-xs sm:text-sm leading-relaxed max-w-[280px] drop-shadow-lg">
-                You can sit or lie down, keep your eyes open or closed.
-                However you are is enough.
+              <p className="text-white text-xs sm:text-sm font-light leading-relaxed max-w-[280px] drop-shadow-lg">
+                You can sit or lie down, keep your eyes open or closed. However
+                you are is enough.
               </p>
             </div>
           </div>
@@ -62,11 +71,11 @@ const CTASection = () => {
         </div>
 
         {/* Right: CTA content */}
-        <div className="flex flex-col items-center justify-center gap-8 sm:gap-10 w-full lg:w-1/2 py-12 sm:py-16 lg:py-20 px-5 sm:px-6">
-          <h2 className="text-foreground text-center font-display text-3xl sm:text-4xl md:text-5xl lg:text-[60px] font-normal leading-[100%]">
-            Real calm. Join freely.
+        <div className="flex flex-col items-center justify-center gap-8 sm:gap-10 w-full lg:w-1/2  py-12 sm:py-16 lg:py-20 px-5 sm:px-6">
+          <h2 className="whitespace-pre text-foreground text-center font-display text-3xl sm:text-4xl md:text-5xl lg:text-[60px] font-normal leading-[100%]">
+            {`Real calm.\n Join freely.`}
           </h2>
-          <DownloadButtons className="!flex-col" />
+          {/* <DownloadButtons className="!flex-col" /> */}
         </div>
       </div>
     </section>

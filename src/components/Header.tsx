@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
+import { navLinks } from "@/data/navLinks";
 
 const CalmisLogo = () => (
   <svg className="shrink-0" width="149" height="27" viewBox="0 0 149 27" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -15,7 +16,7 @@ const CalmisLogo = () => (
   </svg>
 );
 
-const navItems = ["Features", "FAQ", "About", "Download"];
+// const navLinks = ["Features", "FAQ", "About", "Download"];
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -36,9 +37,15 @@ const Header = () => {
 
       {/* Desktop nav */}
       <nav className="hidden md:flex items-center gap-10 lg:gap-16">
-        {navItems.map((item) => (
-          <a key={item} href={`#${item.toLowerCase()}`} className="text-foreground text-center font-body text-lg lg:text-xl font-normal leading-[150%] hover:text-brand transition-colors">
-            {item}
+        {navLinks.map((link) => (
+          <a
+            key={link.label}
+            href={link.href}
+            target={link.isOuterLink ? "_blank" : undefined}
+            rel={link.isOuterLink ? "noopener noreferrer" : undefined}
+            className="text-foreground text-center font-body text-lg lg:text-xl font-normal leading-[150%] hover:text-brand transition-colors"
+          >
+            {link.label}
           </a>
         ))}
       </nav>
@@ -56,14 +63,16 @@ const Header = () => {
       {isMenuOpen && (
         <div className="fixed inset-0 top-[61px] z-40 bg-background md:hidden animate-in fade-in slide-in-from-top-2 duration-200">
           <nav className="flex flex-col items-center gap-2 pt-6 px-5">
-            {navItems.map((item) => (
+            {navLinks.map((link) => (
               <a
-                key={item}
-                href={`#${item.toLowerCase()}`}
+                key={link.label}
+                href={link.href}
+                target={link.isOuterLink ? "_blank" : undefined}
+                rel={link.isOuterLink ? "noopener noreferrer" : undefined}
                 onClick={() => setIsMenuOpen(false)}
                 className="w-full text-center py-4 text-foreground font-body text-xl font-normal leading-[150%] hover:text-brand transition-colors rounded-xl hover:bg-muted active:bg-muted"
               >
-                {item}
+                {link.label}
               </a>
             ))}
           </nav>

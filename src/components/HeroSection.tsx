@@ -49,48 +49,67 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="flex flex-col items-center pt-6 sm:pt-8 md:pt-16 px-6 sm:px-8 md:px-[140px] gap-8 md:gap-10 overflow-hidden">
+    <section
+      ref={sectionRef}
+      className="flex flex-col items-center pt-6 sm:pt-8 md:pt-16 px-6 sm:px-8 md:px-[140px] gap-8 md:gap-10 overflow-hidden"
+    >
       {/* Content */}
       <div className="flex flex-col items-center gap-4 md:gap-5 w-full max-w-[1160px]">
         <div className="flex flex-col items-center gap-2 w-full">
           {/* Pill */}
           <div className="flex py-2 sm:py-3 px-3 sm:px-4 justify-center items-center gap-1 rounded-full bg-brand-100">
             <div className="flex p-1 items-center rounded-full bg-brand-200 animate-[pulse_3s_ease-in-out_infinite]">
-              <svg width="8" height="8" viewBox="0 0 8 8" fill="none"><circle cx="4" cy="4" r="4" fill="hsl(var(--brand-blue))" /></svg>
+              <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                <circle cx="4" cy="4" r="4" fill="hsl(var(--brand-blue))" />
+              </svg>
             </div>
-            <span className="text-brand font-body text-base sm:text-lg font-normal leading-[150%]">mental wellness app</span>
+            <span className="text-brand font-body text-base sm:text-lg font-normal leading-[150%]">
+              coming soon
+            </span>
           </div>
           {/* Heading */}
           <h1 className="text-foreground text-center font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[80px] font-normal leading-[90%] my-[4px]">
-            Calm the storm.<br />Find your center.
+            Calm the storm.
+            <br />
+            Find your center.
           </h1>
         </div>
         <p className="max-w-[737px] text-foreground text-center font-body text-base sm:text-lg font-light leading-[150%] px-[24px]">
-          Calmisu guides you through anxiety with a structured calming flow — breathing, grounding, calligraphy, and meditation — each step deepening the last.
+          Calmisu guides you through anxiety with a structured calming flow —
+          breathing, grounding, calligraphy, and meditation — each step
+          deepening the last.
         </p>
       </div>
 
-      <DownloadButtons />
+      {/* <DownloadButtons /> */}
 
       {/* Hero images */}
       <div className="relative w-screen aspect-[1440/855] mt-0">
-        <img src="/images/hero-sky.webp" alt="" className="absolute w-[100.5%] left-[-0.3%] bottom-0 object-cover" loading="lazy" />
+        <img
+          src="/images/hero-sky.webp"
+          alt=""
+          className="absolute w-[100.5%] left-[-0.3%] bottom-0 object-cover"
+          loading="lazy"
+        />
         <img
           ref={phoneRef}
           src="/images/hero-app.webp"
           alt="Calmisu app preview"
           className="absolute w-full left-0 bottom-[5%] object-contain will-change-transform transition-transform duration-100 ease-out"
-          loading="lazy" />
-        
+          loading="lazy"
+        />
+
         <img
           ref={cloudRef}
-          src="/images/hero-cloud.webp"
+          src="/images/cloud-small.webp"
+          // src="/images/hero-cloud.webp"
           alt=""
-          className="absolute w-full left-0 bottom-[15%] object-contain will-change-transform transition-transform duration-100 ease-out z-10"
-          loading="lazy" />
-        
+          className="absolute w-2/3 bottom-0 lg:bottom-[10%] object-contain will-change-transform left-0 right-0 mx-auto transition-transform duration-100 ease-out z-10"
+          loading="lazy"
+        />
       </div>
-    </section>);
+    </section>
+  );
 
 };
 

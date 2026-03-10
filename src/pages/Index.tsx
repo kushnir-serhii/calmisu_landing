@@ -19,7 +19,7 @@ const AnimatedSection = ({ children, className = "", delay = 0 }: {
   return (
     <div 
       ref={ref}
-      className={`transition-all duration-700 ease-out ${
+      className={`w-full transition-all duration-700 ease-out ${
         isVisible 
           ? 'opacity-100 translate-y-0' 
           : 'opacity-0 translate-y-8'
@@ -47,9 +47,9 @@ const Index = () => {
         <FeaturesScience />
       </AnimatedSection>
       
-      <AnimatedSection delay={200}>
+      {/* <AnimatedSection delay={200}>
         <ReviewsSection />
-      </AnimatedSection>
+      </AnimatedSection> */}
       
       <AnimatedSection delay={250}>
         <ChatSection />

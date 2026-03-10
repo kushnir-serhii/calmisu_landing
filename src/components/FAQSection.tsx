@@ -62,7 +62,7 @@ const FAQSection = () => {
                     {item.question}
                   </span>
                   <div className="flex w-9 h-9 sm:w-10 sm:h-10 justify-center items-center rounded-lg bg-brand-light shrink-0">
-                    <ChevronUp
+                    <ChevronDown
                       size={20}
                       className={`transition-all duration-300 ease-in-out ${isOpen && "rotate-180"}`}
                     />

@@ -34,7 +34,7 @@ const FAQSection = () => {
   return (
     <section
       id="faq"
-      className="w-full px-6 sm:px-8 md:px-16 lg:px-[140px] py-16 sm:py-20 md:py-[120px] rounded-b-2xl sm:rounded-b-3xl"
+      className="w-full scroll-mt-20 px-6 sm:px-8 md:px-16 lg:px-[140px] py-16 sm:py-20 md:py-[120px] rounded-b-2xl sm:rounded-b-3xl"
       style={{
         background:
           "linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--brand-blue-light)) 66.87%)",

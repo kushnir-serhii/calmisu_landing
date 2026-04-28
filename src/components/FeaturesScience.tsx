@@ -14,7 +14,7 @@ const sciencePoints = [
 
 const FeaturesScience = () => {
   return (
-    <section className="w-full px-6 sm:px-8 md:px-16 lg:px-[140px] pb-16 sm:pb-20 md:pb-[120px]">
+    <section id="science" className="w-full px-6 sm:px-8 md:px-16 lg:px-[140px] pb-16 sm:pb-20 md:pb-[120px]">
       <div className="flex flex-col-reverse lg:flex-row items-center gap-8 md:gap-10 w-full">
         {/* Left: phone mockup */}
         <div className="flex w-full lg:w-1/2 justify-center items-end rounded-3xl overflow-hidden shrink-0">

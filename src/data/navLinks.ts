@@ -4,12 +4,11 @@ export const navLinks = [
   {
     label: "Privacy Policy",
     isOuterLink: true,
-    href: "https://calmisu-server.onrender.com/legal/privacy-policy",
+    href: "/#/en/privacy-policy",
   },
   {
     label: "Terms of Service",
     isOuterLink: true,
-    href: "https://calmisu-server.onrender.com/legal/terms",
+    href: "/#/en/terms-of-service",
   },
-  // { label: "Download", href: "#download" },
 ];

@@ -4,11 +4,11 @@ export const navLinks = [
   {
     label: "Privacy Policy",
     isOuterLink: true,
-    href: "/#/en/privacy-policy",
+    href: "/en/privacy-policy",
   },
   {
     label: "Terms of Service",
     isOuterLink: true,
-    href: "/#/en/terms-of-service",
+    href: "/en/terms-of-service",
   },
 ];

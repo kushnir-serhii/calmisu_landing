@@ -9,8 +9,10 @@ export default function TermsPage() {
   const content = { en: <TermsEn />, pl: <TermsPl />, uk: <TermsUa /> };
   const current = content[lang as keyof typeof content] ? lang! : "en";
   return (
-    <div>
-      <LanguageSwitcher lang={current} />
+    <div className="flex flex-col px-36">
+      <div className="ml-auto">
+        <LanguageSwitcher lang={current} />
+      </div>
       <div>{content[current as keyof typeof content]}</div>
     </div>
   );

@@ -12,10 +12,9 @@ export default function PrivacyPage() {
   const content = { en: <PrivacyEn />, pl: <PrivacyPl />, uk: <PrivacyUa /> };
   const current = content[lang as keyof typeof content] ? lang! : "en";
   return (
-    <div className="flex flex-col px-36">
-      <div className="ml-auto">
-
-      <LanguageSwitcher lang={current} />
+    <div className="flex flex-col px-2 lg:px-36">
+      <div className="ml-auto  mt-10">
+        <LanguageSwitcher lang={current} />
       </div>
       <div>{content[current as keyof typeof content]}</div>
     </div>

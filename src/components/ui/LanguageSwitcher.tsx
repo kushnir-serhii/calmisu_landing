@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { UkFlagIcon } from "./flags/UkFlagIcon";
 import { PlFlagIcon } from "./flags/PlFlagIcon";
 import { UaFlagIcon } from "./flags/UaFlagIcon";
@@ -20,14 +20,14 @@ export const LanguageSwitcher = ({ lang }: { lang: string }) => {
       {langs.map((l) => {
         const Flag = flags[l];
         return (
-          <a
+          <Link
             key={l}
-            href={`#/${l}${path}`}
+            to={`/${l}${path}`}
             className={`flex items-center gap-1 ${l === lang ? "font-bold" : "opacity-40 hover:opacity-100"}`}
           >
             <Flag size={20} />
             {l.toUpperCase()}
-          </a>
+          </Link>
         );
       })}
     </div>

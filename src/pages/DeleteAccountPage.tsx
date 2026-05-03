@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -78,6 +79,7 @@ type FormValues = z.infer<typeof schema>;
 export default function DeleteAccountPage() {
   const [lang, setLang] = useState<Lang>("en");
   const [deleted, setDeleted] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const t = i18n[lang];
 
   const form = useForm<FormValues>({
@@ -172,12 +174,23 @@ export default function DeleteAccountPage() {
                       <FormItem>
                         <FormLabel className="font-body">{t.passwordLabel}</FormLabel>
                         <FormControl>
-                          <Input
-                            type="password"
-                            placeholder="••••••••"
-                            autoComplete="current-password"
-                            {...field}
-                          />
+                          <div className="relative">
+                            <Input
+                              type={showPassword ? "text" : "password"}
+                              placeholder="••••••••"
+                              autoComplete="current-password"
+                              className="pr-10"
+                              {...field}
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setShowPassword((v) => !v)}
+                              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                              tabIndex={-1}
+                            >
+                              {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                            </button>
+                          </div>
                         </FormControl>
                         <FormMessage />
                       </FormItem>

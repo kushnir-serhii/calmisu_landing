@@ -9,7 +9,13 @@ const flags: Record<string, React.FC<{ size?: number }>> = {
   uk: UaFlagIcon,
 };
 
-export const LanguageSwitcher = ({ lang }: { lang: string }) => {
+export const LanguageSwitcher = ({
+  lang,
+  onLangChange,
+}: {
+  lang: string;
+  onLangChange?: (lang: string) => void;
+}) => {
   const location = useLocation();
 
   const path = location.pathname.replace(/^\/(en|pl|uk)/, "");
@@ -19,12 +25,18 @@ export const LanguageSwitcher = ({ lang }: { lang: string }) => {
     <div className="flex gap-3">
       {langs.map((l) => {
         const Flag = flags[l];
-        return (
-          <Link
+        const className = `flex items-center gap-1 ${l === lang ? "font-bold" : "opacity-40 hover:opacity-100"}`;
+        return onLangChange ? (
+          <button
             key={l}
-            to={`/${l}${path}`}
-            className={`flex items-center gap-1 ${l === lang ? "font-bold" : "opacity-40 hover:opacity-100"}`}
+            onClick={() => onLangChange(l)}
+            className={className}
           >
+            <Flag size={20} />
+            {l.toUpperCase()}
+          </button>
+        ) : (
+          <Link key={l} to={`/${l}${path}`} className={className}>
             <Flag size={20} />
             {l.toUpperCase()}
           </Link>

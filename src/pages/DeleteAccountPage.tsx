@@ -13,7 +13,60 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
 import { API_BASE_URL } from "@/lib/api";
+
+type Lang = "en" | "pl" | "uk";
+
+const i18n: Record<Lang, {
+  title: string;
+  subtitle: string;
+  warning: string;
+  emailLabel: string;
+  passwordLabel: string;
+  emailPlaceholder: string;
+  submit: string;
+  submitting: string;
+  successTitle: string;
+  successBody: string;
+}> = {
+  en: {
+    title: "Delete your account",
+    subtitle: "Enter your credentials to permanently delete your Calmisu account and all associated data.",
+    warning: "⚠ This action is permanent and cannot be undone.",
+    emailLabel: "Email",
+    passwordLabel: "Password",
+    emailPlaceholder: "you@example.com",
+    submit: "Delete my account",
+    submitting: "Deleting…",
+    successTitle: "Account deleted",
+    successBody: "Your account and all associated data have been permanently removed.",
+  },
+  pl: {
+    title: "Usuń swoje konto",
+    subtitle: "Wprowadź swoje dane, aby trwale usunąć konto Calmisu i wszystkie powiązane dane.",
+    warning: "⚠ Ta czynność jest nieodwracalna i nie można jej cofnąć.",
+    emailLabel: "Email",
+    passwordLabel: "Hasło",
+    emailPlaceholder: "ty@example.com",
+    submit: "Usuń moje konto",
+    submitting: "Usuwanie…",
+    successTitle: "Konto usunięte",
+    successBody: "Twoje konto i wszystkie powiązane dane zostały trwale usunięte.",
+  },
+  uk: {
+    title: "Видалити акаунт",
+    subtitle: "Введи свої дані, щоб назавжди видалити акаунт Calmisu та всі пов'язані дані.",
+    warning: "⚠ Ця дія є незворотною і не може бути скасована.",
+    emailLabel: "Електронна пошта",
+    passwordLabel: "Пароль",
+    emailPlaceholder: "ти@example.com",
+    submit: "Видалити мій акаунт",
+    submitting: "Видалення…",
+    successTitle: "Акаунт видалено",
+    successBody: "Твій акаунт та всі пов'язані дані були назавжди видалені.",
+  },
+};
 
 const schema = z.object({
   email: z.string().email("Enter a valid email address"),
@@ -23,7 +76,9 @@ const schema = z.object({
 type FormValues = z.infer<typeof schema>;
 
 export default function DeleteAccountPage() {
+  const [lang, setLang] = useState<Lang>("en");
   const [deleted, setDeleted] = useState(false);
+  const t = i18n[lang];
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -52,95 +107,96 @@ export default function DeleteAccountPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-16">
-      <div className="w-full max-w-md bg-background rounded-2xl shadow-sm border border-border p-8 flex flex-col gap-6">
-        {deleted ? (
-          <div className="flex flex-col items-center gap-4 text-center py-4">
-            <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center text-2xl">
-              ✓
-            </div>
-            <h1 className="font-display text-2xl text-foreground">
-              Account deleted
-            </h1>
-            <p className="text-muted-foreground font-body">
-              Your account and all associated data have been permanently removed.
-            </p>
-          </div>
-        ) : (
-          <>
-            <div className="flex flex-col gap-1">
+    <div className="flex flex-col px-2 lg:px-36">
+      <div className="ml-auto mt-10">
+        <LanguageSwitcher lang={lang} onLangChange={(l) => setLang(l as Lang)} />
+      </div>
+
+      <div className="flex justify-center py-10">
+        <div className="w-full max-w-md bg-background rounded-2xl shadow-sm border border-border p-8 flex flex-col gap-6">
+          {deleted ? (
+            <div className="flex flex-col items-center gap-4 text-center py-4">
+              <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center text-2xl">
+                ✓
+              </div>
               <h1 className="font-display text-2xl text-foreground">
-                Delete your account
+                {t.successTitle}
               </h1>
-              <p className="text-muted-foreground font-body text-sm">
-                Enter your credentials to permanently delete your Calmisu account
-                and all associated data.
-              </p>
+              <p className="text-muted-foreground font-body">{t.successBody}</p>
             </div>
+          ) : (
+            <>
+              <div className="flex flex-col gap-1">
+                <h1 className="font-display text-2xl text-foreground">
+                  {t.title}
+                </h1>
+                <p className="text-muted-foreground font-body text-sm">
+                  {t.subtitle}
+                </p>
+              </div>
 
-            <div className="rounded-lg bg-destructive/10 border border-destructive/20 px-4 py-3">
-              <p className="text-sm text-destructive font-body font-medium">
-                ⚠ This action is permanent and cannot be undone.
-              </p>
-            </div>
+              <div className="rounded-lg bg-destructive/10 border border-destructive/20 px-4 py-3">
+                <p className="text-sm text-destructive font-body font-medium">
+                  {t.warning}
+                </p>
+              </div>
 
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="flex flex-col gap-4"
-              >
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="font-body">Email</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="email"
-                          placeholder="you@example.com"
-                          autoComplete="email"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="font-body">Password</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="password"
-                          placeholder="••••••••"
-                          autoComplete="current-password"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <Button
-                  type="submit"
-                  variant="destructive"
-                  className="w-full mt-2"
-                  disabled={form.formState.isSubmitting}
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="flex flex-col gap-4"
                 >
-                  {form.formState.isSubmitting
-                    ? "Deleting…"
-                    : "Delete my account"}
-                </Button>
-              </form>
-            </Form>
-          </>
-        )}
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="font-body">{t.emailLabel}</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="email"
+                            placeholder={t.emailPlaceholder}
+                            autoComplete="email"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="font-body">{t.passwordLabel}</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="password"
+                            placeholder="••••••••"
+                            autoComplete="current-password"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <Button
+                    type="submit"
+                    variant="destructive"
+                    className="w-full mt-2"
+                    disabled={form.formState.isSubmitting}
+                  >
+                    {form.formState.isSubmitting ? t.submitting : t.submit}
+                  </Button>
+                </form>
+              </Form>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

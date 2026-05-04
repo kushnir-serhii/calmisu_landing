@@ -16,7 +16,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
-import { API_BASE_URL, deleteAccount } from "@/lib/api";
+import { deleteAccount } from "@/lib/api";
 import { i18n } from "@/data/deletAccount";
 
 export type Lang = "en" | "pl" | "uk";

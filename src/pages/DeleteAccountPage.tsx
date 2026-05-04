@@ -81,6 +81,30 @@ export default function DeleteAccountPage() {
                 </p>
               </div>
 
+              <div className="flex flex-col gap-3 text-sm font-body">
+                <div>
+                  <p className="font-medium text-foreground mb-1">
+                    {t.dataDeletedTitle}
+                  </p>
+                  <ul className="list-disc list-inside space-y-0.5 text-muted-foreground">
+                    {t.dataDeletedItems.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <p className="font-medium text-foreground mb-1">
+                    {t.dataRetainedTitle}
+                  </p>
+                  <ul className="list-disc list-inside space-y-0.5 text-muted-foreground">
+                    {t.dataRetainedItems.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+                <p className="text-muted-foreground">{t.deletionTimeline}</p>
+              </div>
+
               <Form {...form}>
                 <form
                   onSubmit={form.handleSubmit(onSubmit)}

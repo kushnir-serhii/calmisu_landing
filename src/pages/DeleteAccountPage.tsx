@@ -16,72 +16,24 @@ import {
 } from "@/components/ui/form";
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
 import { API_BASE_URL } from "@/lib/api";
+import { i18n } from "@/data/deletAccount";
 
-type Lang = "en" | "pl" | "uk";
-
-const i18n: Record<Lang, {
-  title: string;
-  subtitle: string;
-  warning: string;
-  emailLabel: string;
-  passwordLabel: string;
-  emailPlaceholder: string;
-  submit: string;
-  submitting: string;
-  successTitle: string;
-  successBody: string;
-}> = {
-  en: {
-    title: "Delete your account",
-    subtitle: "Enter your credentials to permanently delete your Calmisu account and all associated data.",
-    warning: "⚠ This action is permanent and cannot be undone.",
-    emailLabel: "Email",
-    passwordLabel: "Password",
-    emailPlaceholder: "you@example.com",
-    submit: "Delete my account",
-    submitting: "Deleting…",
-    successTitle: "Account deleted",
-    successBody: "Your account and all associated data have been permanently removed.",
-  },
-  pl: {
-    title: "Usuń swoje konto",
-    subtitle: "Wprowadź swoje dane, aby trwale usunąć konto Calmisu i wszystkie powiązane dane.",
-    warning: "⚠ Ta czynność jest nieodwracalna i nie można jej cofnąć.",
-    emailLabel: "Email",
-    passwordLabel: "Hasło",
-    emailPlaceholder: "ty@example.com",
-    submit: "Usuń moje konto",
-    submitting: "Usuwanie…",
-    successTitle: "Konto usunięte",
-    successBody: "Twoje konto i wszystkie powiązane dane zostały trwale usunięte.",
-  },
-  uk: {
-    title: "Видалити акаунт",
-    subtitle: "Введи свої дані, щоб назавжди видалити акаунт Calmisu та всі пов'язані дані.",
-    warning: "⚠ Ця дія є незворотною і не може бути скасована.",
-    emailLabel: "Електронна пошта",
-    passwordLabel: "Пароль",
-    emailPlaceholder: "ти@example.com",
-    submit: "Видалити мій акаунт",
-    submitting: "Видалення…",
-    successTitle: "Акаунт видалено",
-    successBody: "Твій акаунт та всі пов'язані дані були назавжди видалені.",
-  },
-};
+export type Lang = "en" | "pl" | "uk";
+export type FormValues = z.infer<typeof schema>;
 
 const schema = z.object({
   email: z.string().email("Enter a valid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
-type FormValues = z.infer<typeof schema>;
+
 
 export default function DeleteAccountPage() {
   const [lang, setLang] = useState<Lang>("en");
   const [deleted, setDeleted] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const t = i18n[lang];
-
+  
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: { email: "", password: "" },
@@ -107,7 +59,7 @@ export default function DeleteAccountPage() {
       toast.error("Network error. Please check your connection and try again.");
     }
   };
-
+  
   return (
     <div className="flex flex-col px-2 lg:px-36">
       <div className="ml-auto mt-10">

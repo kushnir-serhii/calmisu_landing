@@ -123,6 +123,24 @@ export const TermsEn = () => (
       the application, and (if necessary) delete it from your device.
     </p>
 
+    <strong className="block font-bold mt-4">Account Deletion</strong>
+    <p className="mt-1 leading-snug text-sm">
+      You may delete your Calmisu account at any time through the app
+      (Profile → Settings → Delete Account) or via the web form at
+      calmisu.com/delete-account.
+    </p>
+    <p className="mt-1 leading-snug text-sm">
+      When you delete your account through the app, your account is
+      deactivated immediately and all authenticated access is revoked. Your
+      data is retained for 30 days to allow you to restore the account by
+      logging back in. After this 30-day grace period, your account and all
+      associated data are permanently deleted. If you require immediate
+      permanent deletion with no recovery window, select that option in the
+      app or use the web deletion form. The Service Provider cannot recover
+      an account after the grace period has expired or after an immediate
+      deletion has been confirmed.
+    </p>
+
     <strong className="block font-bold mt-4">Subscriptions</strong>
     <p className="mt-1 leading-snug text-sm">
       The Application is available in two tiers: a Free tier with limited access

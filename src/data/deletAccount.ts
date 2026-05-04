@@ -18,6 +18,7 @@ export const i18n: Record<
     submitting: string;
     successTitle: string;
     successBody: string;
+    inAppNote: string;
   }
 > = {
   en: {
@@ -47,6 +48,8 @@ export const i18n: Record<
     successTitle: "Account deleted",
     successBody:
       "Your account and all associated data have been permanently removed.",
+    inAppNote:
+      "💡 Tip: Deleting from within the Calmisu app gives you a 30-day window to change your mind and restore your account before permanent deletion.",
   },
   pl: {
     title: "Usuń swoje konto Calmisu",
@@ -75,6 +78,8 @@ export const i18n: Record<
     successTitle: "Konto usunięte",
     successBody:
       "Twoje konto i wszystkie powiązane dane zostały trwale usunięte.",
+    inAppNote:
+      "💡 Wskazówka: Usuwając konto z poziomu aplikacji Calmisu, masz 30 dni na zmianę decyzji i przywrócenie konta przed trwałym usunięciem.",
   },
   uk: {
     title: "Видалити акаунт Calmisu",
@@ -102,5 +107,7 @@ export const i18n: Record<
     submitting: "Видалення…",
     successTitle: "Акаунт видалено",
     successBody: "Твій акаунт та всі пов'язані дані були назавжди видалені.",
+    inAppNote:
+      "💡 Порада: Видаляючи акаунт через застосунок Calmisu, маєш 30 днів, щоб передумати і відновити акаунт до остаточного видалення.",
   },
 };

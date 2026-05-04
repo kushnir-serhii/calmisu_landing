@@ -145,8 +145,20 @@ export const PrivacyEn = () => (
     <p className="mt-1 leading-snug text-sm">
       The Service Provider will retain User Provided data for as long as you
       use the Application and for a reasonable time thereafter. You can
-      delete your account and all associated data at any time directly
-      within the Application (Profile → Settings → Delete Account).
+      request deletion of your account and all associated data at any time
+      directly within the Application (Profile → Settings → Delete Account)
+      or via the web form at calmisu.com/delete-account.
+    </p>
+    <p className="mt-1 leading-snug text-sm">
+      When you delete your account through the app, your account is
+      deactivated immediately and scheduled for permanent deletion after 30
+      days. During this grace period you may log back in to restore your
+      account and cancel the deletion. After 30 days, your account and all
+      associated data are permanently and irreversibly deleted. If you
+      require immediate permanent deletion, you may select that option in the
+      app or use the web deletion form above.
+    </p>
+    <p className="mt-1 leading-snug text-sm">
       Alternatively, please contact the Service Provider at{" "}
       <a href="mailto:calmisuapp@gmail.com" className="text-blue-600 underline">calmisuapp@gmail.com</a>{" "}
       and they will respond in a reasonable time.

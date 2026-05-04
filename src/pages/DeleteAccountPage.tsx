@@ -103,6 +103,11 @@ export default function DeleteAccountPage() {
                   </ul>
                 </div>
                 <p className="text-muted-foreground">{t.deletionTimeline}</p>
+                {t.inAppNote && (
+                  <p className="text-sm text-blue-700 bg-blue-50 border border-blue-200 rounded-lg px-3 py-2">
+                    {t.inAppNote}
+                  </p>
+                )}
               </div>
 
               <Form {...form}>

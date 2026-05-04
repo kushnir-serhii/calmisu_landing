@@ -1,8 +1,14 @@
 {
-  "name": "vite_react_shadcn_ts",
+  "name": "calmisu-landing",
+  "description": "Landing page for Calmisu Application",
+  "author": "Serhii Kushnir <s1983kushnir@gmail.com>",
+  "license": "UNLICENSED",
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",

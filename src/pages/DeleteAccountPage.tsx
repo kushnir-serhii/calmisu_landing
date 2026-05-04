@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
+import { useMutation } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -15,7 +16,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
-import { API_BASE_URL } from "@/lib/api";
+import { deleteAccount } from "@/lib/api";
 import { i18n } from "@/data/deletAccount";
 
 export type Lang = "en" | "pl" | "uk";
@@ -27,38 +28,23 @@ const schema = z.object({
 });
 
 
-
 export default function DeleteAccountPage() {
   const [lang, setLang] = useState<Lang>("en");
-  const [deleted, setDeleted] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const t = i18n[lang];
-  
+
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: { email: "", password: "" },
   });
 
-  const onSubmit = async (values: FormValues) => {
-    try {
-      const res = await fetch(`${API_BASE_URL}/auth/delete-account-web`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
-      });
+  const mutation = useMutation({
+    mutationFn: deleteAccount,
+    onSuccess: () => form.reset(),
+    onError: (error: Error) => toast.error(error.message),
+  });
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        toast.error(data.message ?? "Something went wrong. Please try again.");
-        return;
-      }
-
-      setDeleted(true);
-    } catch {
-      toast.error("Network error. Please check your connection and try again.");
-    }
-  };
+  const onSubmit = (values: FormValues) => mutation.mutate(values);
   
   return (
     <div className="flex flex-col px-2 lg:px-36">
@@ -68,7 +54,7 @@ export default function DeleteAccountPage() {
 
       <div className="flex justify-center py-10">
         <div className="w-full max-w-md bg-background rounded-2xl shadow-sm border border-border p-8 flex flex-col gap-6">
-          {deleted ? (
+          {mutation.isSuccess ? (
             <div className="flex flex-col items-center gap-4 text-center py-4">
               <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center text-2xl">
                 ✓
@@ -153,9 +139,9 @@ export default function DeleteAccountPage() {
                     type="submit"
                     variant="destructive"
                     className="w-full mt-2"
-                    disabled={form.formState.isSubmitting}
+                    disabled={mutation.isPending}
                   >
-                    {form.formState.isSubmitting ? t.submitting : t.submit}
+                    {mutation.isPending ? t.submitting : t.submit}
                   </Button>
                 </form>
               </Form>

@@ -138,8 +138,20 @@ export const PrivacyPl = () => (
     <p className="mt-1 leading-snug text-sm">
       Dostawca Usług będzie przechowywać Dane Dostarczone przez Użytkownika tak
       długo, jak korzystasz z Aplikacji, oraz przez rozsądny czas po tym
-      okresie. Możesz usunąć swoje konto i wszystkie powiązane dane w dowolnym
-      momencie bezpośrednio w Aplikacji (Profil → Ustawienia → Usuń konto).
+      okresie. Możesz zażądać usunięcia swojego konta i wszystkich powiązanych
+      danych w dowolnym momencie bezpośrednio w Aplikacji (Profil → Ustawienia
+      → Usuń konto) lub za pomocą formularza na stronie calmisu.com/delete-account.
+    </p>
+    <p className="mt-1 leading-snug text-sm">
+      Po usunięciu konta przez aplikację Twoje konto jest natychmiast
+      dezaktywowane i zaplanowane do trwałego usunięcia po 30 dniach. W tym
+      czasie możesz zalogować się ponownie, aby przywrócić konto i anulować
+      usunięcie. Po 30 dniach konto i wszystkie powiązane dane są trwale i
+      nieodwracalnie usuwane. Jeśli wymagasz natychmiastowego trwałego
+      usunięcia, możesz wybrać tę opcję w aplikacji lub skorzystać z
+      powyższego formularza.
+    </p>
+    <p className="mt-1 leading-snug text-sm">
       Alternatywnie prosimy o kontakt pod adresem{" "}
       <a href="mailto:calmisuapp@gmail.com" className="text-blue-600 underline">calmisuapp@gmail.com</a>,
       a Dostawca Usług odpowie w rozsądnym terminie.

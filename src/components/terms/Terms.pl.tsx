@@ -124,6 +124,24 @@ export const TermsPl = () => (
       Aplikacji i (w razie potrzeby) usunąć ją z urządzenia.
     </p>
 
+    <strong className="block font-bold mt-4">Usunięcie Konta</strong>
+    <p className="mt-1 leading-snug text-sm">
+      Możesz usunąć swoje konto Calmisu w dowolnym momencie przez aplikację
+      (Profil → Ustawienia → Usuń konto) lub za pomocą formularza na stronie
+      calmisu.com/delete-account.
+    </p>
+    <p className="mt-1 leading-snug text-sm">
+      Po usunięciu konta przez aplikację Twoje konto jest natychmiast
+      dezaktywowane i cały uwierzytelniony dostęp zostaje odwołany. Dane są
+      przechowywane przez 30 dni, umożliwiając przywrócenie konta przez
+      ponowne zalogowanie się. Po upływie 30-dniowego okresu karencji konto
+      i wszystkie powiązane dane są trwale usuwane. Jeśli wymagasz
+      natychmiastowego trwałego usunięcia bez możliwości odzyskania, wybierz
+      tę opcję w aplikacji lub skorzystaj z formularza. Dostawca Usług nie
+      może przywrócić konta po upływie okresu karencji ani po potwierdzeniu
+      natychmiastowego usunięcia.
+    </p>
+
     <strong className="block font-bold mt-4">Subskrypcje</strong>
     <p className="mt-1 leading-snug text-sm">
       Aplikacja jest dostępna w dwóch wariantach: bezpłatnym (Free) z ograniczonym

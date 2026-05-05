@@ -1,3 +1,5 @@
+import { EMAIL_SUPPORT } from "../constants/mail";
+
 export const TermsPl = () => (
   <div className="max-w-xl mx-auto px-6 py-4 sm:px-12">
     <strong className="block font-bold">Regulamin</strong>
@@ -185,7 +187,7 @@ export const TermsPl = () => (
     <p className="mt-1 leading-snug text-sm">
       Jeśli masz jakiekolwiek pytania lub sugestie dotyczące Regulaminu,
       prosimy o kontakt z Dostawcą Usług pod adresem{" "}
-      <a href="mailto:calmisuapp@gmail.com" className="text-blue-600 underline">calmisuapp@gmail.com</a>.
+      <a href={`mailto:${EMAIL_SUPPORT}`} className="text-blue-600 underline">{EMAIL_SUPPORT}</a>.
     </p>
   </div>
 );

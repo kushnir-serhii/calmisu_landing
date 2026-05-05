@@ -1,3 +1,5 @@
+import { EMAIL_SUPPORT } from "../constants/mail";
+
 export const TermsUa = () => (
   <div className="max-w-xl mx-auto px-6 py-4 sm:px-12">
     <strong className="block font-bold">Умови та Положення</strong>
@@ -183,7 +185,7 @@ export const TermsUa = () => (
     <p className="mt-1 leading-snug text-sm">
       Якщо у вас є запитання або пропозиції щодо Умов та Положень, будь ласка,
       не соромтесь звертатись до Постачальника послуг за адресою{" "}
-      <a href="mailto:calmisuapp@gmail.com" className="text-blue-600 underline">calmisuapp@gmail.com</a>.
+      <a href={`mailto:${EMAIL_SUPPORT}`} className="text-blue-600 underline">{EMAIL_SUPPORT}</a>.
     </p>
   </div>
 );

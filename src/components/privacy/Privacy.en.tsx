@@ -1,3 +1,5 @@
+import { EMAIL_SUPPORT } from "../constants/mail";
+
 export const PrivacyEn = () => (
   <div className="max-w-xl mx-auto px-6 py-4 sm:px-12">
     <strong className="block font-bold">Privacy Policy</strong>
@@ -160,7 +162,7 @@ export const PrivacyEn = () => (
     </p>
     <p className="mt-1 leading-snug text-sm">
       Alternatively, please contact the Service Provider at{" "}
-      <a href="mailto:calmisuapp@gmail.com" className="text-blue-600 underline">calmisuapp@gmail.com</a>{" "}
+      <a href={`mailto:${EMAIL_SUPPORT}`} className="text-blue-600 underline">{EMAIL_SUPPORT}</a>{" "}
       and they will respond in a reasonable time.
     </p>
 
@@ -178,7 +180,7 @@ export const PrivacyEn = () => (
       their servers. If you are a parent or guardian and you are aware that
       your child has provided us with personal information, please contact
       the Service Provider (
-      <a href="mailto:calmisuapp@gmail.com" className="text-blue-600 underline">calmisuapp@gmail.com</a>)
+      <a href={`mailto:${EMAIL_SUPPORT}`} className="text-blue-600 underline">{EMAIL_SUPPORT}</a>)
       so that they will be able to take the necessary actions.
     </p>
 
@@ -212,7 +214,7 @@ export const PrivacyEn = () => (
       If you have any questions regarding privacy while using the
       Application, or have questions about the practices, please contact the
       Service Provider via email at{" "}
-      <a href="mailto:calmisuapp@gmail.com" className="text-blue-600 underline">calmisuapp@gmail.com</a>.
+      <a href={`mailto:${EMAIL_SUPPORT}`} className="text-blue-600 underline">{EMAIL_SUPPORT}</a>.
     </p>
   </div>
 );

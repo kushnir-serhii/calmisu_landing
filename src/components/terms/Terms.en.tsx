@@ -1,3 +1,5 @@
+import { EMAIL_SUPPORT, GMAIL_COMPOSE_URL } from "@/components/constants/mail";
+
 export const TermsEn = () => (
   <div className="max-w-xl mx-auto px-6 py-4 sm:px-12">
     <strong className="block font-bold">Terms of Service</strong>
@@ -184,7 +186,7 @@ export const TermsEn = () => (
     <p className="mt-1 leading-snug text-sm">
       If you have any questions or suggestions about the Terms of Service,
       please do not hesitate to contact the Service Provider at{" "}
-      <a href="mailto:calmisuapp@gmail.com" className="text-blue-600 underline">calmisuapp@gmail.com</a>.
+      <a href={`${GMAIL_COMPOSE_URL}${EMAIL_SUPPORT}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">{EMAIL_SUPPORT}</a>.
     </p>
   </div>
 );

@@ -1,4 +1,4 @@
-import { EMAIL_SUPPORT } from "../constants/mail";
+import { EMAIL_SUPPORT, GMAIL_COMPOSE_URL } from "@/components/constants/mail";
 
 export const PrivacyUa = () => (
   <div className="max-w-xl mx-auto px-6 py-4 sm:px-12">
@@ -156,7 +156,7 @@ export const PrivacyUa = () => (
     </p>
     <p className="mt-1 leading-snug text-sm">
       Як альтернативу, будь ласка, зв'яжись з Постачальником послуг за адресою{" "}
-      <a href={`mailto:${EMAIL_SUPPORT}`} className="text-blue-600 underline">{EMAIL_SUPPORT}</a>,
+      <a href={`${GMAIL_COMPOSE_URL}${EMAIL_SUPPORT}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">{EMAIL_SUPPORT}</a>,
       і відповідь надійде у розумні терміни.
     </p>
 
@@ -172,7 +172,7 @@ export const PrivacyUa = () => (
       Постачальник послуг негайно видалить її зі своїх серверів. Якщо ви є
       батьком або опікуном і знаєте, що ваша дитина надала нам персональну
       інформацію, будь ласка, зв'яжіться з Постачальником послуг (
-      <a href={`mailto:${EMAIL_SUPPORT}`} className="text-blue-600 underline">{EMAIL_SUPPORT}</a>),
+      <a href={`${GMAIL_COMPOSE_URL}${EMAIL_SUPPORT}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">{EMAIL_SUPPORT}</a>),
       щоб він міг вжити необхідних заходів.
     </p>
 
@@ -205,7 +205,7 @@ export const PrivacyUa = () => (
       Якщо у вас є запитання щодо конфіденційності під час використання
       Додатку або запитання щодо наших практик, будь ласка, зв'яжіться з
       Постачальником послуг електронною поштою:{" "}
-      <a href={`mailto:${EMAIL_SUPPORT}`} className="text-blue-600 underline">{EMAIL_SUPPORT}</a>.
+      <a href={`${GMAIL_COMPOSE_URL}${EMAIL_SUPPORT}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">{EMAIL_SUPPORT}</a>.
     </p>
   </div>
 );

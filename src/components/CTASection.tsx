@@ -49,7 +49,7 @@ const CTASection = () => {
             <div className="absolute inset-0 bg-black/10"></div>
             <div className="relative z-10 flex flex-col items-center justify-center h-full p-6 sm:p-8 text-center">
               <h3 className="text-white text-xl sm:text-2xl font-display font-normal mb-2 drop-shadow-lg">
-                Bamboo Forest
+                River Flow
               </h3>
               <button
                 onClick={togglePlay}
@@ -99,22 +99,38 @@ const CTASection = () => {
             </button>
 
             {/* Android button */}
-            <button className="flex w-full h-[54px] px-6 justify-center items-center gap-2 rounded-xl bg-foreground text-background font-body text-base sm:text-lg font-normal leading-[150%] hover:opacity-90 transition-opacity touch-manipulation">
+            <a
+              href="https://play.google.com/store/apps/details?id=com.calmisu.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex w-full h-[54px] px-6 justify-center items-center gap-2 rounded-xl bg-foreground text-background font-body text-base sm:text-lg font-normal leading-[150%] hover:opacity-90 transition-opacity touch-manipulation"
+            >
               Download for Android
               <PlayStoreIcon />
-            </button>
+            </a>
 
             {/* QR code card — desktop only */}
             <div className="hidden md:flex items-center gap-4 w-full bg-white rounded-2xl px-4 py-3 shadow-sm border border-slate-100 mt-1">
-              <img src="/icons/frame.svg" alt="QR code" className="w-12 h-12 shrink-0" />
+              <img
+                src="/icons/frame.svg"
+                alt="QR code"
+                className="w-12 h-12 shrink-0"
+              />
               <div>
-                <p className="text-sm font-medium text-slate-800">Get the Android app</p>
-                <p className="text-xs text-slate-500">Scan with your phone's camera</p>
+                <p className="text-sm font-medium text-slate-800">
+                  Get the Android app
+                </p>
+                <p className="text-xs text-slate-500">
+                  Scan with your phone's camera
+                </p>
               </div>
             </div>
           </div>
 
-          <NotifyMe isOpen={isNotifyOpen} onClose={() => setIsNotifyOpen(false)} />
+          <NotifyMe
+            isOpen={isNotifyOpen}
+            onClose={() => setIsNotifyOpen(false)}
+          />
         </div>
       </div>
     </section>

@@ -48,10 +48,15 @@ const DownloadButtons = ({
       Join iOS Waitlist
       <AppleIcon />
     </button>
-    <button className="flex w-full sm:w-[261px] h-[54px] px-6 justify-center items-center gap-2 rounded-xl bg-foreground text-background font-body text-base sm:text-lg font-normal leading-[150%] hover:opacity-90 transition-opacity touch-manipulation">
+    <a
+      href="https://play.google.com/store/apps/details?id=com.calmisu.app"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex w-full sm:w-[261px] h-[54px] px-6 justify-center items-center gap-2 rounded-xl bg-foreground text-background font-body text-base sm:text-lg font-normal leading-[150%] hover:opacity-90 transition-opacity touch-manipulation"
+    >
       Download for Android
       <PlayStoreIcon />
-    </button>
+    </a>
   </div>
 );
 

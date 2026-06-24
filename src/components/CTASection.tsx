@@ -88,7 +88,7 @@ const CTASection = () => {
           <h2 className="whitespace-pre text-foreground text-center font-display text-3xl sm:text-4xl md:text-5xl lg:text-[60px] font-normal leading-[100%]">
             {`Real calm.\n Join freely.`}
           </h2>
-          <div className="flex flex-col items-center gap-3 w-full px-6 sm:px-0 max-w-[320px]">
+          <div className="flex flex-col items-center gap-3 w-full px-0 sm:px-6 max-w-[320px]">
             {/* iOS button */}
             <button
               onClick={() => setIsNotifyOpen(true)}

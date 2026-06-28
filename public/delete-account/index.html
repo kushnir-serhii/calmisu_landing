@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Delete Account – Calmisu</title>
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com"
+    />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orienta&family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *, *::before, *::after { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        padding: 0;
+        background: #f8f9fc;
+        color: #1c2035;
+        font-family: 'Roboto', Helvetica, Arial, sans-serif;
+        font-weight: 400;
+        line-height: 1.5;
+      }
+
+      .page {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 48px 16px;
+      }
+
+      .card {
+        width: 100%;
+        max-width: 460px;
+        background: #fff;
+        border: 1px solid #e4eaf5;
+        border-radius: 16px;
+        padding: 32px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      h1 {
+        font-family: 'Orienta', serif;
+        font-size: 1.5rem;
+        font-weight: 400;
+        margin: 0;
+        color: #1c2035;
+      }
+
+      .subtitle {
+        font-size: 0.875rem;
+        color: #636672;
+        margin: 0;
+      }
+
+      .warning-box {
+        background: #fff0f0;
+        border: 1px solid #fca5a5;
+        border-radius: 8px;
+        padding: 12px 16px;
+        font-size: 0.875rem;
+        color: #dc2626;
+        font-weight: 500;
+      }
+
+      .section-title {
+        font-weight: 500;
+        font-size: 0.875rem;
+        color: #1c2035;
+        margin: 0 0 6px 0;
+      }
+
+      ul, ol {
+        margin: 0;
+        padding-left: 1.4em;
+        font-size: 0.875rem;
+        color: #636672;
+        line-height: 1.7;
+      }
+
+      .info-box {
+        background: #eff4ff;
+        border: 1px solid #c3d4f4;
+        border-radius: 8px;
+        padding: 12px 16px;
+        font-size: 0.875rem;
+        color: #1a4bbd;
+      }
+
+      .divider {
+        border: none;
+        border-top: 1px solid #e4eaf5;
+        margin: 0;
+      }
+
+      .email-section p {
+        font-size: 0.875rem;
+        color: #636672;
+        margin: 0;
+      }
+
+      a {
+        color: #5a7fd6;
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      .footer {
+        margin-top: 24px;
+        font-size: 0.8rem;
+        color: #9ca3af;
+        text-align: center;
+      }
+
+      .logo {
+        font-family: 'Orienta', serif;
+        font-size: 1.1rem;
+        color: #5a7fd6;
+        margin-bottom: 24px;
+        text-align: center;
+        letter-spacing: 0.03em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <div class="logo">Calmisu</div>
+
+      <div class="card">
+        <div>
+          <h1>Delete Your Account</h1>
+          <p class="subtitle">
+            You can permanently delete your Calmisu account using the options below.
+          </p>
+        </div>
+
+        <div class="warning-box">
+          This action is permanent and cannot be undone. All your data will be removed.
+        </div>
+
+        <div>
+          <p class="section-title">What will be deleted</p>
+          <ul>
+            <li>Your profile (name, email address)</li>
+            <li>Activity history and streaks</li>
+            <li>Chat history stored on your device</li>
+            <li>Subscription information</li>
+          </ul>
+          <p style="margin: 6px 0 0; font-size:0.8rem; color:#9ca3af;">Active subscriptions are not automatically refunded. Contact your app store for refunds.</p>
+        </div>
+
+        <hr class="divider" />
+
+        <div>
+          <p class="section-title">Option 1 — Delete in the app</p>
+          <ol>
+            <li>Open the Calmisu app and sign in.</li>
+            <li>Go to <strong>Profile</strong> → <strong>Settings</strong>.</li>
+            <li>Tap <strong>Delete Account</strong> and confirm.</li>
+          </ol>
+        </div>
+
+        <hr class="divider" />
+
+        <div class="email-section">
+          <p class="section-title">Option 2 — Request by email</p>
+          <p>
+            If you cannot access the app, send a deletion request from the email
+            address linked to your account to
+            <a href="mailto:calmisuapp@gmail.com">calmisuapp@gmail.com</a>.
+            We will process it within 30 days.
+          </p>
+        </div>
+      </div>
+
+      <p class="footer">
+        Questions? See our <a href="https://calmisu.com/en/privacy-policy">Privacy Policy</a>.
+      </p>
+    </div>
+  </body>
+</html>

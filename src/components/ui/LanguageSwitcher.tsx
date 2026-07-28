@@ -27,11 +27,7 @@ export const LanguageSwitcher = ({
         const Flag = flags[l];
         const className = `flex items-center gap-1 ${l === lang ? "font-bold" : "opacity-40 hover:opacity-100"}`;
         return onLangChange ? (
-          <button
-            key={l}
-            onClick={() => onLangChange(l)}
-            className={className}
-          >
+          <button key={l} onClick={() => onLangChange(l)} className={className}>
             <Flag size={20} />
             {l.toUpperCase()}
           </button>

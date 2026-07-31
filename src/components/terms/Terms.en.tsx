@@ -146,12 +146,24 @@ export const TermsEn = () => (
     <strong className="block font-bold mt-4">Subscriptions</strong>
     <p className="mt-1 leading-snug text-sm">
       The Application is available in two tiers: a Free tier with limited access
-      to features, and a Pro tier with full access to the meditation library,
-      unlimited AI chat, and all premium features. Prices for the Pro tier are
+      to features, and a Premium tier with full access to the meditation library,
+      unlimited AI chat, and all premium features. Prices for the Premium tier are
       displayed within the Application at the time of purchase.
     </p>
     <p className="mt-1 leading-snug text-sm">
-      Pro subscriptions are billed on a monthly or quarterly basis and
+      New subscribers may be offered a free trial period before the subscription
+      begins. Availability and length of the free trial, if any, are shown within
+      the Application prior to purchase and are limited to new subscribers who
+      have not previously subscribed. Unless cancelled before the trial ends, the
+      subscription automatically converts to a paid subscription at the price
+      displayed in the Application at the time of purchase, and your Google Play
+      account will be charged accordingly. You can cancel at any time before the
+      trial period ends through your Google Play Store account settings to avoid
+      being charged. Prices and currency are determined by Google Play based on
+      your Google Play account's country or region.
+    </p>
+    <p className="mt-1 leading-snug text-sm">
+      Premium subscriptions are billed on a monthly or quarterly basis and
       automatically renew at the end of each billing period unless cancelled at
       least 24 hours before the renewal date. You can manage and cancel your
       subscription at any time through your Google Play Store account settings.

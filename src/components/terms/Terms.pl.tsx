@@ -147,12 +147,25 @@ export const TermsPl = () => (
     <strong className="block font-bold mt-4">Subskrypcje</strong>
     <p className="mt-1 leading-snug text-sm">
       Aplikacja jest dostępna w dwóch wariantach: bezpłatnym (Free) z ograniczonym
-      dostępem do funkcji oraz Pro z pełnym dostępem do biblioteki medytacji,
-      nieograniczonego czatu AI i wszystkich funkcji premium. Ceny wariantu Pro
-      są wyświetlane w Aplikacji w momencie zakupu.
+      dostępem do funkcji oraz Premium z pełnym dostępem do biblioteki medytacji,
+      nieograniczonego czatu AI i wszystkich funkcji premium. Ceny wariantu
+      Premium są wyświetlane w Aplikacji w momencie zakupu.
     </p>
     <p className="mt-1 leading-snug text-sm">
-      Subskrypcje Pro są rozliczane miesięcznie lub kwartalnie i automatycznie
+      Nowym subskrybentom może zostać zaoferowany bezpłatny okres próbny przed
+      rozpoczęciem subskrypcji. Dostępność i długość bezpłatnego okresu próbnego,
+      jeśli występuje, są wyświetlane w Aplikacji przed dokonaniem zakupu i
+      dotyczą wyłącznie nowych subskrybentów, którzy wcześniej nie posiadali
+      subskrypcji. Jeśli subskrypcja nie zostanie anulowana przed zakończeniem
+      okresu próbnego, automatycznie przechodzi w płatną subskrypcję według ceny
+      wyświetlonej w Aplikacji w momencie zakupu, a Twoje konto Google Play
+      zostanie odpowiednio obciążone. Możesz anulować w dowolnym momencie przed
+      zakończeniem okresu próbnego w ustawieniach konta Google Play Store, aby
+      uniknąć naliczenia opłaty. Ceny i waluta są określane przez Google Play na
+      podstawie kraju lub regionu Twojego konta Google Play.
+    </p>
+    <p className="mt-1 leading-snug text-sm">
+      Subskrypcje Premium są rozliczane miesięcznie lub kwartalnie i automatycznie
       odnawiane pod koniec każdego okresu rozliczeniowego, chyba że zostaną
       anulowane co najmniej 24 godziny przed datą odnowienia. Możesz zarządzać
       subskrypcją i anulować ją w dowolnym momencie w ustawieniach konta Google

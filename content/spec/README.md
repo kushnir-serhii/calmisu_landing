@@ -61,6 +61,7 @@ Exactly one task owns each file. Do not edit a file you don't own.
 
 | File | Purpose |
 |---|---|
+| [`PROGRESS.md`](./PROGRESS.md) | **Where the migration currently stands.** Start here when resuming. |
 | [`00-conventions.md`](./00-conventions.md) | Shared repo facts, invariants, and contracts. **Every agent reads this first.** |
 | [`agents-roster.md`](./agents-roster.md) | Which agent does what, and why |
 | `task-01`…`task-06` | The executable task prompts |

@@ -3,6 +3,7 @@ import { Play, Pause } from "lucide-react";
 import { NotifyMe } from "./popups/NotifyMe";
 import riverMeditationAudio from "@/assets/river_meditation.mp3";
 import infinityBg from "@/assets/infinity.webp";
+import { QRCodeGen } from "./ui/QRCodeGen";
 
 const AppleIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -111,10 +112,14 @@ const CTASection = () => {
 
             {/* QR code card — desktop only */}
             <div className="hidden md:flex items-center gap-4 w-full bg-white rounded-2xl px-4 py-3 shadow-sm border border-slate-100 mt-1">
-              <img
+              {/* <img
                 src="/icons/frame.svg"
                 alt="QR code"
                 className="w-12 h-12 shrink-0"
+              /> */}
+              <QRCodeGen
+                data="https://play.google.com/store/apps/details?id=com.calmisu.app"
+                size={44}
               />
               <div>
                 <p className="text-sm font-medium text-slate-800">

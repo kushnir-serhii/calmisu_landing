@@ -10,7 +10,7 @@
     "node": ">=22"
   },
   "scripts": {
-    "dev": "astro dev",
+    "dev": "start http://localhost:4322/ && astro dev",
     "build": "astro build",
     "lint": "eslint .",
     "preview": "astro preview",

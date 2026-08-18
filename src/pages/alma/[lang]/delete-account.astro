@@ -1,0 +1,66 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import AlmaDocsNav from "@/components/alma/AlmaDocsNav.astro";
+import { DeleteAccountEn } from "@/components/alma/DeleteAccount.en";
+import { DeleteAccountEs } from "@/components/alma/DeleteAccount.es";
+import { DeleteAccountUk } from "@/components/alma/DeleteAccount.uk";
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: "en" } },
+    { params: { lang: "es" } },
+    { params: { lang: "uk" } },
+  ];
+}
+
+const { lang } = Astro.params;
+
+const content = { en: DeleteAccountEn, es: DeleteAccountEs, uk: DeleteAccountUk };
+const current = (content[lang as keyof typeof content] ? lang : "en") as keyof typeof content;
+const Content = content[current];
+
+const meta = {
+  en: {
+    title: "Delete Your Alma Account",
+    description: "Permanently delete your Alma account and all associated data.",
+  },
+  es: {
+    title: "Eliminar tu Cuenta de Alma",
+    description: "Elimina permanentemente tu cuenta de Alma y todos los datos asociados.",
+  },
+  uk: {
+    title: "Видалення Акаунта Alma",
+    description: "Остаточно видаліть свій акаунт Alma та всі пов'язані з ним дані.",
+  },
+}[current];
+
+// hreflang alternates. The URL segment doubles as the ISO 639-1 code for all
+// three languages (en / es / uk), so no mapping table is needed. Hrefs keep the
+// trailing slash to match the canonical Astro emits for directory-format pages.
+const alternates = ["en", "es", "uk"].map((l) => ({
+  hreflang: l,
+  href: new URL(`/alma/${l}/delete-account/`, Astro.site).href,
+}));
+const xDefault = new URL("/alma/en/delete-account/", Astro.site).href;
+---
+
+<BaseLayout
+  title={meta.title}
+  description={meta.description}
+  canonicalUrl={Astro.url.href}
+  lang={current}
+>
+  <Fragment slot="head">
+    {
+      alternates.map((alt) => (
+        <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
+      ))
+    }
+    <link rel="alternate" hreflang="x-default" href={xDefault} />
+  </Fragment>
+
+  <div class="flex flex-col px-2 lg:px-36">
+    <AlmaDocsNav lang={current} current="delete-account" currentPath={Astro.url.pathname} />
+    <Content />
+  </div>
+</BaseLayout>

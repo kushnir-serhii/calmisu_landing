@@ -1,4 +1,3 @@
-import { useLocation, Link } from "react-router-dom";
 import { UkFlagIcon } from "./flags/UkFlagIcon";
 import { PlFlagIcon } from "./flags/PlFlagIcon";
 import { UaFlagIcon } from "./flags/UaFlagIcon";
@@ -11,14 +10,14 @@ const flags: Record<string, React.FC<{ size?: number }>> = {
 
 export const LanguageSwitcher = ({
   lang,
+  currentPath,
   onLangChange,
 }: {
   lang: string;
+  currentPath?: string;
   onLangChange?: (lang: string) => void;
 }) => {
-  const location = useLocation();
-
-  const path = location.pathname.replace(/^\/(en|pl|uk)/, "");
+  const path = (currentPath ?? "").replace(/^\/(en|pl|uk)/, "");
 
   const langs = ["en", "pl", "uk"];
   return (
@@ -32,10 +31,10 @@ export const LanguageSwitcher = ({
             {l.toUpperCase()}
           </button>
         ) : (
-          <Link key={l} to={`/${l}${path}`} className={className}>
+          <a key={l} href={`/${l}${path}`} className={className}>
             <Flag size={20} />
             {l.toUpperCase()}
-          </Link>
+          </a>
         );
       })}
     </div>

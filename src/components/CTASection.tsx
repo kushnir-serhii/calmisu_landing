@@ -43,7 +43,7 @@ const CTASection = () => {
         <div className="flex w-full lg:w-1/2 h-[350px] sm:h-[450px] lg:h-[589px] rounded-2xl sm:rounded-[30px] overflow-hidden relative justify-center items-center p-6 sm:p-8">
           <div className="relative w-full max-w-[320px] sm:max-w-[400px] aspect-square rounded-2xl overflow-hidden shadow-lg">
             <img
-              src={infinityBg}
+              src={infinityBg.src}
               alt="Bamboo Forest background"
               className="absolute inset-0 w-full h-full object-cover"
             />

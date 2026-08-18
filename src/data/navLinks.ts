@@ -2,6 +2,11 @@ export const navLinks = [
   { label: "Features", href: "#features" },
   { label: "FAQ", href: "#faq" },
   {
+    label: "Articles",
+    isOuterLink: true,
+    href: "/articles/",
+  },
+  {
     label: "Privacy Policy",
     isOuterLink: true,
     href: "/en/privacy-policy",

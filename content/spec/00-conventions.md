@@ -49,7 +49,7 @@ Root wrapper class: `flex flex-col items-center w-full bg-background overflow-hi
 | `HeroSection.tsx` | yes | owns a `NotifyMe` modal instance |
 | `CTASection.tsx` | yes | owns a second `NotifyMe` modal instance **and** a `QRCodeGen` (see below) |
 | `ChatSection.tsx` | yes | `window` scroll listener → parallax transforms |
-| `FAQSection.tsx` | yes | Radix Accordion (needs JS to expand) |
+| `FAQSection.tsx` | yes | plain `useState` expand/collapse + CSS transitions — no Radix (still needs JS to expand) |
 | `FeaturesFlow` / `FeaturesScience` | no | pure markup |
 | `Footer.tsx` | no | links + socials; imports `@/assets/calmisu.svg?react` (svgr) |
 | `popups/NotifyMe.tsx` | yes | modal, `createPortal`, `fetch` POST to Google Apps Script |
@@ -162,10 +162,31 @@ interface Props {
   ogImage?: string;         // absolute or root-relative; defaults to "/images/calmisuog.png"
   canonicalUrl?: string;    // defaults to Astro.url.href
   ogType?: "website" | "article";  // defaults to "website"
+
+  // --- added in task-06 (Wave 2) ---
+  lang?: string;    // <html lang>; defaults to "en". Localized legal pages pass "pl" / "uk".
+  noindex?: boolean; // emits <meta name="robots" content="noindex, nofollow">. Used by /delete-account/.
 }
 ```
 
 It renders `<html lang>`, the full `<head>` (charset, viewport, title, description, OG, Twitter card, favicon, canonical), imports `src/index.css` globally, and exposes `<slot />`.
+
+**Head injection (added in task-06).** `BaseLayout` also exposes a named `head` slot as the last
+child of `<head>`. Pages inject extra `<meta>` / `<link>` tags through it:
+
+```astro
+<BaseLayout title={...} description={...}>
+  <Fragment slot="head">
+    <meta property="article:published_time" content={pubDate.toISOString()} />
+  </Fragment>
+  ...body...
+</BaseLayout>
+```
+
+Current consumers: `articles/[...slug].astro` (OG article timestamps) and both
+`[lang]/*.astro` legal pages (hreflang alternates + `x-default`). `/delete-account/` uses the
+`noindex` prop instead, and is also excluded from the sitemap via the `filter` in
+`astro.config.mjs` — **keep those two in sync.**
 
 Current production meta values to use as the site-wide defaults:
 

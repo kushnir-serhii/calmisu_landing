@@ -1,0 +1,73 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PrivacyEn } from "@/components/privacy/Privacy.en";
+import { PrivacyPl } from "@/components/privacy/Privacy.pl";
+import { PrivacyUa } from "@/components/privacy/Privacy.ua";
+import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: "en" } },
+    { params: { lang: "pl" } },
+    { params: { lang: "uk" } },
+  ];
+}
+
+const { lang } = Astro.params;
+
+const content = { en: PrivacyEn, pl: PrivacyPl, uk: PrivacyUa };
+const current = (content[lang as keyof typeof content] ? lang : "en") as keyof typeof content;
+const Content = content[current];
+
+const meta = {
+  en: {
+    title: "Privacy Policy — Calmisu",
+    description:
+      "Read how Calmisu collects, uses, and protects your information across the app.",
+  },
+  pl: {
+    title: "Polityka Prywatności — Calmisu",
+    description:
+      "Dowiedz się, jak Calmisu zbiera, wykorzystuje i chroni Twoje informacje w aplikacji.",
+  },
+  uk: {
+    title: "Політика Конфіденційності — Calmisu",
+    description:
+      "Дізнайтеся, як Calmisu збирає, використовує та захищає вашу інформацію в додатку.",
+  },
+}[current];
+
+// hreflang alternates. The URL segment doubles as the ISO 639-1 code for all
+// three languages (en / pl / uk), so no mapping table is needed. Hrefs keep the
+// trailing slash to match the canonical Astro emits for directory-format pages.
+const alternates = ["en", "pl", "uk"].map((l) => ({
+  hreflang: l,
+  href: new URL(`/${l}/privacy-policy/`, Astro.site).href,
+}));
+const xDefault = new URL("/en/privacy-policy/", Astro.site).href;
+---
+
+<BaseLayout
+  title={meta.title}
+  description={meta.description}
+  canonicalUrl={Astro.url.href}
+  lang={current}
+>
+  <Fragment slot="head">
+    {
+      alternates.map((alt) => (
+        <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
+      ))
+    }
+    <link rel="alternate" hreflang="x-default" href={xDefault} />
+  </Fragment>
+
+  <div class="flex flex-col px-2 lg:px-36">
+    <div class="ml-auto mt-10">
+      <LanguageSwitcher lang={current} currentPath={Astro.url.pathname} client:load />
+    </div>
+    <div>
+      <Content />
+    </div>
+  </div>
+</BaseLayout>

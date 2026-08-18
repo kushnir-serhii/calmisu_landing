@@ -1,0 +1,15 @@
+---
+// Utility page, not a marketing page: it ships noindex and is excluded from the
+// sitemap (see the `filter` in astro.config.mjs). Keep the two in sync.
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import DeleteAccountIsland from "@/components/DeleteAccountIsland";
+---
+
+<BaseLayout
+  title="Delete Your Calmisu Account"
+  description="Permanently delete your Calmisu account and all associated data."
+  noindex
+>
+  <DeleteAccountIsland client:load />
+</BaseLayout>
+

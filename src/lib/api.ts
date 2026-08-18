@@ -1,6 +1,6 @@
-import { FormValues } from "@/pages/DeleteAccountPage";
+import { FormValues } from "@/components/DeleteAccountIsland";
 
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "";
+export const API_BASE_URL = import.meta.env.PUBLIC_API_BASE_URL ?? "";
 export async function deleteAccount(values: FormValues): Promise<void> {
   const res = await fetch(`${API_BASE_URL}/auth/delete-account-web`, {
     method: "POST",

@@ -1,0 +1,42 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Header from "@/components/Header";
+import HeroSection from "@/components/HeroSection";
+import AnimatedSection from "@/components/AnimatedSection";
+import FeaturesFlow from "@/components/FeaturesFlow";
+import FeaturesScience from "@/components/FeaturesScience";
+import AnimatedChatSection from "@/components/AnimatedChatSection";
+import AnimatedFAQSection from "@/components/AnimatedFAQSection";
+import AnimatedCTASection from "@/components/AnimatedCTASection";
+import Footer from "@/components/Footer";
+---
+
+<BaseLayout
+  title="Calmisu — Calm Your Anxiety"
+  description="Ease anxiety with guided breathing, calming sounds, and grounding techniques. Free to download."
+>
+  <div class="flex flex-col items-center w-full bg-background overflow-hidden">
+    <Header client:load />
+    <HeroSection client:load />
+
+    <AnimatedSection client:visible delay={100}>
+      <FeaturesFlow />
+    </AnimatedSection>
+
+    <AnimatedSection client:visible delay={150}>
+      <FeaturesScience />
+    </AnimatedSection>
+
+    <!-- ReviewsSection stays omitted/commented out — do not re-enable -->
+
+    <AnimatedChatSection client:visible delay={250} />
+
+    <AnimatedFAQSection client:visible delay={300} />
+
+    <AnimatedCTASection client:visible delay={350} />
+
+    <AnimatedSection client:visible delay={400}>
+      <Footer />
+    </AnimatedSection>
+  </div>
+</BaseLayout>

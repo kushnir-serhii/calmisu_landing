@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 
-const GOOGLE_APPS_SCRIPT_URL = import.meta.env.VITE_GOOGLE_APPS_SCRIPT_URL as string;
+const GOOGLE_APPS_SCRIPT_URL = import.meta.env.PUBLIC_GOOGLE_APPS_SCRIPT_URL as string;
 
 interface NotifyMeProps {
   isOpen: boolean;

@@ -1,9 +1,10 @@
 import { defineConfig } from "vitest/config";
-import react from "@vitejs/plugin-react-swc";
 import path from "path";
 
+// No React plugin: it existed only for Fast Refresh, which tests never use.
+// Vite's built-in esbuild transform already handles .tsx (tsconfig sets
+// jsx: "react-jsx"), so JSX tests remain possible without the extra dep.
 export default defineConfig({
-  plugins: [react()],
   test: {
     environment: "jsdom",
     globals: true,

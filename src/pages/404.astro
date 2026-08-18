@@ -1,0 +1,24 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+---
+
+<BaseLayout
+  title="Page Not Found — Calmisu"
+  description="The page you're looking for doesn't exist."
+>
+  <div class="flex flex-col items-center w-full bg-background overflow-hidden min-h-screen">
+    <Header client:load />
+
+    <div class="flex flex-1 flex-col items-center justify-center text-center py-24 px-6">
+      <h1 class="mb-4 text-4xl font-bold text-foreground">404</h1>
+      <p class="mb-4 text-xl text-muted-foreground">Oops! Page not found</p>
+      <a href="/" class="text-primary underline hover:text-primary/90">
+        Return to Home
+      </a>
+    </div>
+
+    <Footer />
+  </div>
+</BaseLayout>

@@ -1,5 +1,6 @@
 ---
 import "@/index.css";
+import { CookieConsent } from "@/components/CookieConsent";
 
 interface Props {
   /** Full <title> — no site-name suffix is appended automatically. */
@@ -71,5 +72,6 @@ const absoluteOgImage = new URL(ogImage, Astro.site ?? Astro.url).href;
 
   <body>
     <slot />
+    <CookieConsent client:load />
   </body>
 </html>

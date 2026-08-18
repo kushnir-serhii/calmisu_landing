@@ -1,0 +1,49 @@
+---
+import AlmaLanguageSwitcher from "./AlmaLanguageSwitcher";
+import type { AlmaLang } from "./AlmaLanguageSwitcher";
+
+interface Props {
+  lang: AlmaLang;
+  current: "privacy-policy" | "terms-of-use" | "delete-account";
+  currentPath: string;
+}
+
+const { lang, current, currentPath } = Astro.props;
+
+const labels: Record<AlmaLang, { privacy: string; terms: string; delete: string }> = {
+  en: { privacy: "Privacy Policy", terms: "Terms of Use", delete: "Delete Account" },
+  es: { privacy: "Política de Privacidad", terms: "Términos de Uso", delete: "Eliminar Cuenta" },
+  uk: { privacy: "Політика Конфіденційності", terms: "Умови Використання", delete: "Видалити Акаунт" },
+};
+
+const t = labels[lang];
+
+const tabs = [
+  { key: "privacy-policy", label: t.privacy, href: `/alma/${lang}/privacy-policy/` },
+  { key: "terms-of-use", label: t.terms, href: `/alma/${lang}/terms-of-use/` },
+  { key: "delete-account", label: t.delete, href: `/alma/${lang}/delete-account/` },
+] as const;
+---
+
+<div class="flex flex-col gap-4 pt-10">
+  <div class="flex items-center justify-between">
+    <span class="font-display text-lg font-bold tracking-wide text-foreground">ALMA</span>
+    <AlmaLanguageSwitcher lang={lang} currentPath={currentPath} client:load />
+  </div>
+  <nav class="flex flex-wrap gap-4 text-sm border-b border-border pb-4">
+    {
+      tabs.map((tab) => (
+        <a
+          href={tab.href}
+          class={
+            tab.key === current
+              ? "font-bold text-foreground"
+              : "text-muted-foreground hover:text-foreground transition-colors"
+          }
+        >
+          {tab.label}
+        </a>
+      ))
+    }
+  </nav>
+</div>

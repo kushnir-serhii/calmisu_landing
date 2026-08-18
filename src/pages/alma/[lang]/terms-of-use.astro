@@ -1,0 +1,68 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import AlmaDocsNav from "@/components/alma/AlmaDocsNav.astro";
+import { TermsOfUseEn } from "@/components/alma/TermsOfUse.en";
+import { TermsOfUseEs } from "@/components/alma/TermsOfUse.es";
+import { TermsOfUseUk } from "@/components/alma/TermsOfUse.uk";
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: "en" } },
+    { params: { lang: "es" } },
+    { params: { lang: "uk" } },
+  ];
+}
+
+const { lang } = Astro.params;
+
+const content = { en: TermsOfUseEn, es: TermsOfUseEs, uk: TermsOfUseUk };
+const current = (content[lang as keyof typeof content] ? lang : "en") as keyof typeof content;
+const Content = content[current];
+
+const meta = {
+  en: {
+    title: "Terms of Use — Alma",
+    description: "Read the terms of use for the Alma app.",
+  },
+  es: {
+    title: "Términos de Uso — Alma",
+    description: "Lee los términos de uso de la app Alma.",
+  },
+  uk: {
+    title: "Умови Використання — Alma",
+    description: "Ознайомтеся з умовами використання застосунку Alma.",
+  },
+}[current];
+
+// hreflang alternates. The URL segment doubles as the ISO 639-1 code for all
+// three languages (en / es / uk), so no mapping table is needed. Hrefs keep the
+// trailing slash to match the canonical Astro emits for directory-format pages.
+const alternates = ["en", "es", "uk"].map((l) => ({
+  hreflang: l,
+  href: new URL(`/alma/${l}/terms-of-use/`, Astro.site).href,
+}));
+const xDefault = new URL("/alma/en/terms-of-use/", Astro.site).href;
+---
+
+<BaseLayout
+  title={meta.title}
+  description={meta.description}
+  canonicalUrl={Astro.url.href}
+  lang={current}
+>
+  <Fragment slot="head">
+    {
+      alternates.map((alt) => (
+        <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
+      ))
+    }
+    <link rel="alternate" hreflang="x-default" href={xDefault} />
+  </Fragment>
+
+  <div class="flex flex-col px-2 lg:px-36">
+    <AlmaDocsNav lang={current} current="terms-of-use" currentPath={Astro.url.pathname} />
+    <div>
+      <Content />
+    </div>
+  </div>
+</BaseLayout>

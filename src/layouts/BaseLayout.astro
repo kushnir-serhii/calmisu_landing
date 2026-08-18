@@ -1,0 +1,58 @@
+---
+import "@/index.css";
+
+interface Props {
+  /** Full <title> — no site-name suffix is appended automatically. */
+  title: string;
+  description: string;
+  /** Absolute or root-relative. Defaults to /images/calmisuog.png */
+  ogImage?: string;
+  /** Defaults to Astro.url.href */
+  canonicalUrl?: string;
+  ogType?: "website" | "article";
+}
+
+const {
+  title,
+  description,
+  ogImage = "/images/calmisuog.png",
+  canonicalUrl,
+  ogType = "website",
+} = Astro.props;
+
+const canonical = canonicalUrl ?? Astro.url.href;
+// Social crawlers reject relative image paths — always emit an absolute URL.
+const absoluteOgImage = new URL(ogImage, Astro.site ?? Astro.url).href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Open Graph (Facebook, LinkedIn, Slack, Discord, iMessage previews) -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={absoluteOgImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter/X Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={absoluteOgImage} />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+
+  <body>
+    <slot />
+  </body>
+</html>

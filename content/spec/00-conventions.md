@@ -47,13 +47,37 @@ Root wrapper class: `flex flex-col items-center w-full bg-background overflow-hi
 |---|---|---|
 | `Header.tsx` | yes | mobile hamburger, `useState` + body-scroll-lock `useEffect` |
 | `HeroSection.tsx` | yes | owns a `NotifyMe` modal instance |
-| `CTASection.tsx` | yes | owns a second `NotifyMe` modal instance |
+| `CTASection.tsx` | yes | owns a second `NotifyMe` modal instance **and** a `QRCodeGen` (see below) |
 | `ChatSection.tsx` | yes | `window` scroll listener → parallax transforms |
 | `FAQSection.tsx` | yes | Radix Accordion (needs JS to expand) |
 | `FeaturesFlow` / `FeaturesScience` | no | pure markup |
 | `Footer.tsx` | no | links + socials; imports `@/assets/calmisu.svg?react` (svgr) |
 | `popups/NotifyMe.tsx` | yes | modal, `createPortal`, `fetch` POST to Google Apps Script |
+| `ui/QRCodeGen.tsx` | yes | **browser-only** — see SSR hazard below |
 | `privacy/*`, `terms/*` | no | pure static content components |
+
+### SSR hazard: `QRCodeGen` / `qr-code-styling`
+
+`src/components/ui/QRCodeGen.tsx` (added recently, commit `e16b46c`) is rendered inside `CTASection.tsx` — a desktop-only (`hidden md:flex`) 44px QR pointing at the Play Store listing.
+
+It imports `qr-code-styling` and, in a `useEffect`, does `new QRCodeStyling(...)` then imperatively `container.innerHTML = ""` + `.append(container)` against a `useRef` div. **`qr-code-styling` is a browser-only library that touches `document` at module scope.**
+
+Under Vite's SPA build this never mattered — nothing rendered server-side. Under Astro, every island is server-rendered at build time first, so a bare top-level `import QRCodeStyling from "qr-code-styling"` inside a component Astro prerenders can crash the build with `document is not defined`.
+
+If that happens, the fix is a dynamic import inside the `useEffect` (which only ever runs client-side):
+
+```tsx
+useEffect(() => {
+  let cancelled = false;
+  import("qr-code-styling").then(({ default: QRCodeStyling }) => {
+    if (cancelled) return;
+    // ...existing setup
+  });
+  return () => { cancelled = true; };
+}, [data, size]);
+```
+
+Task-02 owns this decision. Don't pre-emptively rewrite it — build first, and only apply the workaround if the build actually fails.
 
 ### Env vars (only 2, both client-side)
 
@@ -98,6 +122,30 @@ Grep confirms `TooltipProvider` appears only in `src/App.tsx`. Nothing renders a
 **Background on the duplicates:** `public/en|pl|uk/privacy-policy/index.html` and `public/delete-account/index.html` are hand-written static HTML that *silently shadow* the SPA routes on GitHub Pages (real files beat the 404 fallback), even though nothing links to them — `LanguageSwitcher` always targets the SPA route. Astro's generated pages become the single real implementation at those same URLs.
 
 **Background on the 404 hack:** `public/404.html` encodes the path into a `?/`-prefixed query string and redirects to `/`; an inline `<script>` in `index.html`'s `<head>` decodes it back via `history.replaceState`. Both exist purely to fake client routing on GH Pages. Astro's `src/pages/404.astro` builds to a real `dist/404.html` that GH Pages serves natively — the hack becomes dead weight.
+
+---
+
+## Wave 0 outcome (task-01, completed)
+
+The scaffold landed. Facts every Wave 1 agent needs:
+
+**Versions pinned.** Astro **5.18.2** (not 7) + `@astrojs/react@4` + `@astrojs/tailwind@6` + `@astrojs/sitemap@3`. `@astrojs/tailwind@6` peers on `astro ^3||^4||^5`, so Astro 7 won't install alongside it. Moving to Astro 7 later means dropping `@astrojs/tailwind` and migrating to Tailwind v4 — which would invalidate the current `tailwind.config.ts` HSL theme. Out of scope.
+
+**tsconfig.** Extends `astro/tsconfigs/base` (not `/strict`). `verbatimModuleSyntax` is explicitly **off** — leaving it on flagged 8 pre-existing files for value-position type imports. `noImplicitAny`, `strictNullChecks`, `noUnusedLocals/Parameters` remain off, matching the old config. `tsconfig.app.json` + `tsconfig.node.json` were collapsed into one `tsconfig.json`; `@/*` → `./src/*` intact.
+
+**svgr works.** `import CalmisuLogo from "@/assets/calmisu.svg?react"` in `Footer.tsx` verified end to end — the SVG inlines into built HTML with zero hydration JS. `src/env.d.ts` carries the `vite-plugin-svgr/client` reference.
+
+**Asset imports changed shape — this bites `CTASection.tsx`.** Under Astro, image imports return `ImageMetadata`, not a string:
+```json
+{ "src": "/_astro/infinity.iZjE-XyR.webp", "width": 690, "height": 690, "format": "webp" }
+```
+`CTASection.tsx:46` does `<img src={infinityBg}>` → renders `[object Object]`. **Task-02 owns the fix** (`infinityBg.src`). The `.mp3` import still returns a plain string and is fine.
+
+**Known-broken, assigned to task-06:** `npm test` fails (`vitest.config.ts` imports the now-removed `@vitejs/plugin-react-swc`), and `.github/workflows/deploy.yml` still injects `VITE_*` env keys.
+
+**Expected build noise, harmless:** `[@astrojs/sitemap] No pages found!` until task-02 adds `src/pages/index.astro`, and `Unsupported file type` warnings for the 5 `src/pages/*.tsx` files until task-06 deletes them.
+
+**Dev-server caveat:** the old dev-only `servePublicHtmlPages()` plugin was not ported (per spec). In `astro dev` only, `/alma/en/privacy-policy/` 404s while `/alma/en/privacy-policy/index.html` works. Production is unaffected — GH Pages serves directory indexes and `dist/alma/` is byte-identical to `public/alma/`.
 
 ---
 

@@ -78,14 +78,32 @@ Unchanged: `npm ci`, `upload-pages-artifact` with `path: ./dist` (Astro's defaul
 
 **Bump `node-version` from 20 to 22.** GitHub deprecated Node 20 on Actions runners (the deploy log warns about it), and Astro supports 22. Also update `engines.node` in `package.json` to `>=20` → keep or raise to `>=22` consistently.
 
-### 5. Final `package.json` pass
+### 5. Fix `vitest.config.ts` (broken since Wave 0)
+
+`npm test` currently fails outright:
+
+```
+Cannot find package '@vitejs/plugin-react-swc'
+```
+
+`vitest.config.ts:2` imports that plugin, which task-01 removed from `package.json` per spec. Nobody owned this file during Waves 0–1, so it's yours.
+
+The only test in the repo is `src/test/example.test.ts`, a placeholder asserting `expect(true).toBe(true)` — plain TS, no JSX. So the simplest correct fix is to **drop the React plugin from `vitest.config.ts`** entirely, keeping `environment: "jsdom"`, `globals: true`, `setupFiles`, and the `@` alias.
+
+If you'd rather keep JSX-capable tests possible for the future, install `@vitejs/plugin-react` (the standard, non-SWC one) and swap the import. Either is acceptable — state which you chose.
+
+Do **not** delete `vitest.config.ts` or the test harness; that's an explicit out-of-scope decision for the user.
+
+Verify with `npm test` — it must pass, not just build.
+
+### 6. Final `package.json` pass
 
 - Scripts: `dev`/`build`/`preview` → `astro *` (task-01 did this; verify).
 - Deps removed: `vite`, `@vitejs/plugin-react-swc`, `lovable-tagger` (task-01), `react-router-dom` (now).
 - Deps kept: `astro`, `@astrojs/*`, `react`, `react-dom`, `vite-plugin-svgr`, Radix, `react-hook-form`, `zod`, `@hookform/resolvers`, `@tanstack/react-query`, `sonner`, `lucide-react`, Tailwind + plugins.
 - **Do not** prune the unused shadcn primitives or heavy deps (`recharts`, `embla-carousel-react`, `cmdk`, `vaul`, `input-otp`, `next-themes`, `react-day-picker`) — explicitly a separate follow-up PR.
 
-### 6. Full verification
+### 7. Full verification
 
 ```bash
 rm -rf dist
@@ -120,7 +138,7 @@ Then verify the migration actually achieved its purpose:
 - [ ] `npx astro check` (or `tsc --noEmit`) is clean.
 - [ ] `npm run preview`, then click through every route including a deliberately bad URL (confirm the real 404 renders, with no redirect-to-`/` flash — proving the hack is gone).
 
-### 7. Post-deploy checklist (hand to the user, don't do it yourself)
+### 8. Post-deploy checklist (hand to the user, don't do it yourself)
 
 - Verify `https://calmisu.com/sitemap-index.xml` loads.
 - Submit the sitemap in Google Search Console.
@@ -132,6 +150,7 @@ Then verify the migration actually achieved its purpose:
 
 - [ ] Zero `react-router` references in `src/`; dep removed.
 - [ ] Zero `VITE_` references in `src/`.
+- [ ] `npm test` passes (vitest config fixed).
 - [ ] All 7 dead files deleted; build still green.
 - [ ] Workflow uses `PUBLIC_*` env keys and Node 22.
 - [ ] Full `dist/` manifest above verified.

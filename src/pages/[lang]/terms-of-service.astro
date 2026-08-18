@@ -1,0 +1,70 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { TermsEn } from "@/components/terms/Terms.en";
+import { TermsPl } from "@/components/terms/Terms.pl";
+import { TermsUa } from "@/components/terms/Terms.ua";
+import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: "en" } },
+    { params: { lang: "pl" } },
+    { params: { lang: "uk" } },
+  ];
+}
+
+const { lang } = Astro.params;
+
+const content = { en: TermsEn, pl: TermsPl, uk: TermsUa };
+const current = (content[lang as keyof typeof content] ? lang : "en") as keyof typeof content;
+const Content = content[current];
+
+const meta = {
+  en: {
+    title: "Terms of Service — Calmisu",
+    description: "Read the terms and conditions for using the Calmisu app.",
+  },
+  pl: {
+    title: "Warunki Korzystania — Calmisu",
+    description: "Zapoznaj się z warunkami korzystania z aplikacji Calmisu.",
+  },
+  uk: {
+    title: "Умови Використання — Calmisu",
+    description: "Ознайомтеся з умовами використання додатку Calmisu.",
+  },
+}[current];
+
+// hreflang alternates. The URL segment doubles as the ISO 639-1 code for all
+// three languages (en / pl / uk), so no mapping table is needed. Hrefs keep the
+// trailing slash to match the canonical Astro emits for directory-format pages.
+const alternates = ["en", "pl", "uk"].map((l) => ({
+  hreflang: l,
+  href: new URL(`/${l}/terms-of-service/`, Astro.site).href,
+}));
+const xDefault = new URL("/en/terms-of-service/", Astro.site).href;
+---
+
+<BaseLayout
+  title={meta.title}
+  description={meta.description}
+  canonicalUrl={Astro.url.href}
+  lang={current}
+>
+  <Fragment slot="head">
+    {
+      alternates.map((alt) => (
+        <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
+      ))
+    }
+    <link rel="alternate" hreflang="x-default" href={xDefault} />
+  </Fragment>
+
+  <div class="flex flex-col px-2 lg:px-36">
+    <div class="ml-auto mt-10">
+      <LanguageSwitcher lang={current} currentPath={Astro.url.pathname} client:load />
+    </div>
+    <div>
+      <Content />
+    </div>
+  </div>
+</BaseLayout>

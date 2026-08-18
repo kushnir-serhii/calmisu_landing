@@ -35,6 +35,16 @@ jobs:
           # secret names are unchanged — only the env keys were renamed.
           PUBLIC_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
           PUBLIC_GOOGLE_APPS_SCRIPT_URL: ${{ secrets.VITE_GOOGLE_APPS_SCRIPT_URL }}
+          # Firebase web config isn't secret (scoped by Firebase Security
+          # Rules/domain restrictions, not by hiding the key) — same
+          # com-calmisu-app project as the mobile app, so it's fine inline.
+          PUBLIC_FIREBASE_API_KEY: AIzaSyDGir-jfsf8p2imKmi2D6yQGbCk2Joex94
+          PUBLIC_FIREBASE_AUTH_DOMAIN: com-calmisu-app.firebaseapp.com
+          PUBLIC_FIREBASE_PROJECT_ID: com-calmisu-app
+          PUBLIC_FIREBASE_STORAGE_BUCKET: com-calmisu-app.firebasestorage.app
+          PUBLIC_FIREBASE_MESSAGING_SENDER_ID: "806342346137"
+          PUBLIC_FIREBASE_APP_ID: 1:806342346137:web:71b1a73d3d026f9a3fff08
+          PUBLIC_FIREBASE_MEASUREMENT_ID: G-ZPLTHLCD5N
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

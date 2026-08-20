@@ -25,7 +25,7 @@ const FeaturesScience = () => {
         <div className="flex flex-col items-start gap-8 md:gap-12 flex-1">
           <div className="flex flex-col items-start gap-4 md:gap-6 max-w-[577px]">
             <h2 className="text-foreground font-display text-3xl sm:text-4xl md:text-5xl lg:text-[60px] font-normal leading-[100%]">
-              Built on what actually helps
+              The science behind breathing and grounding
             </h2>
             <p className="text-foreground font-body text-base sm:text-lg font-light leading-[150%]">
               Every feature in Calmisu is grounded in established neuroscience and evidence-based self-regulation techniques.

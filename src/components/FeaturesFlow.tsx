@@ -13,7 +13,7 @@ const FeaturesFlow = () => {
         <div className="flex flex-col items-start gap-8 md:gap-12 flex-1">
           <div className="flex flex-col items-start gap-4 md:gap-6 max-w-[577px]">
             <h2 className="text-foreground font-display text-3xl sm:text-4xl md:text-5xl lg:text-[60px] font-normal leading-[100%]">
-              A flow that actually works
+              How Calmisu calms anxiety in four steps
             </h2>
             <p className="text-foreground font-body text-base sm:text-lg font-light leading-[150%]">
               Each step in the Calming Flow is designed to build on the last, progressively regulating your nervous system.

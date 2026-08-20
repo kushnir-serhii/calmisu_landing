@@ -1,0 +1,275 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("blog", ({ data }) => !data.draft);
+  return entries.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<"blog">;
+}
+
+const { entry } = Astro.props;
+const { title, description, pubDate, updatedDate, image, imageAlt, tags } =
+  entry.data;
+const { Content } = await entry.render();
+
+const pageTitle = `${title} — Calmisu`;
+const canonicalUrl = new URL(`/blog/${entry.slug}/`, Astro.site).href;
+const ogImage = image ?? "/images/calmisuog.png";
+const absoluteImage = new URL(ogImage, Astro.site).href;
+
+// Rough estimate from the raw markdown source — good enough for a "min read" hint.
+const wordCount = entry.body.trim().split(/\s+/).length;
+const readMinutes = Math.max(1, Math.round(wordCount / 200));
+
+const dateFormatter = new Intl.DateTimeFormat("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: title,
+  description,
+  datePublished: pubDate.toISOString(),
+  ...(updatedDate ? { dateModified: updatedDate.toISOString() } : {}),
+  image: absoluteImage,
+  author: {
+    "@type": "Organization",
+    name: "Calmisu",
+  },
+  publisher: {
+    "@type": "Organization",
+    name: "Calmisu",
+    logo: {
+      "@type": "ImageObject",
+      url: new URL("/favicon.svg", Astro.site).href,
+    },
+  },
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": canonicalUrl,
+  },
+};
+
+const PLAY_URL =
+  "https://play.google.com/store/apps/details?id=com.calmisu.app";
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={description}
+  ogImage={ogImage}
+  ogType="article"
+  canonicalUrl={canonicalUrl}
+>
+  <Fragment slot="head">
+    <meta property="article:published_time" content={pubDate.toISOString()} />
+    {
+      updatedDate && (
+        <meta
+          property="article:modified_time"
+          content={updatedDate.toISOString()}
+        />
+      )
+    }
+  </Fragment>
+
+  {
+    /*
+      JSON-LD sits in <body>; Google's structured-data parser accepts it
+      regardless of location.
+    */
+  }
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <div class="flex flex-col items-center w-full bg-brand-beige overflow-hidden">
+    <Header client:load />
+
+    <div class="w-full flex flex-col items-center px-6 sm:px-8 pt-10 sm:pt-14 pb-16 sm:pb-20">
+      <div class="w-full max-w-[760px]">
+        <a
+          href="/blog/"
+          class="inline-flex items-center gap-2 text-foreground font-body text-sm font-semibold no-underline hover:text-brand transition-colors mb-8"
+        >
+          &larr; All posts
+        </a>
+
+        <div class="flex flex-wrap items-center gap-3 mb-4">
+          {tags[0] && (
+            <span class="text-brand font-body text-xs px-3 py-1 rounded-full bg-brand-100">
+              {tags[0]}
+            </span>
+          )}
+          <span class="text-muted-foreground font-body text-sm">
+            {readMinutes} min read
+          </span>
+        </div>
+
+        <h1 class="text-foreground font-display text-4xl sm:text-5xl md:text-6xl font-normal leading-[105%] mb-6">
+          {title}
+        </h1>
+
+        <time
+          datetime={pubDate.toISOString()}
+          class="block text-muted-foreground font-body text-sm"
+        >
+          {dateFormatter.format(pubDate)}
+          {updatedDate && ` (updated ${dateFormatter.format(updatedDate)})`}
+        </time>
+      </div>
+    </div>
+
+    <main class="w-full flex flex-col items-center px-6 sm:px-8 py-12 sm:py-16">
+      <article class="flex flex-col gap-10 w-full max-w-[760px]">
+        <div class="relative w-full aspect-[16/8] rounded-2xl overflow-hidden bg-muted -mt-16 sm:-mt-20">
+          {image && (
+            <img
+              src={image}
+              alt={imageAlt ?? ""}
+              class="w-full h-full object-cover"
+            />
+          )}
+        </div>
+
+        <div class="article-prose prose max-w-none">
+          <Content />
+        </div>
+
+        {
+          tags.length > 0 && (
+            <div class="flex flex-wrap gap-2 -mt-4">
+              {tags.map((tag) => (
+                <span class="text-brand font-body text-xs px-3 py-1 rounded-full bg-brand-100">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )
+        }
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6 rounded-3xl bg-brand p-8 sm:p-10">
+          <div class="flex flex-col gap-2">
+            <p class="text-background font-display text-xl sm:text-2xl font-normal leading-[120%]">
+              Find your center with Calmisu.
+            </p>
+            <p class="text-background/70 font-body text-sm sm:text-base max-w-[380px]">
+              Guided breathing, grounding, calligraphy, and meditation — free
+              to download.
+            </p>
+          </div>
+          <a
+            href={PLAY_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="shrink-0 flex w-full sm:w-auto h-[54px] px-6 justify-center items-center gap-2 rounded-xl bg-foreground text-background font-body text-base font-normal leading-[150%] no-underline hover:opacity-90 transition-opacity touch-manipulation"
+          >
+            Download for Android
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M20.9657 10.7041L5.23599 1.70037C5.00625 1.56712 4.74523 1.4973 4.47965 1.49805C4.21406 1.49881 3.95344 1.57011 3.72446 1.70467C3.49834 1.83337 3.31048 2.01984 3.1801 2.245C3.04972 2.47015 2.9815 2.72591 2.98243 2.98609V21.013C2.9815 21.2732 3.04972 21.5289 3.1801 21.7541C3.31048 21.9792 3.49834 22.1657 3.72446 22.2944C3.95344 22.429 4.21406 22.5003 4.47965 22.501C4.74524 22.5018 5.00626 22.432 5.236 22.2987L20.9657 13.295C21.1978 13.1676 21.3915 12.9801 21.5264 12.7522C21.6613 12.5243 21.7324 12.2644 21.7324 11.9995C21.7324 11.7347 21.6613 11.4748 21.5264 11.2469C21.3915 11.019 21.1978 10.8315 20.9657 10.7041ZM13.4999 13.0602L15.2677 14.828L6.99985 19.5602L13.4999 13.0602ZM6.9988 4.43774L15.2678 9.17102L13.4999 10.9389L6.9988 4.43774ZM16.6168 14.0558L14.5605 11.9995L16.6169 9.94322L20.2094 11.9995L16.6168 14.0558Z"
+                fill="currentColor"
+              />
+            </svg>
+          </a>
+        </div>
+      </article>
+    </main>
+
+    <Footer />
+  </div>
+</BaseLayout>
+
+<style>
+  /*
+   * @tailwindcss/typography is a devDependency but is NOT currently
+   * registered in tailwind.config.ts (owned by task-01/task-06), so the
+   * `prose` class above has no effect yet. This scoped stylesheet gives
+   * article bodies correct brand typography and a readable measure
+   * independent of that plugin. If the plugin is registered later, these
+   * rules layer on top harmlessly.
+   */
+  .article-prose {
+    color: hsl(var(--foreground));
+    font-family: "Roboto", sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    font-size: 1.0625rem;
+  }
+
+  .article-prose :global(h2) {
+    font-family: "Orienta", sans-serif;
+    font-weight: 400;
+    font-size: 1.75rem;
+    line-height: 1.2;
+    color: hsl(var(--foreground));
+    margin-top: 2.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .article-prose :global(h3) {
+    font-family: "Orienta", sans-serif;
+    font-weight: 400;
+    font-size: 1.375rem;
+    line-height: 1.25;
+    color: hsl(var(--foreground));
+    margin-top: 1.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .article-prose :global(p) {
+    margin-top: 0;
+    margin-bottom: 1.25rem;
+  }
+
+  .article-prose :global(ul),
+  .article-prose :global(ol) {
+    margin-top: 0;
+    margin-bottom: 1.25rem;
+    padding-left: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .article-prose :global(ul) {
+    list-style-type: disc;
+  }
+
+  .article-prose :global(ol) {
+    list-style-type: decimal;
+  }
+
+  .article-prose :global(li) {
+    padding-left: 0.25rem;
+  }
+
+  .article-prose :global(li > p) {
+    margin-bottom: 0;
+  }
+
+  .article-prose :global(strong) {
+    font-weight: 500;
+    color: hsl(var(--foreground));
+  }
+
+  .article-prose :global(a) {
+    color: hsl(var(--brand-blue));
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .article-prose :global(a:hover) {
+    opacity: 0.85;
+  }
+</style>

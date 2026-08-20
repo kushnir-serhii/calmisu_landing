@@ -62,6 +62,14 @@ const absoluteOgImage = new URL(ogImage, Astro.site ?? Astro.url).href;
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
+    <!-- Fonts: preconnect first so the TLS handshake overlaps the CSS parse. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Orienta&family=Roboto:wght@300;400;500;700&display=swap"
+    />
+
     <!--
       Per-page <head> injection point. Pages pass extra <meta>/<link> tags
       via <Fragment slot="head"> — used for OG article timestamps and

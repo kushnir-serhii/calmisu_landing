@@ -7,6 +7,14 @@ import svgr from "vite-plugin-svgr";
 // https://astro.build/config
 export default defineConfig({
   site: "https://calmisu.com",
+  // GitHub Pages 301s /foo -> /foo/ for directory index files. Emitting the
+  // canonical slashed form everywhere keeps those redirects out of Search
+  // Console's "Page with redirect" bucket.
+  trailingSlash: "always",
+  redirects: {
+    "/articles": "/blog/",
+    "/articles/[...slug]": "/blog/[...slug]",
+  },
   integrations: [
     react(),
     tailwind(),

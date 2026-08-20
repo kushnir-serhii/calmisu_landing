@@ -33,7 +33,9 @@ const Header = () => {
 
   return (
     <header className="flex w-full px-6 md:px-[120px] py-4 justify-between items-center border-b border-secondary bg-background sticky top-0 z-50">
-      <CalmisLogo />
+      <a href="/" className="flex items-center" aria-label="Calmisu home">
+        <CalmisLogo />
+      </a>
 
       {/* Desktop nav */}
       <nav className="hidden md:flex items-center gap-10 lg:gap-16">
@@ -41,8 +43,8 @@ const Header = () => {
           <a
             key={link.label}
             href={link.href}
-            target={link.isOuterLink ? "_blank" : undefined}
-            rel={link.isOuterLink ? "noopener noreferrer" : undefined}
+            target={link.isExternal ? "_blank" : undefined}
+            rel={link.isExternal ? "noopener noreferrer" : undefined}
             className="text-foreground text-center font-body text-lg lg:text-xl font-normal leading-[150%] hover:text-brand transition-colors"
           >
             {link.label}
@@ -67,8 +69,8 @@ const Header = () => {
               <a
                 key={link.label}
                 href={link.href}
-                target={link.isOuterLink ? "_blank" : undefined}
-                rel={link.isOuterLink ? "noopener noreferrer" : undefined}
+                target={link.isExternal ? "_blank" : undefined}
+                rel={link.isExternal ? "noopener noreferrer" : undefined}
                 onClick={() => setIsMenuOpen(false)}
                 className="w-full text-center py-4 text-foreground font-body text-xl font-normal leading-[150%] hover:text-brand transition-colors rounded-xl hover:bg-muted active:bg-muted"
               >

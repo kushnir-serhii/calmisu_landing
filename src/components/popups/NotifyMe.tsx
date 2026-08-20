@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
+import { track } from "@/lib/analytics";
 
 const GOOGLE_APPS_SCRIPT_URL = import.meta.env.PUBLIC_GOOGLE_APPS_SCRIPT_URL as string;
 
@@ -32,8 +33,13 @@ export const NotifyMe: React.FC<NotifyMeProps> = ({ isOpen, onClose }) => {
         body: JSON.stringify({ email }),
         mode: "no-cors",
       });
+      // NOTE: mode "no-cors" makes this resolve even on a 5xx — the event
+      // below counts attempts, not confirmed signups. Reconcile against the
+      // sheet until the Apps Script returns proper CORS headers.
+      track("waitlist_submit", { platform: "ios" });
       setStatus("success");
     } catch {
+      track("waitlist_error", { platform: "ios" });
       setStatus("error");
       setErrorMessage("Something went wrong. Please try again.");
     }

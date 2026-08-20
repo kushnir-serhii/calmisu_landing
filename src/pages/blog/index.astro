@@ -1,0 +1,131 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import { Button } from "@/components/ui/button";
+
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+const posts = allPosts.sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const [featured] = posts;
+
+const dateFormatter = new Intl.DateTimeFormat("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+
+const readMinutes = featured
+  ? Math.max(1, Math.round(featured.body.trim().split(/\s+/).length / 200))
+  : 0;
+---
+
+<BaseLayout
+  title="Blog — Calmisu"
+  description="Practical, calm guidance on breathing, grounding, and anxiety relief from the Calmisu team."
+>
+  <div class="flex flex-col items-center w-full bg-brand-beige overflow-hidden">
+    <Header client:load />
+
+    <main class="w-full flex flex-col items-center px-6 sm:px-8 md:px-[140px] py-16 sm:py-20 md:py-24">
+      <h1 class="text-foreground font-display text-4xl sm:text-5xl md:text-6xl font-normal leading-[100%] w-full max-w-[1160px] mb-10 md:mb-14">
+        Blog
+      </h1>
+
+      {
+        posts.length === 0 ? (
+          <p class="text-muted-foreground font-body text-base font-light leading-[150%]">
+            No posts yet — check back soon.
+          </p>
+        ) : (
+          <div class="w-full max-w-[1160px] flex flex-col gap-14 md:gap-16">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-14 items-center">
+              <a
+                href={`/blog/${featured.slug}/`}
+                class="group block relative w-full aspect-[16/10] rounded-2xl overflow-hidden bg-muted no-underline"
+              >
+                {featured.data.image && (
+                  <img
+                    src={featured.data.image}
+                    alt={featured.data.imageAlt ?? ""}
+                    class="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                )}
+                <div class="absolute inset-0 bg-brand/0 group-hover:bg-brand/20 transition-colors" />
+              </a>
+              <div class="flex flex-col gap-4">
+                <div class="flex flex-wrap items-center gap-3">
+                  {featured.data.tags[0] && (
+                    <span class="text-brand font-body text-xs px-3 py-1 rounded-full bg-brand-100">
+                      {featured.data.tags[0]}
+                    </span>
+                  )}
+                  <span class="text-muted-foreground font-body text-sm">
+                    {readMinutes} min read
+                  </span>
+                  <span class="text-muted-foreground font-body text-sm">
+                    {dateFormatter.format(featured.data.pubDate)}
+                  </span>
+                </div>
+                <a href={`/blog/${featured.slug}/`} class="no-underline">
+                  <h2 class="text-foreground font-display text-3xl sm:text-4xl font-normal leading-[120%] hover:text-brand transition-colors">
+                    {featured.data.title}
+                  </h2>
+                </a>
+                <p class="text-foreground font-body text-base font-light leading-[150%]">
+                  {featured.data.description}
+                </p>
+                <Button
+                  asChild
+                  size="lg"
+                  className="w-fit bg-foreground text-background hover:bg-brand"
+                >
+                  <a href={`/blog/${featured.slug}/`}>Read more</a>
+                </Button>
+              </div>
+            </div>
+
+            {posts.length > 0 && (
+              <ul class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10 list-none p-0 m-0">
+                {posts.map((post) => (
+                  <li>
+                    <a
+                      href={`/blog/${post.slug}/`}
+                      class="group flex flex-col gap-4 no-underline"
+                    >
+                      <div class="relative w-full aspect-[16/10] rounded-2xl overflow-hidden bg-muted">
+                        {post.data.image && (
+                          <img
+                            src={post.data.image}
+                            alt={post.data.imageAlt ?? ""}
+                            class="w-full h-full object-cover"
+                            loading="lazy"
+                          />
+                        )}
+                        <div class="absolute inset-0 bg-brand/0 group-hover:bg-brand/20 transition-colors" />
+                        {post.data.tags[0] && (
+                          <span class="absolute top-3 right-3 text-brand font-body text-xs px-3 py-1 rounded-full bg-brand-100">
+                            {post.data.tags[0]}
+                          </span>
+                        )}
+                      </div>
+                      <h2 class="text-foreground font-display text-2xl font-normal leading-[120%] group-hover:text-brand transition-colors">
+                        {post.data.title}
+                      </h2>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )
+      }
+    </main>
+
+    <Footer />
+  </div>
+</BaseLayout>

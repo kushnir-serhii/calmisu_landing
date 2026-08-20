@@ -12,8 +12,8 @@ const Footer = () => {
             <a
               key={link.label}
               href={link.href}
-              target={link.isOuterLink ? "_blank" : undefined}
-              rel={link.isOuterLink ? "noopener noreferrer" : undefined}
+              target={link.isExternal ? "_blank" : undefined}
+              rel={link.isExternal ? "noopener noreferrer" : undefined}
               className="text-foreground text-sm sm:text-base md:text-xl font-body leading-[150%] hover:opacity-70 transition-opacity"
             >
               <span className="h-11">{link.label}</span>

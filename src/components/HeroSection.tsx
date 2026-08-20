@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { NotifyMe } from "./popups/NotifyMe";
+import { track } from "@/lib/analytics";
 
 const AppleIcon = () => (
   <svg
@@ -42,7 +43,10 @@ const DownloadButtons = ({
     className={`flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto px-6 sm:px-0 ${className}`}
   >
     <button
-      onClick={onIosClick}
+      onClick={() => {
+        track("cta_click", { platform: "ios", location: "hero" });
+        onIosClick();
+      }}
       className="flex w-full sm:w-[260px] h-[54px] px-6 justify-center items-center gap-2 rounded-xl bg-foreground text-background font-body text-base sm:text-lg font-normal leading-[150%] hover:opacity-90 transition-opacity touch-manipulation"
     >
       Join iOS Waitlist
@@ -52,6 +56,7 @@ const DownloadButtons = ({
       href="https://play.google.com/store/apps/details?id=com.calmisu.app"
       target="_blank"
       rel="noopener noreferrer"
+      onClick={() => track("cta_click", { platform: "android", location: "hero" })}
       className="flex w-full sm:w-[261px] h-[54px] px-6 justify-center items-center gap-2 rounded-xl bg-foreground text-background font-body text-base sm:text-lg font-normal leading-[150%] hover:opacity-90 transition-opacity touch-manipulation"
     >
       Download for Android
@@ -117,7 +122,10 @@ const HeroSection = () => {
         </p>
       </div>
 
-      <DownloadButtons onIosClick={() => setIsNotifyOpen(true)} />
+      <div className="flex flex-col items-center gap-3">
+        <DownloadButtons onIosClick={() => setIsNotifyOpen(true)} />
+       
+      </div>
       <NotifyMe isOpen={isNotifyOpen} onClose={() => setIsNotifyOpen(false)} />
       {/* Hero images */}
       <div className="relative w-screen aspect-[1440/855] mt-0">
@@ -125,14 +133,19 @@ const HeroSection = () => {
           src="/images/hero-sky.webp"
           alt=""
           className="absolute w-[100.5%] left-[-0.3%] bottom-0 object-cover"
+          width={1440}
+          height={855}
           loading="lazy"
         />
         <img
           ref={phoneRef}
           src="/images/hero-app.webp"
-          alt="Calmisu app preview"
+          alt="Calmisu anxiety app showing the guided breathing screen"
           className="absolute w-full left-0 bottom-[5%] object-contain will-change-transform transition-transform duration-100 ease-out"
-          loading="lazy"
+          width={1440}
+          height={855}
+          loading="eager"
+          fetchPriority="high"
         />
 
         <img
@@ -141,6 +154,8 @@ const HeroSection = () => {
           // src="/images/hero-cloud.webp"
           alt=""
           className="absolute w-2/3 bottom-0 lg:bottom-[10%] object-contain will-change-transform left-0 right-0 mx-auto transition-transform duration-100 ease-out z-10"
+          width={960}
+          height={570}
           loading="lazy"
         />
       </div>

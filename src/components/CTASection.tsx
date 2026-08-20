@@ -4,6 +4,7 @@ import { NotifyMe } from "./popups/NotifyMe";
 import riverMeditationAudio from "@/assets/river_meditation.mp3";
 import infinityBg from "@/assets/infinity.webp";
 import { QRCodeGen } from "./ui/QRCodeGen";
+import { track } from "@/lib/analytics";
 
 const AppleIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -28,6 +29,7 @@ const CTASection = () => {
         audioRef.current.pause();
       } else {
         audioRef.current.play();
+        track("meditation_preview_play", { track_name: "river_flow" });
       }
       setIsPlaying(!isPlaying);
     }
@@ -92,7 +94,10 @@ const CTASection = () => {
           <div className="flex flex-col items-center gap-3 w-full px-0 sm:px-6 max-w-[320px]">
             {/* iOS button */}
             <button
-              onClick={() => setIsNotifyOpen(true)}
+              onClick={() => {
+                track("cta_click", { platform: "ios", location: "footer_cta" });
+                setIsNotifyOpen(true);
+              }}
               className="flex w-full h-[54px] px-6 justify-center items-center gap-2 rounded-xl bg-foreground text-background font-body text-base sm:text-lg font-normal leading-[150%] hover:opacity-90 transition-opacity touch-manipulation"
             >
               Join iOS Waitlist
@@ -104,11 +109,18 @@ const CTASection = () => {
               href="https://play.google.com/store/apps/details?id=com.calmisu.app"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() =>
+                track("cta_click", { platform: "android", location: "footer_cta" })
+              }
               className="flex w-full h-[54px] px-6 justify-center items-center gap-2 rounded-xl bg-foreground text-background font-body text-base sm:text-lg font-normal leading-[150%] hover:opacity-90 transition-opacity touch-manipulation"
             >
               Download for Android
               <PlayStoreIcon />
             </a>
+
+            <p className="text-muted-foreground text-center font-body text-sm font-light leading-[140%]">
+              Free · No ads · No account needed
+            </p>
 
             {/* QR code card — desktop only */}
             <div className="hidden md:flex items-center gap-4 w-full bg-white rounded-2xl px-4 py-3 shadow-sm border border-slate-100 mt-1">

@@ -1,5 +1,7 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import { TermsEn } from "@/components/terms/Terms.en";
 import { TermsPl } from "@/components/terms/Terms.pl";
 import { TermsUa } from "@/components/terms/Terms.ua";
@@ -59,6 +61,8 @@ const xDefault = new URL("/en/terms-of-service/", Astro.site).href;
     <link rel="alternate" hreflang="x-default" href={xDefault} />
   </Fragment>
 
+  <Header client:load />
+
   <div class="flex flex-col px-2 lg:px-36">
     <div class="ml-auto mt-10">
       <LanguageSwitcher lang={current} currentPath={Astro.url.pathname} client:load />
@@ -67,4 +71,6 @@ const xDefault = new URL("/en/terms-of-service/", Astro.site).href;
       <Content />
     </div>
   </div>
+
+  <Footer />
 </BaseLayout>

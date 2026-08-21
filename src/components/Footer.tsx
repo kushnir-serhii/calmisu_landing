@@ -4,7 +4,7 @@ import { SocialsList } from "./socialsList.tsx/SocialsList";
 
 const Footer = () => {
   return (
-    <footer className="w-full bg-gray-50 flex flex-col items-center pt-10 sm:pt-16 gap-8 sm:gap-10 overflow-hidden relative">
+    <footer className="w-full bg-gray-50 flex flex-col items-center pt-10 sm:pt-16 gap-8 sm:gap-10 border-t border-secondary overflow-hidden relative">
       {/* Nav links */}
       <div className="flex flex-col lg:flex-row gap-6 items-center justify-between w-full sm:px-8 lg:px-[140px]">
         <nav className="flex flex-wrap items-center justify-center xs:justify-between sm:justify-between gap-x-6 gap-y-3 px-6 w-full md:max-w-[80%] lg:max-w-[70%]">

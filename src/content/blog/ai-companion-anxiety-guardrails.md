@@ -1,5 +1,5 @@
 ---
-title: "AI Chat for Anxiety: What It Should Never Say"
+title: "AI Chat for Anxiety: Where the Line Should Be"
 description: "Millions type their anxious thoughts into a chat window at 2am. That relief is real — but only if the AI on the other end respects strict limits."
 pubDate: 2026-07-14
 image: /images/blog/ai-companion-anxiety-guardrails.webp

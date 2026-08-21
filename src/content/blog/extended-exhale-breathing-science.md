@@ -1,6 +1,6 @@
 ---
-title: "Tricking Your Nervous System: The Science of the Extended Exhale"
-description: "From Kundalini fire breath to a sleepless midnight experiment — the real, tested science behind why breathing out longer than you breathe in can calm a racing mind."
+title: "Breathing for Anxiety: Why a Longer Exhale Works"
+description: "The tested science behind why breathing out longer than you breathe in calms a racing mind — and how to use it tonight."
 pubDate: 2026-08-04
 image: /images/blog/extended-exhale-breathing-science.webp
 imageAlt: "A slow exhale visualized as a widening line"

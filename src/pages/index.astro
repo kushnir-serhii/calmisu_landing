@@ -9,6 +9,7 @@ import AnimatedChatSection from "@/components/AnimatedChatSection";
 import AnimatedFAQSection from "@/components/AnimatedFAQSection";
 import AnimatedCTASection from "@/components/AnimatedCTASection";
 import Footer from "@/components/Footer";
+import LatestPosts from "@/components/LatestPosts.astro";
 import { faqItems } from "@/data/faq";
 
 const PLAY_URL =
@@ -109,6 +110,10 @@ const jsonLd = {
     <AnimatedChatSection client:visible delay={250} />
 
     <AnimatedFAQSection client:visible delay={300} />
+
+    <AnimatedSection client:visible delay={325}>
+      <LatestPosts />
+    </AnimatedSection>
 
     <AnimatedCTASection client:visible delay={350} />
 

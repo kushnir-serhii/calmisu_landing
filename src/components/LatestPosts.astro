@@ -1,0 +1,83 @@
+---
+import { getCollection } from "astro:content";
+
+/**
+ * Three most recent posts, shown on the homepage.
+ *
+ * Card markup deliberately mirrors the secondary grid in src/pages/blog/index.astro
+ * (same aspect ratio, radius, tag pill, hover scale) so the two pages read as one
+ * system. Spacing and type scale follow the other homepage sections
+ * (FeaturesFlow / CTASection).
+ */
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+const posts = allPosts
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+
+const dateFormatter = new Intl.DateTimeFormat("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+---
+
+{
+  posts.length > 0 && (
+    <section
+      id="latest"
+      class="w-full scroll-mt-20 px-6 sm:px-8 md:px-16 lg:px-[140px] py-16 sm:py-20 md:py-[120px]"
+    >
+      <div class="flex flex-col gap-8 md:gap-12 w-full">
+        <div class="flex flex-wrap items-end justify-between gap-4">
+          <h2 class="text-foreground font-display text-3xl sm:text-4xl md:text-5xl lg:text-[60px] font-normal leading-[100%]">
+            Latest from the blog
+          </h2>
+          <a
+            href="/blog/"
+            class="text-foreground font-body text-base sm:text-lg font-normal leading-[150%] hover:text-brand transition-colors no-underline"
+          >
+            All articles
+          </a>
+        </div>
+
+        <ul class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-10 list-none p-0 m-0">
+          {posts.map((post) => (
+            <li>
+              <a
+                href={`/blog/${post.slug}/`}
+                class="group flex flex-col gap-4 h-full no-underline"
+              >
+                <div class="relative w-full aspect-[16/10] rounded-2xl overflow-hidden bg-muted">
+                  {post.data.image && (
+                    <img
+                      src={post.data.image}
+                      alt={post.data.imageAlt ?? ""}
+                      class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                      loading="lazy"
+                    />
+                  )}
+                  {post.data.tags[0] && (
+                    <span class="absolute top-3 right-3 text-brand font-body text-xs px-3 py-1 rounded-full bg-brand-100">
+                      {post.data.tags[0]}
+                    </span>
+                  )}
+                </div>
+                <div class="flex flex-col gap-2">
+                  <h3 class="text-foreground font-display text-2xl font-normal leading-[120%] group-hover:text-brand transition-colors">
+                    {post.data.title}
+                  </h3>
+                  <time
+                    datetime={post.data.pubDate.toISOString()}
+                    class="text-muted-foreground font-body text-sm font-light"
+                  >
+                    {dateFormatter.format(post.data.pubDate)}
+                  </time>
+                </div>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
+}

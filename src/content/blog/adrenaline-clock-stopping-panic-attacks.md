@@ -1,5 +1,5 @@
 ---
-title: "The Adrenaline Clock: A Logical Approach to Stopping Panic Attacks"
+title: "How to Stop a Panic Attack: The Adrenaline Clock"
 description: "Panic attacks feel like a medical emergency, but they run on a predictable chemical timer. Understanding that clock can be the fastest way to ride one out."
 pubDate: 2026-08-11
 image: /images/blog/adrenaline-clock.webp

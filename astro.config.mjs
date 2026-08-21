@@ -13,7 +13,15 @@ export default defineConfig({
   trailingSlash: "always",
   redirects: {
     "/articles": "/blog/",
+    "/articles/": "/blog/",
     "/articles/[...slug]": "/blog/[...slug]",
+    // The two /articles/ URLs Google actually indexed had slugs that no
+    // longer exist under /blog/, so the wildcard above can't catch them.
+    // Point each at its closest replacement instead of letting them 404.
+    "/articles/box-breathing-for-anxiety/":
+      "/blog/extended-exhale-breathing-science/",
+    "/articles/grounding-techniques-for-panic-attacks/":
+      "/blog/adrenaline-clock-stopping-panic-attacks/",
   },
   integrations: [
     react(),

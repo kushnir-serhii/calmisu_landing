@@ -43,7 +43,7 @@
     --brand-blue-100: 216 42% 93%;
     --brand-blue-200: 216 32% 87%;
     --brand-star: 222 30% 60%;
-    --brand-beige: 33 47% 96%; /* #FAF6F1 */
+    --brand-beige: 33 47% 98%;
     --gray-50: 210 20% 98%;
     --gray-100: 220 14% 96%;
 
@@ -69,5 +69,49 @@
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-display;
+  }
+}
+
+@layer components {
+  /* Shared CTA button hover: slight lift, sliding icon, diagonal shine.
+     Used on the hero, footer CTA, and blog download buttons for consistency. */
+  .cta-btn {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    transition: transform 300ms ease-out;
+  }
+
+  .cta-btn::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    left: -75%;
+    width: 50%;
+    background: linear-gradient(
+      120deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
+    transform: skewX(-20deg);
+    transition: left 0.6s ease;
+    pointer-events: none;
+  }
+
+  .cta-btn:hover::after {
+    left: 125%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cta-btn,
+    .cta-btn::after,
+    .cta-btn svg {
+      transition: none;
+    }
+
+    .cta-btn::after {
+      display: none;
+    }
   }
 }

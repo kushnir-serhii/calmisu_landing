@@ -3,6 +3,7 @@ import { getCollection, type CollectionEntry } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { DownloadButtons } from "@/components/ui/DownloadButtons";
 
 export async function getStaticPaths() {
   const entries = await getCollection("blog", ({ data }) => !data.draft);
@@ -61,9 +62,6 @@ const jsonLd = {
     "@id": canonicalUrl,
   },
 };
-
-const PLAY_URL =
-  "https://play.google.com/store/apps/details?id=com.calmisu.app";
 ---
 
 <BaseLayout
@@ -146,42 +144,23 @@ const PLAY_URL =
           <Content />
         </div>
 
-        {
-          tags.length > 0 && (
-            <div class="flex flex-wrap gap-2 -mt-4">
-              {tags.map((tag) => (
-                <span class="text-brand font-body text-xs px-3 py-1 rounded-full bg-brand-100">
-                  {tag}
-                </span>
-              ))}
-            </div>
-          )
-        }
-
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6 rounded-3xl bg-brand p-8 sm:p-10">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6 rounded-3xl bg-brand-100 p-8 sm:p-10">
           <div class="flex flex-col gap-2">
-            <p class="text-background font-display text-xl sm:text-2xl font-normal leading-[120%]">
+            <p class="text-foreground font-display text-xl sm:text-2xl font-normal leading-[120%]">
               Find your center with Calmisu.
             </p>
-            <p class="text-background/70 font-body text-sm sm:text-base max-w-[380px]">
+            <p class="text-muted-foreground font-body text-sm sm:text-base max-w-[380px]">
               Guided breathing, grounding, calligraphy, and meditation — free
               to download.
             </p>
           </div>
-          <a
-            href={PLAY_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="shrink-0 flex w-full sm:w-auto h-[54px] px-6 justify-center items-center gap-2 rounded-xl bg-foreground text-background font-body text-base font-normal leading-[150%] no-underline hover:opacity-90 transition-opacity touch-manipulation"
-          >
-            Download for Android
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M20.9657 10.7041L5.23599 1.70037C5.00625 1.56712 4.74523 1.4973 4.47965 1.49805C4.21406 1.49881 3.95344 1.57011 3.72446 1.70467C3.49834 1.83337 3.31048 2.01984 3.1801 2.245C3.04972 2.47015 2.9815 2.72591 2.98243 2.98609V21.013C2.9815 21.2732 3.04972 21.5289 3.1801 21.7541C3.31048 21.9792 3.49834 22.1657 3.72446 22.2944C3.95344 22.429 4.21406 22.5003 4.47965 22.501C4.74524 22.5018 5.00626 22.432 5.236 22.2987L20.9657 13.295C21.1978 13.1676 21.3915 12.9801 21.5264 12.7522C21.6613 12.5243 21.7324 12.2644 21.7324 11.9995C21.7324 11.7347 21.6613 11.4748 21.5264 11.2469C21.3915 11.019 21.1978 10.8315 20.9657 10.7041ZM13.4999 13.0602L15.2677 14.828L6.99985 19.5602L13.4999 13.0602ZM6.9988 4.43774L15.2678 9.17102L13.4999 10.9389L6.9988 4.43774ZM16.6168 14.0558L14.5605 11.9995L16.6169 9.94322L20.2094 11.9995L16.6168 14.0558Z"
-                fill="currentColor"
-              />
-            </svg>
-          </a>
+          <DownloadButtons
+            client:load
+            only="android"
+            location="blog_cta"
+            widthClass="w-full sm:w-auto"
+            className="shrink-0"
+          />
         </div>
       </article>
     </main>

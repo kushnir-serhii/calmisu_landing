@@ -20,6 +20,11 @@ const CalmisLogo = () => (
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [currentPath, setCurrentPath] = useState("");
+
+  useEffect(() => {
+    setCurrentPath(window.location.pathname);
+  }, []);
 
   // Lock body scroll when menu is open
   useEffect(() => {
@@ -30,6 +35,9 @@ const Header = () => {
     }
     return () => { document.body.style.overflow = ""; };
   }, [isMenuOpen]);
+
+  const isLinkActive = (href: string) =>
+    !href.includes("#") && currentPath === href;
 
   return (
     <header className="flex w-full px-6 md:px-[120px] py-4 justify-between items-center border-b border-secondary bg-background sticky top-0 z-50">
@@ -45,7 +53,9 @@ const Header = () => {
             href={link.href}
             target={link.isExternal ? "_blank" : undefined}
             rel={link.isExternal ? "noopener noreferrer" : undefined}
-            className="text-foreground text-center font-body text-lg lg:text-xl font-normal leading-[150%] hover:text-brand transition-colors"
+            className={`text-center font-body text-lg lg:text-xl font-normal leading-[150%] hover:text-brand transition-colors ${
+              isLinkActive(link.href) ? "text-brand" : "text-foreground"
+            }`}
           >
             {link.label}
           </a>
@@ -72,7 +82,9 @@ const Header = () => {
                 target={link.isExternal ? "_blank" : undefined}
                 rel={link.isExternal ? "noopener noreferrer" : undefined}
                 onClick={() => setIsMenuOpen(false)}
-                className="w-full text-center py-4 text-foreground font-body text-xl font-normal leading-[150%] hover:text-brand transition-colors rounded-xl hover:bg-muted active:bg-muted"
+                className={`w-full text-center py-4 font-body text-xl font-normal leading-[150%] transition-colors rounded-xl hover:bg-muted active:bg-muted hover:text-brand ${
+                  isLinkActive(link.href) ? "text-brand" : "text-foreground"
+                }`}
               >
                 {link.label}
               </a>

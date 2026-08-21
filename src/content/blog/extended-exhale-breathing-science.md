@@ -1,5 +1,5 @@
 ---
-title: "Breathing for Anxiety: Why a Longer Exhale Works"
+title: "Why Breathing Out Longer Calms Anxiety Fast"
 description: "The tested science behind why breathing out longer than you breathe in calms a racing mind — and how to use it tonight."
 pubDate: 2026-08-04
 image: /images/blog/extended-exhale-breathing-science.webp

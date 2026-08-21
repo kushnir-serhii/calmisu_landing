@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.calmisu.app",
+      "sha256_cert_fingerprints": [
+        "4F:9B:83:31:B4:11:F7:5A:29:A6:9B:A5:26:06:FE:39:0D:18:96:4E:C2:C3:12:3A:D2:9C:AF:AD:5D:A5:19:0F"
+      ]
+    }
+  }
+]

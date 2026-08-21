@@ -1,6 +1,6 @@
 ---
-title: "The Ink, the Brush, and \"No-Mind\": Calligraphy as Meditation"
-description: "Long before it was a wellness trend, ink brush calligraphy was a Zen practice for quieting the mind. Here's why dragging a brush across paper still works on an overstimulated brain."
+title: "Calligraphy as Meditation: The Zen of the Brush"
+description: "Long before it was a wellness trend, ink brush calligraphy was a Zen practice for quieting the mind. Here's why it still works on an overstimulated brain."
 pubDate: 2026-07-28
 image: /images/blog/calligraphy-as-meditation.webp
 imageAlt: "A brush stroke drying on paper"

@@ -71,34 +71,35 @@ const HeroSection = () => {
       </div>
       <NotifyMe isOpen={isNotifyOpen} onClose={() => setIsNotifyOpen(false)} />
       {/* Hero images */}
+      {/* The container already reserves space via aspect-[1440/855], so
+          width/height here are the true intrinsic sizes, not layout hints. */}
       <div className="relative w-screen aspect-[1440/855] mt-0">
         <img
           src="/images/hero-sky.webp"
           alt=""
-          className="absolute w-[100.5%] left-[-0.3%] bottom-0 object-cover"
           width={1440}
-          height={855}
+          height={736}
+          className="absolute w-[100.5%] left-[-0.3%] bottom-0 object-cover"
           loading="lazy"
         />
         <img
           ref={phoneRef}
           src="/images/hero-app.webp"
           alt="Calmisu anxiety app showing the guided breathing screen"
-          className="absolute w-full left-0 bottom-[5%] object-contain will-change-transform transition-transform duration-100 ease-out"
           width={1440}
-          height={855}
+          height={858}
+          className="absolute w-full left-0 bottom-[5%] object-contain will-change-transform transition-transform duration-100 ease-out"
           loading="eager"
+          // React 18 does not map the camelCase prop; the lowercase HTML
+          // attribute is what the preload scanner actually reads.
           {...{ fetchpriority: "high" }}
         />
 
         <img
           ref={cloudRef}
           src="/images/cloud-small.webp"
-          // src="/images/hero-cloud.webp"
           alt=""
           className="absolute w-2/3 bottom-0 lg:bottom-[10%] object-contain will-change-transform left-0 right-0 mx-auto transition-transform duration-100 ease-out z-10"
-          width={960}
-          height={570}
           loading="lazy"
         />
       </div>

@@ -1,6 +1,6 @@
 ---
-title: "What an AI Companion Should Never Say About Your Anxiety"
-description: "Millions of people now type their anxious thoughts into a chat window at 2am. The relief that offers is real and centuries old — but only if the AI on the other end respects strict limits."
+title: "AI Chat for Anxiety: What It Should Never Say"
+description: "Millions type their anxious thoughts into a chat window at 2am. That relief is real — but only if the AI on the other end respects strict limits."
 pubDate: 2026-07-14
 image: /images/blog/ai-companion-anxiety-guardrails.webp
 imageAlt: "A chat companion screen"

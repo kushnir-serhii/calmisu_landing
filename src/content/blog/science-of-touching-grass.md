@@ -1,5 +1,5 @@
 ---
-title: "The Science of \"Touching Grass\": Why the Internet's Favorite Insult Is Clinical Advice"
+title: "Grounding Techniques: The Science of Touching Grass"
 description: "\"Go touch grass\" is usually thrown around as a joke, but the sensory grounding it describes is a real, well-studied way to interrupt a spiraling mind."
 pubDate: 2026-07-21
 image: /images/blog/science-of-touching-grass.webp

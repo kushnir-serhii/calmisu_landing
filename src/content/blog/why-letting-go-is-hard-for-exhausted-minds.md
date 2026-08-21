@@ -1,6 +1,6 @@
 ---
-title: "You Aren't Bad at Meditation: Why \"Letting Go\" Is So Hard for Exhausted Minds"
-description: "Visualizing your thoughts as clouds drifting away is a classic mindfulness exercise — and, for an exhausted mind, exhausting in itself. Here's why, and what actually helped."
+title: "Why Meditation Feels So Hard When You're Exhausted"
+description: "Watching your thoughts drift away like clouds is classic mindfulness — and, for an exhausted mind, exhausting in itself. Here's what worked instead."
 pubDate: 2026-08-18
 image: /images/blog/why-letting-go-is-hard-for-exhausted-minds.webp
 imageAlt: "Thoughts drifting away as clouds"

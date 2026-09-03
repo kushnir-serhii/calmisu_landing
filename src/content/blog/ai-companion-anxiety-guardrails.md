@@ -6,8 +6,8 @@ image: /images/blog/ai-companion-anxiety-guardrails.webp
 imageAlt: "A chat companion screen"
 tags: ["behind calmisu", "mental health", "ai"]
 draft: false
-authorName: "Calmisu Team"
-authorBio: "Notes on anxiety & the nervous system."
+authorName: "Julia K"
+authorBio: "Product Designer & Creator of Calmisu."
 ---
 
 At any given hour, countless people are unspooling their anxieties into the glowing void of a chat window.

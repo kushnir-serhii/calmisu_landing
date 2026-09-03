@@ -29,11 +29,11 @@ const HeroSection = () => {
   return (
     <section
       ref={sectionRef}
-      className="flex flex-col items-center pt-6 sm:pt-8 md:pt-16 px-6 sm:px-8 md:px-[140px] gap-8 md:gap-10 overflow-hidden"
+      className="flex flex-col items-center pt-10 sm:pt-12 md:pt-16 px-6 sm:px-8 md:px-[140px] gap-8 md:gap-10 overflow-hidden"
     >
       {/* Content */}
       <div className="flex flex-col items-center gap-4 md:gap-5 w-full max-w-[1160px]">
-        <div className="flex flex-col items-center gap-2 w-full">
+        <div className="flex flex-col items-center gap-3 sm:gap-4 w-full">
           {/* Pill */}
           <div className="flex py-2 sm:py-3 px-3 sm:px-4 justify-center items-center gap-1 rounded-full bg-brand-100">
             <div className="flex p-1 items-center rounded-full bg-brand-200 animate-[pulse_3s_ease-in-out_infinite]">

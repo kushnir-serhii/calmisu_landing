@@ -1,0 +1,142 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import { DownloadButtons } from "@/components/ui/DownloadButtons";
+
+const canonicalUrl = new URL("/about/", Astro.site).href;
+
+// Person node lives in the homepage @graph (#author). Here we only reference it
+// so this page reinforces the same entity.
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  url: canonicalUrl,
+  mainEntity: { "@id": new URL("/#author", Astro.site).href },
+};
+---
+
+<BaseLayout
+  title="About Julia K, Creator of Calmisu"
+  description="Julia K is a product designer and the creator of Calmisu. Here's the personal background — calligraphy practice and living with anxiety tools — behind the app."
+  canonicalUrl={canonicalUrl}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <div class="flex flex-col items-center w-full bg-brand-beige overflow-hidden">
+    <Header client:load />
+
+    <main class="w-full flex flex-col items-center px-6 sm:px-8 pt-14 sm:pt-20 pb-16 sm:pb-24">
+      <div class="w-full max-w-[760px] flex flex-col gap-6">
+        <h1 class="text-foreground font-display text-4xl sm:text-5xl md:text-6xl font-normal leading-[105%]">
+          About Calmisu
+        </h1>
+        <div class="flex items-center gap-3">
+          <img
+            src="/images/blog/blog_avatar_julia.webp"
+            alt="Julia K"
+            width="44"
+            height="44"
+            class="h-11 w-11 rounded-full object-cover bg-brand-100"
+          />
+          <p class="text-muted-foreground font-body text-base">
+            Julia K — Product Designer &amp; Creator of Calmisu
+          </p>
+        </div>
+
+        <div class="article-prose flex flex-col gap-5">
+          <p>
+            Hi, I'm Julia. I'm a product designer, and Calmisu is the app I built
+            for the version of myself that needed it.
+          </p>
+
+          <h2>Why I built Calmisu</h2>
+          <p>
+            In my mid-twenties I started having panic attacks. Nothing
+            cinematic — just a suddenly tight chest, racing thoughts, and the
+            sense that something was very wrong. My GP checked my heart and
+            lungs, everything came back clear, and I was left to figure out the
+            practical side myself: what actually helps in the moment.
+          </p>
+          <p>
+            I tried a lot of things over the years — slow breathing in
+            meditations, breath of fire in Kundalini classes, watching thoughts
+            drift by like clouds. Some helped, some didn't, and the advice
+            rarely explained <em>why</em>. When I started building Calmisu I dug
+            into the clinical mechanics of anxiety and found there's real,
+            tested science behind the simple techniques: a longer exhale than
+            inhale, sensory grounding, giving a spiraling mind something
+            concrete to do.
+          </p>
+
+          <h2>The calligraphy part</h2>
+          <p>
+            I first picked up an ink brush at 13, learning to write a few basic
+            kanji as part of an aikido dojo's cultural introduction. I took the
+            classes to fend off school bullies and, honestly, to look cool — and
+            like most of my teenage hobbies, it faded. I don't practice
+            calligraphy today. But the feeling of it stayed with me: the calm,
+            single-pointed concentration, the aesthetics of the process itself —
+            the crisp paper, the ink blooming into the fibers, an imperfect
+            stroke you can't take back. That's the state mindful calligraphy is
+            in Calmisu to recreate, which is why it's a core part of the app and
+            not a novelty feature.
+          </p>
+
+          <h2>What Calmisu is — and isn't</h2>
+          <p>
+            Calmisu is a free Android app: guided breathing, 5-sense grounding,
+            mindful kanji calligraphy, and calming meditation sounds, with no
+            ads and no account required. It's a self-help tool built from
+            personal experience and published research — not a medical device,
+            and not a substitute for a therapist or doctor. I don't hold
+            clinical credentials, and Calmisu doesn't pretend to treat or
+            diagnose anything.
+          </p>
+        </div>
+
+        <div class="mt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-6 rounded-3xl bg-brand-100 p-8 sm:p-10">
+          <div class="flex flex-col gap-2">
+            <p class="text-foreground font-display text-xl sm:text-2xl font-normal leading-[120%]">
+              Try the app I made.
+            </p>
+            <p class="text-muted-foreground font-body text-sm sm:text-base max-w-[380px]">
+              Guided breathing, grounding, calligraphy, and meditation — free to
+              download.
+            </p>
+          </div>
+          <DownloadButtons
+            client:load
+            only="android"
+            location="about_cta"
+            widthClass="w-full sm:w-auto"
+            className="shrink-0"
+          />
+        </div>
+      </div>
+    </main>
+
+    <Footer />
+  </div>
+</BaseLayout>
+
+<style>
+  .article-prose {
+    color: hsl(var(--foreground));
+    font-family: "Roboto", sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    font-size: 1.0625rem;
+  }
+  .article-prose :global(h2) {
+    font-family: "Orienta", sans-serif;
+    font-weight: 400;
+    font-size: 1.75rem;
+    line-height: 1.2;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .article-prose :global(em) {
+    font-style: italic;
+  }
+</style>

@@ -18,6 +18,12 @@ interface Props {
    * that must stay out of search results.
    */
   noindex?: boolean;
+  /**
+   * Emit <meta name="robots" content="noindex, follow"> — deindex the page
+   * while still letting crawlers follow its links. Used for /alma/* pages,
+   * which must leave Google's index but stay reachable by direct link.
+   */
+  noindexFollow?: boolean;
 }
 
 const {
@@ -28,6 +34,7 @@ const {
   ogType = "website",
   lang = "en",
   noindex = false,
+  noindexFollow = false,
 } = Astro.props;
 
 const canonical = canonicalUrl ?? Astro.url.href;
@@ -44,6 +51,7 @@ const absoluteOgImage = new URL(ogImage, Astro.site ?? Astro.url).href;
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
+    {noindexFollow && <meta name="robots" content="noindex, follow" />}
 
     <!-- Open Graph (Facebook, LinkedIn, Slack, Discord, iMessage previews) -->
     <meta property="og:type" content={ogType} />
@@ -60,14 +68,22 @@ const absoluteOgImage = new URL(ogImage, Astro.site ?? Astro.url).href;
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={absoluteOgImage} />
 
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
-    <!-- Fonts: preconnect first so the TLS handshake overlaps the CSS parse. -->
+    <!--
+      Fonts: preconnect first so the TLS handshake overlaps the CSS parse.
+      `display=optional` (not `swap`) is deliberate — it gives the browser a
+      tiny block window and then locks in whatever font is showing for the
+      rest of the page load, so the hero <h1> never visibly reflows/grows
+      when Orienta finishes downloading. On repeat visits the font is cached
+      and paints immediately.
+    -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Orienta&family=Roboto:wght@300;400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Orienta&family=Roboto:wght@300;400;500;700&display=optional"
     />
 
     <!--

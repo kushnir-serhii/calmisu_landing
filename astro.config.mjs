@@ -27,10 +27,13 @@ export default defineConfig({
     react(),
     tailwind(),
     sitemap({
-      // /delete-account/ ships <meta name="robots" content="noindex">; listing
-      // it in the sitemap would contradict that. Keep this in sync with the
-      // `noindex` prop in src/pages/delete-account.astro.
-      filter: (page) => !page.startsWith("https://calmisu.com/delete-account"),
+      // Pages that ship <meta name="robots" content="noindex..."> must not be
+      // listed here — a sitemap entry contradicts the tag. Keep in sync with:
+      //   - the `noindex` prop in src/pages/delete-account.astro
+      //   - the `noindexFollow` prop on the /alma/* pages
+      filter: (page) =>
+        !page.startsWith("https://calmisu.com/delete-account") &&
+        !page.includes("/alma/"),
     }),
   ],
   vite: {

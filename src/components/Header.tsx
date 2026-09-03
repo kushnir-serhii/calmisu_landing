@@ -40,20 +40,20 @@ const Header = () => {
     !href.includes("#") && currentPath === href;
 
   return (
-    <header className="flex w-full px-6 md:px-[120px] py-4 justify-between items-center border-b border-secondary bg-background sticky top-0 z-50">
+    <header className="flex w-full px-6 md:px-10 lg:px-[120px] py-4 justify-between items-center border-b border-secondary bg-background sticky top-0 z-50">
       <a href="/" className="flex items-center" aria-label="Calmisu home">
         <CalmisLogo />
       </a>
 
       {/* Desktop nav */}
-      <nav className="hidden md:flex items-center gap-10 lg:gap-16">
+      <nav className="hidden lg:flex items-center gap-6 xl:gap-16">
         {navLinks.map((link) => (
           <a
             key={link.label}
             href={link.href}
             target={link.isExternal ? "_blank" : undefined}
             rel={link.isExternal ? "noopener noreferrer" : undefined}
-            className={`text-center font-body text-lg lg:text-xl font-normal leading-[150%] hover:text-brand transition-colors ${
+            className={`text-center font-body text-base xl:text-xl font-normal leading-[150%] whitespace-nowrap hover:text-brand transition-colors ${
               isLinkActive(link.href) ? "text-brand" : "text-foreground"
             }`}
           >
@@ -65,7 +65,7 @@ const Header = () => {
       {/* Mobile hamburger */}
       <button
         onClick={() => setIsMenuOpen(!isMenuOpen)}
-        className="md:hidden flex items-center justify-center w-10 h-10 rounded-lg touch-manipulation"
+        className="lg:hidden flex items-center justify-center w-10 h-10 rounded-lg touch-manipulation"
         aria-label={isMenuOpen ? "Close menu" : "Open menu"}
       >
         {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -73,7 +73,7 @@ const Header = () => {
 
       {/* Mobile drawer */}
       {isMenuOpen && (
-        <div className="fixed inset-0 top-[61px] z-40 bg-background md:hidden animate-in fade-in slide-in-from-top-2 duration-200">
+        <div className="fixed inset-0 top-[61px] z-40 bg-background lg:hidden animate-in fade-in slide-in-from-top-2 duration-200">
           <nav className="flex flex-col items-center gap-2 pt-6 px-5">
             {navLinks.map((link) => (
               <a

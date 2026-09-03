@@ -16,6 +16,20 @@ const PLAY_URL =
   "https://play.google.com/store/apps/details?id=com.calmisu.app";
 const site = Astro.site ?? new URL("https://calmisu.com");
 
+// YouTube channel for the entity graph (`sameAs` on Person + Organization).
+// Resolved from https://youtu.be/27xEzkqhZE0 via oEmbed (channel "Calmisu").
+const YOUTUBE_URL: string | null = "https://www.youtube.com/@Calmisu";
+
+// Author photo for the Person node (also used as the blog byline avatar).
+const AUTHOR_IMAGE: string | null = "/images/blog/blog_avatar_julia.webp";
+
+const orgSameAs = [
+  "https://www.instagram.com/calmisu.app/",
+  "https://www.facebook.com/calmisu",
+  "https://www.tiktok.com/@calmisu.app",
+  ...(YOUTUBE_URL ? [YOUTUBE_URL] : []),
+];
+
 /**
  * One @graph so the entities cross-reference each other.
  *
@@ -31,11 +45,19 @@ const jsonLd = {
       name: "Calmisu",
       url: site.href,
       logo: new URL("/favicon.svg", site).href,
-      sameAs: [
-        "https://www.instagram.com/calmisu.app/",
-        "https://www.facebook.com/calmisu",
-        "https://www.tiktok.com/@calmisu.app",
-      ],
+      sameAs: orgSameAs,
+      founder: { "@id": new URL("/#author", site).href },
+    },
+    {
+      "@type": "Person",
+      "@id": new URL("/#author", site).href,
+      name: "Julia K",
+      jobTitle: "Product Designer & Creator of Calmisu",
+      url: new URL("/about/", site).href,
+      ...(AUTHOR_IMAGE
+        ? { image: new URL(AUTHOR_IMAGE, site).href }
+        : {}),
+      ...(YOUTUBE_URL ? { sameAs: [YOUTUBE_URL] } : {}),
     },
     {
       "@type": "WebSite",
@@ -86,7 +108,7 @@ const jsonLd = {
 ---
 
 <BaseLayout
-  title="Calmisu — Free Anxiety Relief App: Breathing & Grounding"
+  title="Anxiety Relief App: Breathing & Calligraphy | Calmisu"
   description="Calm anxiety and panic with guided breathing, 5-sense grounding, mindful calligraphy and meditation sounds. Free Android app — no ads, no account needed."
 >
   <Fragment slot="head">

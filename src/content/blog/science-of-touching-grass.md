@@ -6,8 +6,8 @@ image: /images/blog/science-of-touching-grass.webp
 imageAlt: "Bare feet standing on grass"
 tags: ["grounding", "anxiety 101", "science"]
 draft: false
-authorName: "Calmisu Team"
-authorBio: "Notes on anxiety & the nervous system."
+authorName: "Julia K"
+authorBio: "Product Designer & Creator of Calmisu."
 ---
 
 If you spend enough time in the combative corners of the internet, you will eventually see someone told to "go touch grass." Deployed as an insult, it implies that someone is chronically online, obsessing over digital trivialities, and entirely disconnected from physical reality.

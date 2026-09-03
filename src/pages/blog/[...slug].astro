@@ -18,9 +18,23 @@ interface Props {
 }
 
 const { entry } = Astro.props;
-const { title, description, pubDate, updatedDate, image, imageAlt, tags } =
-  entry.data;
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  image,
+  imageAlt,
+  tags,
+  authorName,
+  authorBio,
+} = entry.data;
 const { Content } = await entry.render();
+
+// dateModified defaults to the publish date when the post has never been edited.
+const modifiedDate = updatedDate ?? pubDate;
+// Byline avatar. Keep in sync with AUTHOR_IMAGE in src/pages/index.astro.
+const authorImage = "/images/blog/blog_avatar_julia.webp";
 
 const pageTitle = `${title} — Calmisu`;
 const canonicalUrl = new URL(`/blog/${entry.slug}/`, Astro.site).href;
@@ -43,12 +57,9 @@ const jsonLd = {
   headline: title,
   description,
   datePublished: pubDate.toISOString(),
-  ...(updatedDate ? { dateModified: updatedDate.toISOString() } : {}),
+  dateModified: modifiedDate.toISOString(),
   image: absoluteImage,
-  author: {
-    "@type": "Organization",
-    name: "Calmisu",
-  },
+  author: { "@id": new URL("/#author", Astro.site).href },
   publisher: {
     "@type": "Organization",
     name: "Calmisu",
@@ -125,6 +136,29 @@ const jsonLd = {
           {dateFormatter.format(pubDate)}
           {updatedDate && ` (updated ${dateFormatter.format(updatedDate)})`}
         </time>
+
+        <a
+          href="/about/"
+          class="mt-5 inline-flex items-center gap-3 no-underline group w-fit"
+          rel="author"
+        >
+          <img
+            src={authorImage}
+            alt={authorName}
+            width="36"
+            height="36"
+            loading="lazy"
+            class="h-9 w-9 rounded-full object-cover bg-brand-100"
+          />
+          <span class="flex flex-col leading-tight">
+            <span class="text-foreground font-body text-sm font-semibold group-hover:text-brand transition-colors">
+              {authorName}
+            </span>
+            <span class="text-muted-foreground font-body text-xs">
+              {authorBio}
+            </span>
+          </span>
+        </a>
       </div>
     </div>
 

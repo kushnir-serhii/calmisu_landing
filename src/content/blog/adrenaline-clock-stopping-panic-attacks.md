@@ -6,8 +6,8 @@ image: /images/blog/adrenaline-clock.webp
 imageAlt: "A clock face dissolving into a pulse line"
 tags: ["anxiety 101", "panic attacks", "breathing"]
 draft: false
-authorName: "Calmisu Team"
-authorBio: "Notes on anxiety & the nervous system."
+authorName: "Julia K"
+authorBio: "Product Designer & Creator of Calmisu."
 ---
 
 I was 25 the first time it happened.

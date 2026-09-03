@@ -16,8 +16,11 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ["Orienta", "sans-serif"],
-        body: ["Roboto", "sans-serif"],
+        // Humanist-ish fallbacks (Trebuchet/Segoe) sit far closer to Orienta's
+        // proportions than bare `sans-serif`, so the swap on first load is
+        // barely perceptible instead of a visible size jump.
+        display: ["Orienta", "Trebuchet MS", "Segoe UI", "sans-serif"],
+        body: ["Roboto", "Segoe UI", "Helvetica Neue", "Arial", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",

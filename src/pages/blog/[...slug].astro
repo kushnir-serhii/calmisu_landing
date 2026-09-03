@@ -59,10 +59,17 @@ const jsonLd = {
   datePublished: pubDate.toISOString(),
   dateModified: modifiedDate.toISOString(),
   image: absoluteImage,
-  author: { "@id": new URL("/#author", Astro.site).href },
+  author: {
+    "@type": "Person",
+    "@id": new URL("/#author", Astro.site).href,
+    name: "Julia K",
+    url: new URL("/about/", Astro.site).href,
+    image: new URL("/images/blog/blog_avatar_julia.webp", Astro.site).href,
+  },
   publisher: {
     "@type": "Organization",
     name: "Calmisu",
+    url: new URL("/", Astro.site).href,
     logo: {
       "@type": "ImageObject",
       url: new URL("/favicon.svg", Astro.site).href,

@@ -39,6 +39,8 @@
 
     /* Calmisu brand tokens */
     --brand-blue: 222 33% 53%;
+    /* Darker brand-blue for text on brand-100/200 fills (4.9:1, WCAG AA). */
+    --brand-blue-dark: 222 33% 45%;
     --brand-blue-light: 222 43% 95%;
     --brand-blue-100: 216 42% 93%;
     --brand-blue-200: 216 32% 87%;

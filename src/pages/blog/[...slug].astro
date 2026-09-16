@@ -1,7 +1,7 @@
 ---
 import { getCollection, type CollectionEntry } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import Header from "@/components/Header";
+import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer";
 import { DownloadButtons } from "@/components/ui/DownloadButtons";
 
@@ -110,7 +110,7 @@ const jsonLd = {
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
   <div class="flex flex-col items-center w-full bg-brand-beige overflow-hidden">
-    <Header client:load />
+    <Header />
 
     <div class="w-full flex flex-col items-center px-6 sm:px-8 pt-10 sm:pt-14 pb-16 sm:pb-20">
       <div class="w-full max-w-[760px]">

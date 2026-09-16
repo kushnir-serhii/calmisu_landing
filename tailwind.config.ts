@@ -58,6 +58,7 @@ export default {
         },
         brand: {
           DEFAULT: "hsl(var(--brand-blue))",
+          dark: "hsl(var(--brand-blue-dark))",
           light: "hsl(var(--brand-blue-light))",
           100: "hsl(var(--brand-blue-100))",
           200: "hsl(var(--brand-blue-200))",

@@ -1,7 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import Header from "@/components/Header";
+import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 
@@ -28,7 +28,7 @@ const readMinutes = featured
   description="Practical, calm guidance on breathing, grounding, and anxiety relief from the Calmisu team."
 >
   <div class="flex flex-col items-center w-full bg-brand-beige overflow-hidden">
-    <Header client:load />
+    <Header />
 
     <main class="w-full flex flex-col items-center px-6 sm:px-8 md:px-[140px] py-16 sm:py-20 md:py-24">
       <h1 class="text-foreground font-display text-4xl sm:text-5xl md:text-6xl font-normal leading-[100%] w-full max-w-[1160px] mb-10 md:mb-14">

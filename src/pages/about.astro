@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import Header from "@/components/Header";
+import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer";
 import { DownloadButtons } from "@/components/ui/DownloadButtons";
 
@@ -24,7 +24,7 @@ const jsonLd = {
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
   <div class="flex flex-col items-center w-full bg-brand-beige overflow-hidden">
-    <Header client:load />
+    <Header />
 
     <main class="w-full flex flex-col items-center px-6 sm:px-8 pt-14 sm:pt-20 pb-16 sm:pb-24">
       <div class="w-full max-w-[760px] flex flex-col gap-6">

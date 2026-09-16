@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import Header from "@/components/Header";
+import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer";
 import { TermsEn } from "@/components/terms/Terms.en";
 import { TermsPl } from "@/components/terms/Terms.pl";
@@ -61,7 +61,7 @@ const xDefault = new URL("/en/terms-of-service/", Astro.site).href;
     <link rel="alternate" hreflang="x-default" href={xDefault} />
   </Fragment>
 
-  <Header client:load />
+  <Header />
 
   <main class="flex flex-col px-2 lg:px-36">
     <div class="ml-auto mt-10">

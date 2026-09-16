@@ -1,4 +1,3 @@
-import { logEvent } from "firebase/analytics";
 import { getAnalyticsInstance } from "./firebase";
 
 type Params = Record<string, string | number | boolean>;
@@ -14,9 +13,11 @@ type Params = Record<string, string | number | boolean>;
 export function track(name: string, params: Params = {}): void {
   const analytics = getAnalyticsInstance();
   if (!analytics) return;
-  try {
-    logEvent(analytics, name, params);
-  } catch {
-    // A metric must never break the page.
-  }
+  // Dynamic so the SDK stays out of the island bundles. A non-null instance
+  // means initAnalytics() already loaded this module, so it resolves from cache.
+  import("firebase/analytics")
+    .then(({ logEvent }) => logEvent(analytics, name, params))
+    .catch(() => {
+      // A metric must never break the page.
+    });
 }

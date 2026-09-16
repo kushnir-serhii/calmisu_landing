@@ -1,5 +1,4 @@
-import { initializeApp } from "firebase/app";
-import { isSupported, getAnalytics, type Analytics } from "firebase/analytics";
+import type { Analytics } from "firebase/analytics";
 
 const firebaseConfig = {
   apiKey: import.meta.env.PUBLIC_FIREBASE_API_KEY,
@@ -17,8 +16,15 @@ let analytics: Analytics | null = null;
 
 // Same Firebase project (com-calmisu-app) as the Calmisu mobile app, so web
 // and app events land in one Analytics dashboard.
+//
+// The SDK is imported dynamically so its ~70 KB only downloads and evaluates
+// after consent — not on every page load, where it cost a long main-thread task.
 export async function initAnalytics() {
   if (analytics) return analytics;
+  const [{ initializeApp }, { isSupported, getAnalytics }] = await Promise.all([
+    import("firebase/app"),
+    import("firebase/analytics"),
+  ]);
   if (!(await isSupported())) return null;
   const app = initializeApp(firebaseConfig);
   analytics = getAnalytics(app);

@@ -60,8 +60,8 @@ const xDefault = new URL("/alma/en/delete-account/", Astro.site).href;
     <link rel="alternate" hreflang="x-default" href={xDefault} />
   </Fragment>
 
-  <div class="flex flex-col px-2 lg:px-36">
+  <main class="flex flex-col px-2 lg:px-36">
     <AlmaDocsNav lang={current} current="delete-account" currentPath={Astro.url.pathname} />
     <Content />
-  </div>
+  </main>
 </BaseLayout>

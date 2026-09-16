@@ -43,6 +43,8 @@ const Footer = () => {
         <img
           src="/images/footer-bamboo.webp"
           alt="Bamboo illustration"
+          width={1920}
+          height={435}
           className="w-full object-cover -mt-[30px] sm:-mt-[60px] md:-mt-[120px]"
           loading="lazy"
         />

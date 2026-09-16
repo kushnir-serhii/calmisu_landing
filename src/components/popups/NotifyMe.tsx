@@ -82,7 +82,7 @@ export const NotifyMe: React.FC<NotifyMeProps> = ({ isOpen, onClose }) => {
         {status !== "success" ? (
           <div className="text-center">
             <div className="flex items-center justify-center mb-5">
-              <img src="/images/cloud_ios.webp" alt="" className="w-16 h-16" />
+              <img src="/images/cloud_ios.webp" alt="" width={64} height={64} className="w-16 h-16" />
             </div>
 
             <h2 className="text-2xl font-semibold mb-2">

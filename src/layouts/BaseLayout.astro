@@ -96,6 +96,6 @@ const absoluteOgImage = new URL(ogImage, Astro.site ?? Astro.url).href;
 
   <body>
     <slot />
-    <CookieConsent client:load />
+    <CookieConsent client:idle />
   </body>
 </html>

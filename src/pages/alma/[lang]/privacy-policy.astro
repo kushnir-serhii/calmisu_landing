@@ -63,10 +63,10 @@ const xDefault = new URL("/alma/en/privacy-policy/", Astro.site).href;
     <link rel="alternate" hreflang="x-default" href={xDefault} />
   </Fragment>
 
-  <div class="flex flex-col px-2 lg:px-36">
+  <main class="flex flex-col px-2 lg:px-36">
     <AlmaDocsNav lang={current} current="privacy-policy" currentPath={Astro.url.pathname} />
     <div>
       <Content />
     </div>
-  </div>
+  </main>
 </BaseLayout>

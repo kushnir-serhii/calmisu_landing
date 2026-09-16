@@ -36,6 +36,8 @@ const CTASection = () => {
             <img
               src={infinityBg.src}
               alt="Bamboo Forest background"
+              width={infinityBg.width}
+              height={infinityBg.height}
               className="absolute inset-0 w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-black/10"></div>
@@ -45,6 +47,8 @@ const CTASection = () => {
               </h3>
               <button
                 onClick={togglePlay}
+                aria-label={isPlaying ? "Pause River Flow preview" : "Play River Flow preview"}
+                aria-pressed={isPlaying}
                 className="w-16 h-16 sm:w-20 sm:h-20 bg-white/10 hover:bg-white/20 backdrop-blur-[10px] rounded-full flex items-center justify-center transition-all duration-300 mb-4 sm:mb-6 touch-manipulation outline-none"
               >
                 {isPlaying ? (

@@ -63,14 +63,14 @@ const xDefault = new URL("/en/terms-of-service/", Astro.site).href;
 
   <Header client:load />
 
-  <div class="flex flex-col px-2 lg:px-36">
+  <main class="flex flex-col px-2 lg:px-36">
     <div class="ml-auto mt-10">
       <LanguageSwitcher lang={current} currentPath={Astro.url.pathname} client:load />
     </div>
     <div>
       <Content />
     </div>
-  </div>
+  </main>
 
   <Footer />
 </BaseLayout>

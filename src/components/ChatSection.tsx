@@ -32,6 +32,8 @@ const ChatSection = () => {
         <img
           src="/images/chat-illustration.webp"
           alt="Calmisu AI chat"
+          width={1149}
+          height={1134}
           className="w-[90%] sm:w-[80%] max-w-[996px] relative -mr-[5%] sm:-mr-[10%] will-change-transform"
           style={{ transform: `translateY(${phoneY}px)` }}
           loading="lazy"
@@ -40,6 +42,8 @@ const ChatSection = () => {
         <img
           src="/images/cloud-small.webp"
           alt=""
+          width={1187}
+          height={747}
           className="absolute z-10 w-[80%] sm:w-[75%] max-w-[791px] bottom-[0%] right-[0%] sm:right-[5%] will-change-transform"
           style={{ transform: `translate(${cloudX}px, ${cloudY}px)` }}
           loading="lazy"

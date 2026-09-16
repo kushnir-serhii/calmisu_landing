@@ -33,7 +33,7 @@ const ReviewsSection = () => {
   return (
     <section className="relative w-full px-6 sm:px-6 md:px-[120px] py-12 sm:py-16 md:py-20 rounded-2xl sm:rounded-3xl overflow-hidden">
       {/* Background */}
-      <img src="/images/reviews-water-bg.webp" alt="" className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+      <img src="/images/reviews-water-bg.webp" alt="" width={1920} height={1271} className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
 
       <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-end gap-6 md:gap-5">
         {/* Title */}

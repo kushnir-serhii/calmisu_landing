@@ -1,0 +1,18 @@
+---
+/**
+ * Static scroll-reveal wrapper. Emits no JavaScript.
+ *
+ * Use this for sections whose children are themselves static. The React
+ * version (AnimatedSection.tsx) exists only for the sections that compose an
+ * interactive child into the same island — see AnimatedChatSection.tsx.
+ */
+interface Props {
+  class?: string;
+}
+
+const { class: className = "" } = Astro.props;
+---
+
+<div class:list={["reveal", className]}>
+  <slot />
+</div>

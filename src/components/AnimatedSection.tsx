@@ -1,32 +1,25 @@
 import React from "react";
-import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 
+/**
+ * Scroll-reveal wrapper for sections that must live inside a React island.
+ *
+ * The reveal itself is pure CSS (`.reveal` in index.css). This component never
+ * hides its children: it previously started at `opacity-0` and waited for a
+ * hydrated IntersectionObserver to flip it, which meant the pre-rendered HTML
+ * shipped invisible and stayed that way whenever hydration failed or landed
+ * after the user had already scrolled past the section.
+ *
+ * Prefer AnimatedSection.astro when the children need no hydration.
+ */
 const AnimatedSection = ({
   children,
   className = "",
-  delay = 0,
 }: {
   children: React.ReactNode;
   className?: string;
+  /** Accepted for call-site compatibility; scroll-driven reveals are keyed to
+   *  each section's own scroll position, so a stagger delay has no meaning. */
   delay?: number;
-}) => {
-  const { ref, isVisible } = useScrollAnimation();
-
-  return (
-    <div
-      ref={ref}
-      className={`w-full transition-all duration-700 ease-out ${
-        isVisible
-          ? 'opacity-100 translate-y-0'
-          : 'opacity-0 translate-y-8'
-      } ${className}`}
-      style={{
-        transitionDelay: isVisible ? `${delay}ms` : '0ms'
-      }}
-    >
-      {children}
-    </div>
-  );
-};
+}) => <div className={`reveal ${className}`}>{children}</div>;
 
 export default AnimatedSection;

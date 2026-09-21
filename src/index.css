@@ -117,3 +117,40 @@
     }
   }
 }
+
+/* Scroll reveal for the homepage sections.
+   The content is visible by default and the animation is layered on top only
+   where the browser supports scroll-driven animations. Nothing here depends on
+   JavaScript: an earlier version gated visibility behind a hydrated React
+   IntersectionObserver, so any island that failed or hydrated after the user
+   had already scrolled past left the section stuck at opacity 0 — full height,
+   no content, i.e. blank space. */
+@layer components {
+  .reveal {
+    width: 100%;
+  }
+
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .reveal {
+        animation: reveal-section linear both;
+        animation-timeline: view();
+        /* Start as the section's top edge reaches the bottom of the viewport,
+           finish once it is 25% of the way up. `cover` keeps the range tied to
+           the element, so a section taller than the viewport still completes. */
+        animation-range: cover 0% cover 25%;
+      }
+    }
+  }
+
+  @keyframes reveal-section {
+    from {
+      opacity: 0;
+      transform: translateY(2rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}

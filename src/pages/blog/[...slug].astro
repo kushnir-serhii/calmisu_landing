@@ -4,6 +4,29 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer";
 import { DownloadButtons } from "@/components/ui/DownloadButtons";
+import QuizCTA, { type QuizCTAVariant } from "@/components/QuizCTA.astro";
+
+// Tag → variant map (CONTENT.md §7 / SPEC.md Task 7). First matching tag
+// in the post's own tag order wins; an unmapped-tag post falls back to
+// `default`.
+const TAG_VARIANTS: Record<string, QuizCTAVariant> = {
+  "panic attacks": "panic",
+  breathing: "anxiety",
+  "nervous system": "anxiety",
+  grounding: "anxiety",
+  meditation: "sleep",
+  habits: "sleep",
+  calligraphy: "racingThoughts",
+  focus: "racingThoughts",
+};
+
+function resolveQuizCTAVariant(postTags: string[]): QuizCTAVariant {
+  for (const tag of postTags) {
+    const variant = TAG_VARIANTS[tag];
+    if (variant) return variant;
+  }
+  return "default";
+}
 
 export async function getStaticPaths() {
   const entries = await getCollection("blog", ({ data }) => !data.draft);
@@ -35,6 +58,8 @@ const { Content } = await entry.render();
 const modifiedDate = updatedDate ?? pubDate;
 // Byline avatar. Keep in sync with AUTHOR_IMAGE in src/pages/index.astro.
 const authorImage = "/images/blog/blog_avatar_julia.webp";
+
+const quizCTAVariant = resolveQuizCTAVariant(tags);
 
 const pageTitle = `${title} — Calmisu`;
 const canonicalUrl = new URL(`/blog/${entry.slug}/`, Astro.site).href;
@@ -184,6 +209,8 @@ const jsonLd = {
         <div class="article-prose prose max-w-none">
           <Content />
         </div>
+
+        <QuizCTA variant={quizCTAVariant} src={`blog_${entry.slug}`} />
 
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6 rounded-3xl bg-brand-100 p-8 sm:p-10">
           <div class="flex flex-col gap-2">

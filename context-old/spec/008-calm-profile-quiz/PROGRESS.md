@@ -10,7 +10,7 @@
 | 4 — `/quiz/result/` | Done |
 | 5 — Capture client + promo code | Done — per-lead codes, nothing to create by hand |
 | 6 — Email sequence | Done (2026-09-22) — **copy needs Julia's sign-off before it ships**, see below |
-| 7 — Blog CTAs | Not started |
+| 7 — Blog CTAs | Done (2026-09-22) — see below |
 | 8 — iOS branch | Done — superseded 2026-09-22 by an explicit platform choice, not UA detection |
 | 9 — Analytics | Done |
 
@@ -323,3 +323,36 @@ In the quiz gate the link sits in the small print **below** the button, delibera
 that used to sit here — narrow single-purpose consent for `ios_waitlist`, bundled "plan + tips"
 consent for `quiz` — is unchanged and is now written into `src/consts/leads.ts`, next to the constants
 it justifies, where the code that depends on it can be read alongside it.
+
+---
+
+## Done — Task 7, blog CTAs (2026-09-22)
+
+### Files added
+
+- `src/components/QuizCTA.astro` — static markup, `variant` + `src` props. Copy is CONTENT.md §7
+  verbatim, no invented lines.
+
+### Files touched
+
+- `src/pages/blog/[...slug].astro` — tag→variant map (SPEC.md Task 7 table) as a plain object; first
+  matching tag in the post's own tag order wins, unmapped falls back to `default`. `<QuizCTA>` renders
+  between the article body and the existing download-buttons block, before the byline/footer. Links to
+  `/quiz/?src=blog_<slug>` — `quiz_start` already forwards whatever `src` it's given, so no changes
+  needed there.
+
+### Verified
+
+- All 7 posts checked against the built HTML: 5 distinct variants appear (`panic`, `anxiety` ×2,
+  `racingThoughts`, `sleep` ×2, `default`), and the one post with no mapped tag
+  (`ai-companion-anxiety-guardrails`, tags `behind calmisu`/`mental health`/`ai`) renders `default`
+  as expected.
+- Diffed a built blog page's `<script>` tags before and against after — identical, so the CTA adds no
+  hydration script.
+- `npm run build` — 29 pages, clean. `npm run test` — 39/39. `npm run lint` — 12 problems, all
+  pre-existing in unrelated `src/components/ui/*` files.
+
+Note while building this: `export type X = | "a" | "b"` (leading-pipe multiline union) inside an
+`.astro` frontmatter block fails Astro's esbuild parse with `Unexpected "|"`. Single-line union worked.
+Not investigated further since the single-line form is fine here, but worth knowing before reaching
+for a multiline union in another `.astro` file.

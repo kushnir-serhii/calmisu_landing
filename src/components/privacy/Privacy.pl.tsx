@@ -95,6 +95,11 @@ export const PrivacyPl = () => (
         promocyjny
       </li>
       <li>Fakt wyrażenia zgody oraz jej datę</li>
+      <li>
+        Na co dokładnie wyraziłeś/-aś zgodę — na otrzymywanie planu i
+        okazjonalnych wskazówek albo na jedno powiadomienie o dostępności w
+        App Store, w zależności od sposobu zgłoszenia
+      </li>
       <li>Jednorazowy kod promocyjny wydany Tobie oraz datę jego ważności</li>
     </ul>
     <p className="mt-1 leading-snug text-sm">

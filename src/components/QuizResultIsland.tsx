@@ -267,7 +267,7 @@ export default function QuizResultIsland() {
           <p className="mt-3 text-foreground font-body text-base font-light text-center leading-[150%]">
             {platform === "ios"
               ? "Tell us where to send it. We'll also let you know the moment Calmisu lands on the App Store."
-              : "Tell us where to send it. You'll also get a personal code for 14 days of Calmisu PRO — free, no card. You'll have 7 days to activate it."}
+              : "Tell us where to send it. You'll also get a personal code for 14 days of Calmisu PRO — free, no card. You'll have 15 days to activate it."}
           </p>
 
           <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
@@ -440,7 +440,7 @@ export default function QuizResultIsland() {
                   </p>
                   <p className="mt-4 text-foreground font-body text-base font-light leading-[150%]">
                     Open Calmisu, create an account, and enter this code in
-                    Profile. Activate it within 7 days
+                    Profile. Activate it within 15 days
                     {promoExpiresAt
                       ? ` — by ${new Date(promoExpiresAt).toLocaleDateString(
                           "en-US",

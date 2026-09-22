@@ -197,7 +197,7 @@ export default function QuizIsland({ source = "direct" }: Props) {
                   alt=""
                   width={36}
                   height={36}
-                  className="w-9 h-9 shrink-0"
+                  className="w-6 h-6 shrink-0"
                   loading="eager"
                 />
               )}

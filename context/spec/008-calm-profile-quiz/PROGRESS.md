@@ -260,6 +260,17 @@ invent copy" — so read `email.service.ts` and rewrite in Julia's voice before 
 Also still to do: push `quiz-sequence`, open the PR, and deploy. Nothing new is needed in Railway env
 — no new variables.
 
+**Deploy the backend before the landing, not the other way round.** The landing's `quize-page`
+carries the "activate within 15 days" copy; `main` still mints 7-day codes until `quiz-sequence` is
+merged. Landing ships on push to `main` via GitHub Pages, backend auto-deploys on merge — so pushing
+the landing first would have the site promise 15 days while every code issued is still good for 7.
+The reverse order is harmless: 15-day codes under copy that says 7 merely understates.
+
+Second-order, worth knowing rather than acting on: merging the backend starts the cron. No existing
+production lead can receive anything (`consentScope: null` excludes all of them), but the first *new*
+quiz lead gets the draft Day 2 copy about 48h later. That is the window to land Julia's rewrite in,
+not a margin to rely on.
+
 ## Open for the next session
 
 **1. ~~Create the shared promo code.~~** Done differently — codes are now minted per lead, see above. No manual row to create, no code value in any env var.

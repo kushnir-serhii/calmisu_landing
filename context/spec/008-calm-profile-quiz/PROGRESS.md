@@ -9,9 +9,9 @@
 | 3 — `/quiz/` page | Done |
 | 4 — `/quiz/result/` | Done |
 | 5 — Capture client + promo code | Done — per-lead codes, nothing to create by hand |
-| 6 — Email sequence | Not started — **unblocked**, Day 0 + unsubscribe already ship |
+| 6 — Email sequence | Done (2026-09-22) — **copy needs Julia's sign-off before it ships**, see below |
 | 7 — Blog CTAs | Not started |
-| 8 — iOS branch | Done (built into Task 4 rather than deferred) |
+| 8 — iOS branch | Done — superseded 2026-09-22 by an explicit platform choice, not UA detection |
 | 9 — Analytics | Done |
 
 ### Files added
@@ -122,11 +122,149 @@ Two notes on *how*, because a naive fix would have rotted:
 
 ---
 
+## Done — explicit platform choice (2026-09-22)
+
+### Why this exists
+
+The result page used to guess the phone OS from the user-agent and, if it looked like iOS, submit `source: 'ios_waitlist'` instead of `'quiz'` — suppressing both the code and the email. Two things were wrong with that:
+
+1. **A user-agent cannot know what phone you own.** Someone on a Windows laptop with an iPhone in their pocket was served the Android path and issued a code they could never redeem. Desktop is a large share of quiz traffic, so this was likely a *bigger* miss than iOS itself. No detection can fix this in principle — only asking can.
+2. **It jammed two facts into one column.** `source` meant both "which form" and "which phone", which is exactly why quiz-takers and notify-me-modal users had become indistinguishable for consent purposes.
+
+### What changed
+
+**The visitor now chooses.** A two-option radio group ("Which phone do you use?" — iPhone / Android) sits above the email input on the gate, styled as an exact copy of the quiz's own option cards (`border-2`, `rounded-xl`, `bg-white border-brand` selected). The UA sniff is kept, demoted to the **preselect** — so mobile keeps its zero friction and desktop gets corrected. A ref guards against the async UA resolution clobbering a manual choice.
+
+Design note: pills above **one** submit button, not two submit buttons. The gate has a single full-width `bg-brand` primary action; two brand-filled submits would compete at the exact point where hesitation costs conversions. The offer line rewrites on selection, so the promise is visible before committing.
+
+**`source` and `platform` are now independent.** The quiz always sends `source: 'quiz'`; `'ios_waitlist'` now comes **only** from the NotifyMe modal. `platform` is `'android' | 'ios' | null`.
+
+**The two decisions in `POST /leads` were split:**
+
+| | Promo code | Day 0 plan email |
+|---|---|---|
+| `source: 'quiz'`, platform android/null | yes | yes, with code |
+| `source: 'quiz'`, platform ios | **no** | **yes**, no code + App Store notice |
+| `source: 'ios_waitlist'` | no | no |
+
+iOS visitors earned the plan by finishing the quiz and the copy promises it, so they get it — just not a code they cannot redeem. The null-promo email path already existed (the "already redeemed" branch), so it was reused rather than reinvented; `awaitingAppStore` distinguishes the two null cases, because "already redeemed" must **not** start promising an App Store notice.
+
+`isCodeReusable` / `isCodeSpent` and the one-code-per-lead rule were left untouched.
+
+### Privacy policy
+
+The policy enumerates stored fields after the word **"only"**, which `platform` made false. Added in all three languages (en/pl/ua), and the stale "(the quiz or the iOS waitlist)" parenthetical was corrected to the app waitlist signup, since the quiz no longer produces that value. **If you add another stored field, this list and the consent-checkbox sentence in `QuizResultIsland.tsx` are both factual claims — update them with it.**
+
+### Shipped
+
+- Backend: PR #71 (`lead-platform`), merged to main, auto-deployed. Migration `20260922150000_add_lead_platform` applied in production 16:06:25Z, no rollback. Suite **227/227**.
+- Landing: commit `603edba` on `quize-page`. **39/39**, build clean, no new lint.
+- `platform` is nullable — additive, no backfill (prod `leads` had 0 rows).
+
+---
+
+---
+
+## Done — Task 6, the email sequence (2026-09-22)
+
+Days 2/5/9/14 now send from a daily cron. Day 0 and unsubscribe already shipped in Task 1, so this
+inherited both rather than rebuilding them.
+
+### `kumo_back-end` (branch `quiz-sequence`, commit `d32cc93`) — **not pushed, no PR opened**
+
+- `prisma/schema.prisma` — `Lead.consentScope` / `Lead.consentAt`, new `LeadEmail` model, migration
+  `20260922170000_add_lead_consent_scope_and_emails`. Both columns nullable, additive, no backfill.
+- `src/consts/leads.ts` (new) — `CONSENT_SCOPE_QUIZ` / `CONSENT_SCOPE_IOS_WAITLIST`
+- `src/jobs/quizSequence.ts` (new) — `runQuizSequence()`, wired in `src/app.ts` at `0 9 * * *`
+- `src/services/email.service.ts` — `sendQuizDay2Email` / `Day5` / `Day9` / `Day14`
+- `test/leads/leadSequence.test.ts` (new, 15), `test/leads/leads.test.ts` extended
+
+### `consentScope` — what Art. 7(1) actually needed
+
+The open question from the last session is closed. `consent: true` could prove *that* someone
+consented; it could not prove *to what*.
+
+`consentScope` records the copy they agreed under: `quiz_plan_tips_v1` (the quiz gate's explicit
+unticked checkbox) or `ios_waitlist_notify_v1` (the NotifyMe modal — narrow consent to one App Store
+ping, no checkbox). `consentAt` stamps every submission, not just the first, because re-submitting is
+itself a fresh opt-in — that is already why the update branch clears `unsubscribedAt`.
+
+Three things about it are load-bearing:
+
+- **Server-derived, never client-supplied.** Neither field is in `createLeadSchema`, and a test asserts
+  a client-sent `consentScope` is ignored. A caller must not be able to assert what copy they were shown.
+- **The `_v1` suffix is not decoration.** If the consent copy changes materially, mint `_v2`. Never
+  redefine `_v1` — old rows have to keep meaning what they meant when they were written.
+- **The sequence filters on `consentScope`, not on `source`.** That is the whole point. The rule the
+  last session said to "make a test, not a comment" now reads the recorded consent directly.
+
+Consequence, and it is intended: leads captured before this migration have `consentScope: null` and
+get **no sequence emails at all**. We cannot demonstrate what they agreed to, so we do not send.
+
+### The activation window moved 7 → 15 days
+
+Day 14's subject is `Your code expires tomorrow`. That copy was written when the plan was one shared
+code; per-lead codes expire 7 days after capture, so on day 14 the code had been dead for a week.
+
+`QUIZ_PROMO_ACTIVATION_WINDOW_DAYS` is now **15**, making the email true. `QUIZ_PROMO_DURATION_DAYS`
+(14 days of PRO once redeemed) is **unchanged** — still two different clocks, still stated separately
+in both the email and Section C. Do not shrink the window back toward 7 without moving or dropping
+that email; the constant's comment says so.
+
+**This does not reach codes already minted.** Existing leads keep their 7-day `expiresAt`, so Day 14
+is suppressed for them as expired. The first cohort silently skips the last email. Correct, but know it.
+
+### How the job decides
+
+Eligibility, every line of it covered by a test:
+
+- `consentScope === 'quiz_plan_tips_v1'`, `consent === true`, `unsubscribedAt === null`
+- no `LeadEmail` row for `(leadId, day)`
+- age window `N <= ageDays < N + 2` — the 2-day catch-up survives a missed cron run, and the upper
+  bound is what stops the first-ever run blasting a backlog of old leads with the whole sequence
+- the query is bounded by `createdAt >= now - OLDEST_ELIGIBLE_AGE_DAYS`, derived from
+  `SEQUENCE_DAYS` + `CATCH_UP_WINDOW_DAYS`, so a daily job doesn't scan every lead ever captured
+
+Day 14 carries three more, because it is the only email whose copy leans on the code: skip when there
+is no `promoCodeId` (iOS leads never get one), when the code is redeemed, and when `expiresAt` is
+null, past, or more than 48h out. **It reads the lead's actual code, never the constant** — that is
+what keeps "expires tomorrow" honest for a lead whose window predates the widening.
+
+**The ledger row is written before the send, not after.** `@@unique([leadId, day])` is the
+concurrency lock: a second overlapping run's `create` fails and that run skips the lead, instead of
+both racing to send. If the send then throws, the row is deleted and the error rethrown, so the lead
+stays eligible within its catch-up window rather than being silently skipped forever with nothing
+delivered.
+
+### Landing (commit `637c074` on `quize-page`)
+
+- `QuizResultIsland.tsx` — both "7 days to activate" strings → 15. `"Your 7 days"` is the plan
+  heading, a third unrelated number, untouched.
+- `Privacy.en/pl/ua.tsx` — one new stored-field bullet for `consentScope`, same position in all three.
+  `consentAt` needed none: "The fact that you gave consent, and when" already claimed it, and was
+  arguably untrue until now.
+
+### Verified
+
+- `npx tsc --noEmit` clean; `npm run db:test:setup` applies the migration to real Postgres
+- Backend `npm test` — **246/246** (baseline was 227), run and confirmed directly, not taken on report
+- Landing — 39/39, `npm run build` clean at 29 pages, no new lint
+
+### Before this ships
+
+**The day 2/5/9/14 body copy is agent-written, not Julia's.** `CONTENT.md` §6 scripts Day 0 in full
+but gives the other four only a subject line and a one-line brief ("short lead-in, link to X, one line
+back to the plan"). The structure matches the spec; the words are a **draft**. The spec says "Do not
+invent copy" — so read `email.service.ts` and rewrite in Julia's voice before sending to a real list.
+
+Also still to do: push `quiz-sequence`, open the PR, and deploy. Nothing new is needed in Railway env
+— no new variables.
+
 ## Open for the next session
 
 **1. ~~Create the shared promo code.~~** Done differently — codes are now minted per lead, see above. No manual row to create, no code value in any env var.
 
-**2. `/leads` needs deploying.** The endpoint only exists locally. Checked 2026-09-22 — **less to do than this item used to claim**, and the 17 red tests never gated it (see above):
+**2. ~~`/leads` needs deploying.~~ DONE (2026-09-22)** — backend is live in production; see the platform section below. Original analysis kept for reference: checked 2026-09-22 — **less to do than this item used to claim**, and the 17 red tests never gated it (see above):
 
 - **`LANDING_URL` needs nothing set on Railway.** It is `z.string().default('https://calmisu.com')` in `src/config/env.ts:44`, and that default matches production exactly (`astro.config.mjs` `site` + `public/CNAME`). It will not crash on boot and will not be wrong. `QUIZ_PROMO_CODE` was removed again, so there is **no new env var at all**.
 - **`prisma migrate deploy` runs on boot** via the `start` script and applies both `leads` migrations.
@@ -139,7 +277,19 @@ Confirmed in `calmisu/App.tsx`: `linking.config.screens` maps only `password-res
 
 The plan's Start buttons therefore open `calmisu://` (the app's default screen) with a 1.5s fallback to Play. To make a row open the *specific* activity, the app has to add those routes to its linking config first. Until then the button is honest but blunt — it opens the app, not the exercise.
 
-**4. Not yet done:** blog CTAs (Task 7) and the email sequence (Task 6). Task 6 is now unblocked — Day 0 already sends, and unsubscribe exists, so what remains is days 2/5/9/14 and the `src/jobs` scheduler. Day 14 must still be suppressed when the lead has redeemed the code.
+**4. ~~Not yet done: blog CTAs (Task 7) and the email sequence (Task 6).~~** Task 6 is **done**
+(2026-09-22) — see its section above. Every constraint this item used to list is now enforced in
+`src/jobs/quizSequence.ts` and covered by a test in `test/leads/leadSequence.test.ts`, including the
+`consentScope` column this item called "still worth doing".
+
+**Task 7 (blog CTAs) is the only implementation task left**, and it is unblocked — it touches nothing
+Task 6 changed.
+
+Two things Task 6 left on the table, neither of them code:
+
+- **The day 2/5/9/14 copy needs Julia.** It is a draft written to CONTENT.md §6's structure, not her
+  words. Do not send it to a real list first.
+- **`quiz-sequence` is committed but unpushed.** Push, PR, deploy. No new env vars.
 
 **5. ~~`NotifyMe.tsx` is on `no-cors`.~~** Done (2026-09-22). It posts to `postLead` with `source: 'ios_waitlist'`; `grep -r "no-cors" src/` returns nothing, and `waitlist_submit` / `waitlist_error` now reflect real outcomes rather than attempts.
 
@@ -156,10 +306,9 @@ In the quiz gate the link sits in the small print **below** the button, delibera
 
 **Pre-existing nit, not fixed:** `src/components/CookieConsent.tsx:29` links `/en/privacy-policy` with no trailing slash, against `trailingSlash: "always"` — it redirects rather than 404s, so it works, but it's inconsistent.
 
-### Still open on consent (decide during Task 6)
+### ~~Still open on consent~~ — closed by Task 6 (2026-09-22)
 
-Both sources write `consent: true` into one column with no record of *what* was agreed to:
-- `ios_waitlist` → one App Store notification. No checkbox; the single-purpose modal plus its stated-purpose line is the opt-in. GDPR Recital 32 wants a clear affirmative action, not specifically a checkbox — this is defensible, but it is *narrow* consent.
-- `quiz` → "plan + occasional tips about anxiety", via an explicit unticked checkbox, because it bundles a second purpose.
-
-**So the Task 6 sequence must never send to `source: 'ios_waitlist'` leads.** Make that a filter with a test, not a comment. Consider also storing a consent-version string on `Lead` so Art. 7(1) "demonstrate consent" is actually satisfiable — today you can prove *that* they consented, not *to what*.
+`consentScope` now records what each source agreed to, and the sequence filters on it. The reasoning
+that used to sit here — narrow single-purpose consent for `ios_waitlist`, bundled "plan + tips"
+consent for `quiz` — is unchanged and is now written into `src/consts/leads.ts`, next to the constants
+it justifies, where the code that depends on it can be read alongside it.

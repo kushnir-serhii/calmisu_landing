@@ -1,5 +1,9 @@
 # Migration Progress
 
+**Status: ✅ Done. Since merged to `main`** (branch `migrate-to-the-astro` merged via PRs #26–31,
+confirmed 2026-09-22). The "uncommitted by design" note below describes the working-tree state
+mid-session and no longer applies — everything landed.
+
 Resume point for a fresh session. Read this, then `README.md`, then `00-conventions.md`.
 
 ## Status

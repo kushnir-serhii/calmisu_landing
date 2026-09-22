@@ -7,7 +7,9 @@ export const PrivacyPl = () => (
       Niniejsza polityka prywatności dotyczy aplikacji Calmisu (zwanej dalej
       „Aplikacją") na urządzenia mobilne, stworzonej przez Serhii Kushnir
       (zwanego dalej „Dostawcą Usług") jako usługa Freemium. Usługa jest
-      przeznaczona do użytku „W STANIE, W JAKIM JEST".
+      przeznaczona do użytku „W STANIE, W JAKIM JEST". Dotyczy ona również
+      strony internetowej calmisu.com, w tym opisanego poniżej quizu Calm
+      Profile.
     </p>
 
     <strong className="block font-bold mt-4">Zbieranie i Wykorzystanie Informacji</strong>
@@ -56,6 +58,61 @@ export const PrivacyPl = () => (
     <p className="mt-1 leading-snug text-sm">
       Informacje, o które prosi Dostawca Usług, będą przez niego przechowywane
       i wykorzystywane zgodnie z niniejszą polityką prywatności.
+    </p>
+
+    <strong className="block font-bold mt-4">Quiz Calm Profile (Strona internetowa)</strong>
+    <p className="mt-1 leading-snug text-sm">
+      Strona calmisu.com udostępnia quiz "Calm Profile", który proponuje
+      uspokajającą rutynę. Quiz służy wyłącznie do samodzielnej refleksji. Nie
+      jest testem medycznym, nie generuje wyniku punktowego ani oceny nasilenia
+      objawów i nie stanowi diagnozy ani zastępstwa dla profesjonalnej opieki.
+    </p>
+    <p className="mt-1 leading-snug text-sm">
+      Twoje odpowiedzi w quizie — w tym pytania o odczucia ciała i o to, co
+      dzieje się z Twoimi myślami — pozostają w Twojej przeglądarce. Są
+      przechowywane na samej stronie i zakodowane w adresie strony z wynikiem,
+      dzięki czemu Twój link nadal działa. Nigdy nie są wysyłane na serwery
+      Usługodawcy i nie istnieje miejsce w bazie danych, które mogłoby je
+      przechować.
+    </p>
+    <p className="mt-1 leading-snug text-sm">
+      Jeśli poprosisz o 7-dniowy plan e-mailem, Usługodawca przechowuje
+      wyłącznie:
+    </p>
+    <ul className="list-disc pl-6 mt-1 text-sm space-y-1">
+      <li>Twój adres e-mail</li>
+      <li>
+        Nazwę uzyskanego profilu (pojedyncze słowo, np. "sleep" lub "anxiety")
+        — nigdy poszczególnych odpowiedzi, które do niego doprowadziły
+      </li>
+      <li>
+        Źródło zgłoszenia (quiz lub zapis na listę oczekujących w aplikacji)
+        oraz jego język
+      </li>
+      <li>
+        Wybraną przez Ciebie platformę telefonu (iPhone lub Android) — wybór
+        należy do Ciebie i służy do ustalenia, czy przysługuje Ci kod
+        promocyjny
+      </li>
+      <li>Fakt wyrażenia zgody oraz jej datę</li>
+      <li>Jednorazowy kod promocyjny wydany Tobie oraz datę jego ważności</li>
+    </ul>
+    <p className="mt-1 leading-snug text-sm">
+      Adres e-mail służy do wysłania Ci planu oraz okazjonalnych wskazówek
+      dotyczących lęku. Z każdej takiej wiadomości możesz zrezygnować jednym
+      kliknięciem lub poprosić o usunięcie swojego adresu, pisząc na{" "}
+      <a href={`${GMAIL_COMPOSE_URL}${EMAIL_SUPPORT}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">{EMAIL_SUPPORT}</a>.
+      Twój adres nigdy nie jest sprzedawany. Podanie adresu e-mail jest
+      dobrowolne — wynik profilu zobaczysz niezależnie od tego, czy go podasz.
+    </p>
+    <p className="mt-1 leading-snug text-sm">
+      Pamięć lokalna przeglądarki służy do zapamiętania — wyłącznie na Twoim
+      urządzeniu — że plan został odblokowany oraz jaki kod promocyjny
+      otrzymujesz, abyś mógł później ponownie otworzyć swój plan. Wyczyszczenie
+      danych przeglądarki usuwa te informacje. Zdarzenia analityczne strony
+      (takie jak rozpoczęcie lub ukończenie quizu) zapisują wyłącznie nazwę
+      profilu, nigdy Twoje odpowiedzi, i są zbierane dopiero po zaakceptowaniu
+      banera dotyczącego plików cookie.
     </p>
 
     <strong className="block font-bold mt-4">Dostęp Stron Trzecich</strong>
@@ -191,7 +248,7 @@ export const PrivacyPl = () => (
       dalsze korzystanie z Aplikacji jest równoznaczne z akceptacją wszelkich
       zmian.
     </p>
-    <p className="mt-1 leading-snug text-sm">Niniejsza polityka prywatności obowiązuje od 2026-03-10</p>
+    <p className="mt-1 leading-snug text-sm">Niniejsza polityka prywatności obowiązuje od 2026-09-22</p>
 
     <strong className="block font-bold mt-4">Twoja Zgoda</strong>
     <p className="mt-1 leading-snug text-sm">

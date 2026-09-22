@@ -31,9 +31,12 @@ export default defineConfig({
       // listed here — a sitemap entry contradicts the tag. Keep in sync with:
       //   - the `noindex` prop in src/pages/delete-account.astro
       //   - the `noindexFollow` prop on the /alma/* pages
+      //   - the `noindexFollow` prop in src/pages/quiz/result.astro
+      // Note /quiz/ itself IS indexable — only the result page is excluded.
       filter: (page) =>
         !page.startsWith("https://calmisu.com/delete-account") &&
-        !page.includes("/alma/"),
+        !page.includes("/alma/") &&
+        !page.startsWith("https://calmisu.com/quiz/result"),
     }),
   ],
   vite: {

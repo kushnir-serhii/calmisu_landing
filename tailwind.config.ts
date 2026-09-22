@@ -62,6 +62,7 @@ export default {
           light: "hsl(var(--brand-blue-light))",
           100: "hsl(var(--brand-blue-100))",
           200: "hsl(var(--brand-blue-200))",
+          300: "hsl(var(--brand-blue-300))",
           star: "hsl(var(--brand-star))",
           beige: "hsl(var(--brand-beige))",
         },

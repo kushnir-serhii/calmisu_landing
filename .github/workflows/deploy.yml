@@ -34,7 +34,6 @@ jobs:
           # Astro only exposes client-side vars prefixed PUBLIC_. The repo
           # secret names are unchanged — only the env keys were renamed.
           PUBLIC_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
-          PUBLIC_GOOGLE_APPS_SCRIPT_URL: ${{ secrets.VITE_GOOGLE_APPS_SCRIPT_URL }}
           # Firebase web config isn't secret (scoped by Firebase Security
           # Rules/domain restrictions, not by hiding the key) — same
           # com-calmisu-app project as the mobile app, so it's fine inline.

@@ -1,0 +1,66 @@
+---
+/**
+ * Homepage entry point into the quiz.
+ *
+ * Pure markup — no island, so it adds nothing to the page's JS. It sits in the
+ * slot the commented-out ReviewsSection used to occupy (see index.astro);
+ * that component stays disabled.
+ *
+ * Icons are the mobile app's own onboarding artwork, reused here so the quiz
+ * reads as a preview of the app rather than a separate web thing.
+ */
+const icons = [
+  { src: "/images/quiz/panic.webp", label: "Panic attacks" },
+  { src: "/images/quiz/anxiety.webp", label: "Anxiety and stress" },
+  { src: "/images/quiz/thoughts.webp", label: "Racing thoughts" },
+  { src: "/images/quiz/sleeping.webp", label: "Trouble sleeping" },
+];
+---
+
+<section
+  id="quiz"
+  class="w-full scroll-mt-20 px-6 sm:px-8 md:px-16 lg:px-[140px] py-16 sm:py-20 md:py-[120px]"
+>
+  <div
+    class="flex flex-col items-center gap-6 w-full rounded-2xl sm:rounded-[30px] bg-brand-100 px-6 sm:px-10 py-12 sm:py-16 text-center"
+  >
+    <div class="flex items-center gap-3">
+      {
+        icons.map((icon) => (
+          <img
+            src={icon.src}
+            alt={icon.label}
+            width="44"
+            height="44"
+            class="w-10 h-10 sm:w-11 sm:h-11"
+            loading="lazy"
+          />
+        ))
+      }
+    </div>
+
+    <h2
+      class="text-foreground font-display text-3xl sm:text-4xl md:text-5xl lg:text-[60px] font-normal leading-[100%] max-w-[720px]"
+    >
+      What pattern does your anxiety follow?
+    </h2>
+
+    <p
+      class="max-w-[560px] text-foreground font-body text-base sm:text-lg font-light leading-[150%]"
+    >
+      Nine questions, about two minutes. You'll get the name of your pattern,
+      the two techniques that work fastest on it, and a 7-day plan.
+    </p>
+
+    <a
+      href="/quiz/?src=homepage"
+      class="bg-brand text-white font-body text-lg px-8 py-4 rounded-2xl hover:bg-brand-dark transition-colors no-underline"
+    >
+      Find my pattern
+    </a>
+
+    <p class="text-muted-foreground font-body text-sm font-light">
+      Free · No account needed · Not a diagnosis
+    </p>
+  </div>
+</section>

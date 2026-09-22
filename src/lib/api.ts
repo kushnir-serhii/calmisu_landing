@@ -23,6 +23,12 @@ export interface LeadPayload {
    */
   profile?: string;
   source: "quiz" | "ios_waitlist";
+  /**
+   * Which phone the visitor says they use, stated by them — never inferred
+   * from the user agent. Absent for the iOS waitlist modal, which has no
+   * quiz behind it.
+   */
+  platform?: "ios" | "android";
   locale: string;
   consent: boolean;
   /**

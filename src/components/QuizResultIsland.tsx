@@ -76,6 +76,22 @@ export default function QuizResultIsland() {
   const [promoExpiresAt, setPromoExpiresAt] = useState<string | null>(null);
   const planRef = useRef<HTMLDivElement>(null);
 
+  // The visitor's stated phone, not a UA guess — `isIOS` is only the default
+  // this starts from. Track whether they've made an explicit choice so the
+  // UA sniff resolving later never clobbers it.
+  const [platform, setPlatform] = useState<"ios" | "android">(
+    isIOS ? "ios" : "android",
+  );
+  const platformTouchedRef = useRef(false);
+  useEffect(() => {
+    if (platformTouchedRef.current) return;
+    setPlatform(isIOS ? "ios" : "android");
+  }, [isIOS]);
+  const choosePlatform = (next: "ios" | "android") => {
+    platformTouchedRef.current = true;
+    setPlatform(next);
+  };
+
   const state = useMemo(() => {
     if (typeof window === "undefined") return null;
     return decodePlan(new URLSearchParams(window.location.search));
@@ -135,7 +151,8 @@ export default function QuizResultIsland() {
       const result = await postLead({
         email,
         profile: state.profile,
-        source: isIOS ? "ios_waitlist" : "quiz",
+        source: "quiz",
+        platform,
         locale: "en",
         consent,
         plan: {
@@ -248,12 +265,55 @@ export default function QuizResultIsland() {
             Your 7-day plan is ready
           </h2>
           <p className="mt-3 text-foreground font-body text-base font-light text-center leading-[150%]">
-            {isIOS
+            {platform === "ios"
               ? "Tell us where to send it. We'll also let you know the moment Calmisu lands on the App Store."
               : "Tell us where to send it. You'll also get a personal code for 14 days of Calmisu PRO — free, no card. You'll have 7 days to activate it."}
           </p>
 
           <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
+            <div>
+              <span
+                id="quiz-platform-label"
+                className="block mb-2 text-foreground font-body text-sm font-medium"
+              >
+                Which phone do you use?
+              </span>
+              <div
+                role="radiogroup"
+                aria-labelledby="quiz-platform-label"
+                className="grid grid-cols-2 gap-4"
+              >
+                {(
+                  [
+                    { value: "ios", label: "iPhone" },
+                    { value: "android", label: "Android" },
+                  ] as const
+                ).map((option) => {
+                  const chosen = platform === option.value;
+                  return (
+                    <button
+                      key={option.value}
+                      type="button"
+                      role="radio"
+                      aria-checked={chosen}
+                      onClick={() => choosePlatform(option.value)}
+                      className={[
+                        "flex items-center justify-center gap-3 w-full px-4 py-3 rounded-xl border-2 text-center",
+                        "transition-all duration-150 active:scale-[0.99]",
+                        chosen
+                          ? "bg-white border-brand"
+                          : "bg-white border-gray-100 hover:border-brand-200",
+                      ].join(" ")}
+                    >
+                      <span className="font-body text-base sm:text-[17px] text-foreground">
+                        {option.label}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
             <input
               type="email"
               required
@@ -275,8 +335,8 @@ export default function QuizResultIsland() {
                   stores. If the Lead schema changes, change this with it. */}
               <span className="text-muted-foreground font-body text-sm font-light leading-[150%]">
                 Email me my plan and occasional tips about anxiety. We store
-                your email and your profile name — never your answers.
-                Unsubscribe any time.
+                your email, your profile name, and which phone you use —
+                never your answers. Unsubscribe any time.
               </span>
             </label>
 
@@ -343,7 +403,7 @@ export default function QuizResultIsland() {
                   </p>
                 </div>
 
-                {!isIOS && (
+                {platform !== "ios" && (
                   <button
                     type="button"
                     onClick={() =>
@@ -358,7 +418,7 @@ export default function QuizResultIsland() {
             ))}
           </ul>
 
-          {isIOS ? (
+          {platform === "ios" ? (
             <div className="mt-8 p-6 rounded-2xl bg-brand-100 text-center">
               <h3 className="text-foreground font-display text-xl sm:text-2xl font-normal">
                 Calmisu is coming to iOS

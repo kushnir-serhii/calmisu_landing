@@ -7,7 +7,8 @@ export const PrivacyEn = () => (
       This privacy policy applies to the Calmisu app (hereby referred to as
       "Application") for mobile devices that was created by Serhii Kushnir
       (hereby referred to as "Service Provider") as a Freemium service. This
-      service is intended for use "AS IS".
+      service is intended for use "AS IS". It also applies to the calmisu.com
+      website, including the Calm Profile quiz described below.
     </p>
 
     <strong className="block font-bold mt-4">Information Collection and Use</strong>
@@ -62,6 +63,58 @@ export const PrivacyEn = () => (
     <p className="mt-1 leading-snug text-sm">
       The information that the Service Provider requests will be retained by
       them and used as described in this privacy policy.
+    </p>
+
+    <strong className="block font-bold mt-4">Calm Profile Quiz (Website)</strong>
+    <p className="mt-1 leading-snug text-sm">
+      The website at calmisu.com offers a "Calm Profile" quiz that suggests a
+      calming routine. The quiz is a self-help tool for reflection only. It is
+      not a medical test, it produces no score or severity rating, and it is
+      not a diagnosis or a substitute for professional care.
+    </p>
+    <p className="mt-1 leading-snug text-sm">
+      Your quiz answers — including the questions about how your body feels and
+      what your thoughts do — stay in your browser. They are held in the page
+      itself and encoded into the address of your result page, so that your
+      link keeps working. They are never sent to the Service Provider's servers
+      and there is no place in the database that could hold them.
+    </p>
+    <p className="mt-1 leading-snug text-sm">
+      If you ask for your 7-day plan by email, the Service Provider stores only:
+    </p>
+    <ul className="list-disc pl-6 mt-1 text-sm space-y-1">
+      <li>Your email address</li>
+      <li>
+        The name of your resulting profile (a single word such as "sleep" or
+        "anxiety") — never the individual answers behind it
+      </li>
+      <li>
+        Where the request came from (the quiz or the app waitlist signup) and
+        its language
+      </li>
+      <li>
+        Which phone platform you selected (iPhone or Android) — you choose
+        this yourself, and it's used to decide whether a promotional code
+        applies
+      </li>
+      <li>The fact that you gave consent, and when</li>
+      <li>The one-time promotional code issued to you, and its expiry date</li>
+    </ul>
+    <p className="mt-1 leading-snug text-sm">
+      This email address is used to send you the plan and occasional tips about
+      anxiety. You can unsubscribe from any of these emails in one click, or
+      ask for your address to be deleted by writing to{" "}
+      <a href={`${GMAIL_COMPOSE_URL}${EMAIL_SUPPORT}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">{EMAIL_SUPPORT}</a>.
+      Your address is never sold. Giving an email is optional — your profile
+      result is shown to you whether or not you provide one.
+    </p>
+    <p className="mt-1 leading-snug text-sm">
+      Your browser's local storage is used to remember, on your device only,
+      that your plan has been unlocked and which promotional code you received,
+      so that you can reopen your plan later. Clearing your browser data
+      removes it. Website analytics events (such as starting or completing the
+      quiz) record the profile name only, never your answers, and are collected
+      only after you accept the cookie banner.
     </p>
 
     <strong className="block font-bold mt-4">Third Party Access</strong>
@@ -200,7 +253,7 @@ export const PrivacyEn = () => (
       advised to consult this Privacy Policy regularly for any changes, as
       continued use is deemed approval of all changes.
     </p>
-    <p className="mt-1 leading-snug text-sm">This privacy policy is effective as of 2026-03-10</p>
+    <p className="mt-1 leading-snug text-sm">This privacy policy is effective as of 2026-09-22</p>
 
     <strong className="block font-bold mt-4">Your Consent</strong>
     <p className="mt-1 leading-snug text-sm">

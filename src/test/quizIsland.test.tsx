@@ -199,13 +199,43 @@ describe("QuizResultIsland", () => {
       email: "test@example.com",
       profile: "racingThoughts",
       source: "quiz",
+      platform: "android",
       locale: "en",
       consent: true,
       // Q1–Q3 and Q6–Q9 only, so the Day-0 email can link to this exact plan.
       plan: { t: "day", d: "5", c: "alone", m: "visual", f: "weekly" },
     });
-    expect(Object.keys(payload)).toHaveLength(6);
+    expect(Object.keys(payload)).toHaveLength(7);
     expect(Object.keys(payload.plan!)).toEqual(["t", "d", "c", "m", "f"]);
+  });
+
+  it("defaults the platform choice to the UA sniff (non-iOS → android)", async () => {
+    stubLocation("?p=panic");
+    render(<QuizResultIsland />);
+
+    // No explicit UA override is set here, so jsdom's default UA is not iOS
+    // and the default radio choice should be Android.
+    const androidRadio = screen.getByRole("radio", { name: "Android" });
+    const iosRadio = screen.getByRole("radio", { name: "iPhone" });
+    expect(androidRadio).toHaveAttribute("aria-checked", "true");
+    expect(iosRadio).toHaveAttribute("aria-checked", "false");
+  });
+
+  it("selecting iPhone sends platform: 'ios' with source: 'quiz' (not 'ios_waitlist')", async () => {
+    stubLocation("?p=panic");
+    render(<QuizResultIsland />);
+
+    fireEvent.click(screen.getByRole("radio", { name: "iPhone" }));
+    fireEvent.change(screen.getByLabelText("Email address"), {
+      target: { value: "ios@example.com" },
+    });
+    fireEvent.click(screen.getByRole("checkbox"));
+    fireEvent.click(screen.getByRole("button", { name: "Send my plan" }));
+
+    await waitFor(() => expect(postLead).toHaveBeenCalledTimes(1));
+    const payload = vi.mocked(postLead).mock.calls[0][0];
+    expect(payload.source).toBe("quiz");
+    expect(payload.platform).toBe("ios");
   });
 
   it("reveals the seven days and the promo code after submitting", async () => {

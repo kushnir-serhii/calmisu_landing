@@ -17,8 +17,11 @@ export async function deleteAccount(values: FormValues): Promise<void> {
 
 export interface LeadPayload {
   email: string;
-  /** The derived profile only — never the raw quiz answers. */
-  profile: string;
+  /**
+   * The derived profile only — never the raw quiz answers. Absent for the iOS
+   * waitlist, which has no quiz behind it.
+   */
+  profile?: string;
   source: "quiz" | "ios_waitlist";
   locale: string;
   consent: boolean;

@@ -294,8 +294,17 @@ export default function QuizResultIsland() {
               {status === "loading" ? "Sending..." : "Send my plan"}
             </button>
 
+            {/* Outside the <label> on purpose — a link inside it would toggle
+                the checkbox on click as well as follow the href. */}
             <p className="text-center text-muted-foreground font-body text-sm font-light">
-              No spam. No card. Unsubscribe in one click.
+              No spam. No card. Unsubscribe in one click. See our{" "}
+              <a
+                href="/en/privacy-policy/"
+                className="underline hover:text-foreground transition-colors"
+              >
+                privacy policy
+              </a>
+              .
             </p>
           </form>
         </div>

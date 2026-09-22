@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { track } from "@/lib/analytics";
-
-const GOOGLE_APPS_SCRIPT_URL = import.meta.env.PUBLIC_GOOGLE_APPS_SCRIPT_URL as string;
+import { postLead } from "@/lib/api";
 
 interface NotifyMeProps {
   isOpen: boolean;
@@ -27,21 +26,24 @@ export const NotifyMe: React.FC<NotifyMeProps> = ({ isOpen, onClose }) => {
     setErrorMessage("");
 
     try {
-      await fetch(GOOGLE_APPS_SCRIPT_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-        mode: "no-cors",
+      // Submitting this form is the opt-in: the modal does one thing, and the
+      // line under the button says what is stored and what it is used for.
+      await postLead({
+        email,
+        source: "ios_waitlist",
+        locale: "en",
+        consent: true,
       });
-      // NOTE: mode "no-cors" makes this resolve even on a 5xx — the event
-      // below counts attempts, not confirmed signups. Reconcile against the
-      // sheet until the Apps Script returns proper CORS headers.
       track("waitlist_submit", { platform: "ios" });
       setStatus("success");
-    } catch {
+    } catch (err) {
       track("waitlist_error", { platform: "ios" });
       setStatus("error");
-      setErrorMessage("Something went wrong. Please try again.");
+      setErrorMessage(
+        err instanceof Error
+          ? err.message
+          : "Something went wrong. Please try again.",
+      );
     }
   };
 
@@ -116,6 +118,17 @@ export const NotifyMe: React.FC<NotifyMeProps> = ({ isOpen, onClose }) => {
               >
                 <span>{status === "loading" ? "Sending..." : "Notify Me"}</span>
               </button>
+              <p className="text-slate-400 text-xs leading-relaxed">
+                We store your email to tell you once Calmisu is on the App
+                Store. Nothing else. Unsubscribe in one click. See our{" "}
+                <a
+                  href="/en/privacy-policy/"
+                  className="underline hover:text-slate-600 transition-colors"
+                >
+                  privacy policy
+                </a>
+                .
+              </p>
             </form>
           </div>
         ) : (

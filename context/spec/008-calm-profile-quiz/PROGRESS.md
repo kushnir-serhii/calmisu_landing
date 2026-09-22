@@ -8,8 +8,8 @@
 | 2 — Quiz data module | Done |
 | 3 — `/quiz/` page | Done |
 | 4 — `/quiz/result/` | Done |
-| 5 — Capture client + promo code | **Partial** — client done, stubbed; promo code not created |
-| 6 — Email sequence | Not started (needs Task 1) |
+| 5 — Capture client + promo code | Done — per-lead codes, nothing to create by hand |
+| 6 — Email sequence | Not started — **unblocked**, Day 0 + unsubscribe already ship |
 | 7 — Blog CTAs | Not started |
 | 8 — iOS branch | Done (built into Task 4 rather than deferred) |
 | 9 — Analytics | Done |
@@ -49,7 +49,7 @@
 
 Mobile review of `/quiz/` passed, so the front end is signed off.
 
-### `kumo_back-end` (branch `habits-db`, uncommitted)
+### `kumo_back-end` (branch `quiz-codes`, commit `f5927eb`)
 
 - `prisma/schema.prisma` — `Lead` model + `prisma/migrations/20260922120000_add_leads/`
 - `src/features/leads/leads.schemas.ts`, `leads.routes.ts`
@@ -99,7 +99,26 @@ The product decision "one shared code with `maxUses` high" is **withdrawn**. Eac
 - Backend `test/leads` — 14/14
 - Landing `npm run test` — 36/36; `npm run build` — 29 pages, clean
 
-**Pre-existing, not from this work:** `test/subscription/rc-webhook.test.ts` fails 13 tests. Confirmed identical at HEAD with these changes stashed. Unrelated to leads.
+### The backend suite was red — now resolved (2026-09-22)
+
+The earlier note here said "13 pre-existing failures in `rc-webhook.test.ts`." That undercounted. It was **17 failures across 3 files**, and all 17 were **test-side defects — no production bug**.
+
+Proven by running the suite at `f5927eb` and again at its parent `3c00c47`: identical 17 both times, so the lead-capture work caused none of them.
+
+| Failures | File | Cause |
+|---|---|---|
+| 13 | `test/subscription/rc-webhook.test.ts` | `.env.test` had `REVENUECAT_SANDBOX=false` while the fixtures send `environment: 'SANDBOX'`. The guard added in `3188ad2` therefore made every event log-only. These tests were not merely red — they were **vacuous**, rejecting each event before exercising any logic. |
+| 3 | `test/habits/habitReminders.job.test.ts` | Mock resolved `recipients: 0`; `sendReminder()` deliberately skips the `lastFiredAt` write when nothing was delivered. Stale fixture. |
+| 1 | `test/media/meditations.route.test.ts` | `GET /media/meditations` was made public on purpose in `02fc311` (per-track `access`, fail-locked); the test still asserted the old 401. |
+
+Fixed in `kumo_back-end`, test files only, no `src/` changes. **Suite is now 224/224.**
+
+Two notes on *how*, because a naive fix would have rotted:
+
+- `rc-webhook.test.ts` no longer reads ambient env. It mocks `src/config/env` and forces the flag on, mirroring the pattern already in `meditations.route.test.ts`. `.env.test` is **gitignored**, so editing it would have fixed the suite on one machine only. Verified by restoring `.env.test` to `false` and re-running: still green.
+- The media test now asserts a `premium` track is still labelled `premium` for an unauthenticated caller. That is the property worth protecting once the route is public — the old 401 assertion was standing in for it.
+
+**There is no test-running CI in `kumo_back-end`.** The only workflow is Neon PR branching. Nothing has ever gated on these tests, which is how 17 stayed red. Now that the suite passes from a clean clone, wiring it up is cheap and is the highest-value next backend chore.
 
 ---
 
@@ -107,7 +126,13 @@ The product decision "one shared code with `maxUses` high" is **withdrawn**. Eac
 
 **1. ~~Create the shared promo code.~~** Done differently — codes are now minted per lead, see above. No manual row to create, no code value in any env var.
 
-**2. `/leads` needs deploying.** The endpoint only exists locally. Set `LANDING_URL` on Railway (that is the only new var — `QUIZ_PROMO_CODE` was removed again); `prisma migrate deploy` runs on boot and applies both `leads` migrations. Then confirm `PUBLIC_API_BASE_URL` is set for the landing build — with it empty the fetch now hits a relative `/leads` and fails, where it used to stub.
+**2. `/leads` needs deploying.** The endpoint only exists locally. Checked 2026-09-22 — **less to do than this item used to claim**, and the 17 red tests never gated it (see above):
+
+- **`LANDING_URL` needs nothing set on Railway.** It is `z.string().default('https://calmisu.com')` in `src/config/env.ts:44`, and that default matches production exactly (`astro.config.mjs` `site` + `public/CNAME`). It will not crash on boot and will not be wrong. `QUIZ_PROMO_CODE` was removed again, so there is **no new env var at all**.
+- **`prisma migrate deploy` runs on boot** via the `start` script and applies both `leads` migrations.
+- **`PUBLIC_API_BASE_URL` is already wired** in `.github/workflows/deploy.yml` from the existing `VITE_API_BASE_URL` secret, and the shipped `/delete-account` page already depends on it — if it were unset, account deletion would already be broken in production. Worth a glance, not a blocker.
+
+Sharp edge to know: `API_BASE_URL = import.meta.env.PUBLIC_API_BASE_URL ?? ""` (`src/lib/api.ts:3`) degrades **silently** to a relative `/leads` if that secret ever goes missing. The stub used to mask this; now it just 404s on a static host. A build-time assert would be the honest fix.
 
 **3. Per-activity deep links are not possible today — app change required.**
 Confirmed in `calmisu/App.tsx`: `linking.config.screens` maps only `password-reset`, `password-set` and `email-verified`. There is no activity route, so `calmisu://activity/breath` would resolve to nothing.
@@ -116,4 +141,25 @@ The plan's Start buttons therefore open `calmisu://` (the app's default screen) 
 
 **4. Not yet done:** blog CTAs (Task 7) and the email sequence (Task 6). Task 6 is now unblocked — Day 0 already sends, and unsubscribe exists, so what remains is days 2/5/9/14 and the `src/jobs` scheduler. Day 14 must still be suppressed when the lead has redeemed the code.
 
-**5. `NotifyMe.tsx` is still on `no-cors`** (Task 5 step 4). `postLead` is real now, so migrating it to `source: 'ios_waitlist'` is a small change — and it makes `waitlist_submit` truthful for the first time.
+**5. ~~`NotifyMe.tsx` is on `no-cors`.~~** Done (2026-09-22). It posts to `postLead` with `source: 'ios_waitlist'`; `grep -r "no-cors" src/` returns nothing, and `waitlist_submit` / `waitlist_error` now reflect real outcomes rather than attempts.
+
+Consequences worth knowing:
+- **`PUBLIC_GOOGLE_APPS_SCRIPT_URL` is dead.** Removed from `.env.example` and `.github/workflows/deploy.yml`. The `VITE_GOOGLE_APPS_SCRIPT_URL` repo secret can be deleted, and the Apps Script itself retired once the existing sheet is exported.
+- The waitlist had no consent checkbox and still doesn't. The modal does exactly one thing, so submitting it is the opt-in — but a line under the button now states what is stored and why, because `consent: true` is a factual claim the backend records. If that modal ever grows a second purpose, it needs a real checkbox.
+- `LeadPayload.profile` is now optional; the waitlist sends no profile.
+
+**6. Privacy policy is now linked from both capture forms** (2026-09-22) — Art. 13 wants purpose and rights reachable at the point of collection.
+
+The correct href is **`/en/privacy-policy/`**, not `/privacy-policy/`. The page is language-prefixed (`src/pages/[lang]/privacy-policy.astro` → `/en/`, `/pl/`, `/uk/`), and there is a *separate* `/alma/<lang>/` set for a different product — don't link those by mistake. I linked the wrong path first and the build caught it.
+
+In the quiz gate the link sits in the small print **below** the button, deliberately outside the `<label>`: a link inside it would toggle the consent checkbox as well as follow the href.
+
+**Pre-existing nit, not fixed:** `src/components/CookieConsent.tsx:29` links `/en/privacy-policy` with no trailing slash, against `trailingSlash: "always"` — it redirects rather than 404s, so it works, but it's inconsistent.
+
+### Still open on consent (decide during Task 6)
+
+Both sources write `consent: true` into one column with no record of *what* was agreed to:
+- `ios_waitlist` → one App Store notification. No checkbox; the single-purpose modal plus its stated-purpose line is the opt-in. GDPR Recital 32 wants a clear affirmative action, not specifically a checkbox — this is defensible, but it is *narrow* consent.
+- `quiz` → "plan + occasional tips about anxiety", via an explicit unticked checkbox, because it bundles a second purpose.
+
+**So the Task 6 sequence must never send to `source: 'ios_waitlist'` leads.** Make that a filter with a test, not a comment. Consider also storing a consent-version string on `Lead` so Art. 7(1) "demonstrate consent" is actually satisfiable — today you can prove *that* they consented, not *to what*.

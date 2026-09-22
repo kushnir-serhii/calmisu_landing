@@ -13,6 +13,7 @@ export interface NavLink {
 // rendered on a page other than "/".
 export const navLinks: NavLink[] = [
   { label: "Features", href: "/#features" },
+  { label: "Quiz", href: "/quiz/?src=nav" },
   { label: "FAQ", href: "/#faq" },
   { label: "Blog", href: "/blog/" },
   { label: "About", href: "/about/" },

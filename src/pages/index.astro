@@ -5,6 +5,7 @@ import HeroSection from "@/components/HeroSection.astro";
 import AnimatedSection from "@/components/AnimatedSection.astro";
 import FeaturesFlow from "@/components/FeaturesFlow";
 import FeaturesScience from "@/components/FeaturesScience";
+import QuizPromo from "@/components/QuizPromo.astro";
 import AnimatedChatSection from "@/components/AnimatedChatSection";
 import AnimatedFAQSection from "@/components/AnimatedFAQSection";
 import AnimatedCTASection from "@/components/AnimatedCTASection";
@@ -131,6 +132,10 @@ const jsonLd = {
       </AnimatedSection>
 
       <!-- ReviewsSection stays omitted/commented out — do not re-enable -->
+
+      <AnimatedSection>
+        <QuizPromo />
+      </AnimatedSection>
 
       <AnimatedChatSection client:visible delay={250} />
 

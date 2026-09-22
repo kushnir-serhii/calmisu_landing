@@ -44,6 +44,10 @@
     --brand-blue-light: 222 43% 95%;
     --brand-blue-100: 216 42% 93%;
     --brand-blue-200: 216 32% 87%;
+    /* Mirrors the mobile app's `blue.300` (#b0c6e2) — the border colour its
+       CardWrapper animates to when a card is selected. Kept here so the quiz's
+       selected state matches the app's onboarding screen exactly. */
+    --brand-blue-300: 214 46% 79%;
     --brand-star: 222 30% 60%;
     --brand-beige: 33 47% 98%;
     --gray-50: 210 20% 98%;

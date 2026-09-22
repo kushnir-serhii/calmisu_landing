@@ -1,0 +1,112 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Header from "@/components/Header.astro";
+import QuizIsland from "@/components/QuizIsland";
+import { Badge } from "@/components/ui/badge";
+
+/**
+ * Quiz entry point.
+ *
+ * The intro block is server-rendered rather than living inside the island, so
+ * the H1 and the value proposition are in the static HTML for crawlers and for
+ * the first paint. Only the questions need JS.
+ *
+ * The island renders a Start CTA over this intro until the visitor commits,
+ * then hides it via the `html[data-quiz-started]` rule below and takes over
+ * with the questions. `data-quiz-intro` and the global style are what wire
+ * that hand-off; `mb-12 sm:mb-16` lives on the intro wrapper (not on a wrapper
+ * around the island) so the spacing disappears along with the intro instead
+ * of leaving dead space above the first question.
+ *
+ * `?src=` marks where the visitor came from (homepage, nav, a blog post) and is
+ * forwarded to the `quiz_start` event.
+ */
+const source = Astro.url.searchParams.get("src") ?? "direct";
+---
+
+<BaseLayout
+  title="What's Your Anxiety Pattern? — 2-Minute Quiz | Calmisu"
+  description="Answer 9 quick questions and find out which pattern your anxiety follows — and the two techniques that work fastest for it. Free, no account."
+>
+  <div class="flex flex-col items-center w-full bg-background">
+    <Header progress={true} />
+
+    <main class="flex flex-col items-center w-full">
+      <section
+        data-quiz-section
+        class="w-full px-6 sm:px-8 md:px-16 lg:px-[140px] pt-10 sm:pt-12 md:pt-16 pb-16 sm:pb-20 md:pb-[120px]"
+      >
+        <div
+          data-quiz-intro
+          class="flex flex-col items-center gap-4 w-full max-w-[740px] mx-auto text-center mb-12 sm:mb-16"
+        >
+          <Badge
+            className="py-2 px-4 text-brand-dark font-body text-sm sm:text-base"
+          >
+            9 questions · about 2 minutes
+          </Badge>
+
+          <h1
+            class="text-foreground font-display text-4xl sm:text-5xl md:text-6xl font-normal leading-[95%]"
+          >
+            What pattern does
+            <br />
+            your anxiety follow?
+          </h1>
+
+          <p
+            class="max-w-[600px] text-foreground font-body text-base sm:text-lg font-light leading-[150%]"
+          >
+            Anxiety doesn't feel the same for everyone. Answer a few questions
+            and we'll name the pattern yours follows — and the two techniques
+            that tend to work fastest on it.
+          </p>
+
+          <p class="text-muted-foreground font-body text-sm font-light">
+            Free · No account needed · Not a diagnosis
+          </p>
+        </div>
+
+        <QuizIsland client:load source={source} />
+      </section>
+    </main>
+  </div>
+</BaseLayout>
+
+<style is:global>
+  /* The island flips this on when the visitor clicks "Start the quiz". */
+  html[data-quiz-started] [data-quiz-intro] {
+    display: none;
+  }
+
+  /* Once the questions take over, the section's own vertical padding would
+     push the viewport-height question column past one screen. */
+  html[data-quiz-started] [data-quiz-section] {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  /* The rail lives in the header (see Header.astro's `progress` prop) but
+     only means something once the quiz has actually started. */
+  html:not([data-quiz-started]) [data-quiz-progress] {
+    display: none;
+  }
+</style>
+
+<script is:inline>
+  // The progress rail is fixed under the header, so it needs the header's
+  // real rendered height (which differs by breakpoint) rather than a
+  // hardcoded value.
+  function setHeaderHeightVar() {
+    const header = document.querySelector("[data-site-header]");
+    if (header) {
+      document.documentElement.style.setProperty(
+        "--header-h",
+        header.offsetHeight + "px"
+      );
+    }
+  }
+  setHeaderHeightVar();
+  window.addEventListener("load", setHeaderHeightVar);
+  window.addEventListener("resize", setHeaderHeightVar);
+</script>

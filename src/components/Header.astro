@@ -4,8 +4,25 @@ import { navLinks } from "@/data/navLinks";
 // Static header: the only interactive part is the mobile menu toggle, handled
 // by the small script below, so no React ships for it.
 const currentPath = Astro.url.pathname;
-const isLinkActive = (href: string) =>
-  !href.includes("#") && currentPath === href;
+const isLinkActive = (href: string) => {
+  if (href.includes("#")) return false;
+  const linkPath = href.split("?")[0];
+  return (
+    currentPath === linkPath ||
+    (linkPath !== "/" && currentPath.startsWith(linkPath))
+  );
+};
+
+interface Props {
+  /**
+   * Reserves the quiz's progress rail along the header's bottom edge. The
+   * rail has to live here rather than in QuizIsland because it needs to
+   * scroll-lock with the header, and the header is the only sticky element
+   * on the page — see src/pages/quiz.astro.
+   */
+  progress?: boolean;
+}
+const { progress = false } = Astro.props;
 ---
 
 <header
@@ -91,6 +108,24 @@ const isLinkActive = (href: string) =>
       }
     </nav>
   </div>
+
+  {
+    progress && (
+      <div
+        data-quiz-progress
+        class="absolute left-0 right-0 -bottom-px h-[3px] bg-brand-100"
+        role="progressbar"
+        aria-valuemin="1"
+        aria-valuemax="9"
+        aria-valuenow="1"
+      >
+        <div
+          class="h-full bg-brand transition-[width] duration-300 ease-out"
+          style="width: var(--quiz-progress, 0%)"
+        />
+      </div>
+    )
+  }
 </header>
 
 <script>

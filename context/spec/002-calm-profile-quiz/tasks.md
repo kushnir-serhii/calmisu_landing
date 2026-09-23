@@ -43,11 +43,11 @@
   - [x] Wire `quiz_*` events through `track()`, consent-gated and without double-counting on Back. **[Agent: react-islands]**
   - [x] Verify: all 7 posts have a CTA (5 variants, `default` on the unmapped post), and the blog `<script>` set is unchanged. **[Agent: content-seo]**
 
-- [ ] **Slice 9: Feature Testing & Regression**
+- [x] **Slice 9: Feature Testing & Regression**
 
   > Verifies the whole feature end-to-end against functional-spec.md, run after all implementation slices are complete.
-  - [ ] Read functional-spec.md acceptance criteria in full. Generate acceptance-level tests that verify the entire feature as a whole — not individual slices. Cover applicable layers (unit for pure logic, integration for service interactions, e2e for user flows) based on the project's testing stack. Write tests with RED validation (must fail before implementation is confirmed done). Annotate each test with `@spec: 002-calm-profile-quiz` and `@regression` if suitable for long-term regression. **[Agent: general-purpose]**
-  - [ ] Run all generated tests. All must pass. Fix any failures before proceeding. **[Agent: general-purpose]**
+  - [x] Read functional-spec.md acceptance criteria in full. Generate acceptance-level tests that verify the entire feature as a whole — not individual slices. Cover applicable layers (unit for pure logic, integration for service interactions, e2e for user flows) based on the project's testing stack. Write tests with RED validation (must fail before implementation is confirmed done). Annotate each test with `@spec: 002-calm-profile-quiz` and `@regression` if suitable for long-term regression. **[Agent: general-purpose]**
+  - [x] Run all generated tests. All must pass. Fix any failures before proceeding. **[Agent: general-purpose]**
 
 - [ ] **Slice 10: Release**
 

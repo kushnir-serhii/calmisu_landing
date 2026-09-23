@@ -39,6 +39,10 @@ export default function QuizIsland({ source = "direct" }: Props) {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
   const headingRef = useRef<HTMLHeadingElement>(null);
+  // Steps whose quiz_question_answered has already fired. In-memory only —
+  // never persisted, alongside answers themselves (see the class doc above).
+  // Without this, Back then re-answering the same question double-counts it.
+  const trackedSteps = useRef<Set<number>>(new Set());
 
   const question = questions[step];
   const total = questions.length;
@@ -87,10 +91,13 @@ export default function QuizIsland({ source = "direct" }: Props) {
   };
 
   const advance = (finalAnswers: Answers) => {
-    track("quiz_question_answered", {
-      index: step + 1,
-      question_id: question.id,
-    });
+    if (!trackedSteps.current.has(step)) {
+      trackedSteps.current.add(step);
+      track("quiz_question_answered", {
+        index: step + 1,
+        question_id: question.id,
+      });
+    }
     if (step < total - 1) setStep(step + 1);
     else complete(finalAnswers);
   };

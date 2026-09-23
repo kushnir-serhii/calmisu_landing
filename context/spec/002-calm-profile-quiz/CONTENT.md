@@ -1,6 +1,6 @@
 # Calm Profile Quiz — Content
 
-> **Companion to `functional-spec.md` in this folder.** Superseded details, kept verbatim for history: the promo code is now **per lead** (returned by `POST /leads`), not `{PUBLIC_QUIZ_PROMO_CODE}`. It has a **15-day** activation window and 14 days of PRO once redeemed; the live copy in `QuizResultIsland.tsx` / `email.service.ts` states both clocks separately. The Day 2/5/9/14 email bodies in the backend are a draft pending Julia's rewrite.
+> **Companion to `functional-spec.md` in this folder.** Superseded details, kept verbatim for history: the promo code is now **per lead** (returned by `POST /leads`), not `{PUBLIC_QUIZ_PROMO_CODE}`. It has a **7-day** activation window (15 days until 2026-09-23) and 14 days of PRO once redeemed; the live copy in `QuizResultIsland.tsx` / `email.service.ts` states both clocks separately. The Day 2/5/6/9 email bodies in the backend are a draft pending Julia's rewrite.
 
 **All copy for the quiz lives here.** `SPEC.md` describes the build; this file is the source of every user-facing string. Copy it verbatim into `src/data/quiz.ts`. Do not paraphrase, and do not write new copy in the components.
 
@@ -345,11 +345,11 @@ Short lead-in, link to `/blog/extended-exhale-breathing-science/`, one line back
 **Day 5 — `You aren't bad at meditation`**
 Link to `/blog/why-letting-go-is-hard-for-exhausted-minds/`.
 
+**Day 6 — `Your code expires tomorrow`**
+One short paragraph, the code, the Play link. **Suppress if already redeemed.** *(Was Day 14 until 2026-09-23; moved when the activation window became 7 days.)*
+
 **Day 9 — `Same time, every day`**
 Link to `/blog/meditation-routine-consistency/`.
-
-**Day 14 — `Your code expires tomorrow`**
-One short paragraph, the code, the Play link. **Suppress if already redeemed.**
 
 Every email carries a working unsubscribe link.
 

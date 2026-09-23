@@ -215,7 +215,7 @@ export default function QuizIsland({ source = "direct" }: Props) {
                 <span
                   aria-hidden="true"
                   className={[
-                    "ml-auto shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center",
+                    "ml-auto shrink-0 w-5 h-5 rounded-md border-2 flex items-center justify-center",
                     chosen
                       ? "bg-brand border-brand text-white"
                       : "border-gray-100",
@@ -223,8 +223,7 @@ export default function QuizIsland({ source = "direct" }: Props) {
                 >
                   {chosen && (
                     <svg
-                      width="11"
-                      height="11"
+                      className="w-1/2 h-1/2"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"

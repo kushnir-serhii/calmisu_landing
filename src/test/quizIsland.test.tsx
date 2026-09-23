@@ -8,7 +8,7 @@ vi.mock("@/lib/analytics", () => ({ track: vi.fn() }));
 vi.mock("@/lib/api", () => ({
   postLead: vi.fn().mockResolvedValue({
     ok: true,
-    promoCode: "1234567890",
+    promoCode: "12345",
     promoExpiresAt: "2026-09-29T00:00:00.000Z",
   }),
 }));
@@ -253,8 +253,9 @@ describe("QuizResultIsland", () => {
     );
     expect(screen.getAllByText(/08:00/)).toHaveLength(7);
     expect(screen.getByText("14 days of PRO, free")).toBeInTheDocument();
-    // The per-lead code from postLead's response, not a build-time constant.
-    expect(screen.getByText("1234567890")).toBeInTheDocument();
+    // The code itself is never shown on the page — only in the email.
+    expect(screen.queryByText("12345")).not.toBeInTheDocument();
+    expect(screen.getByText(/sent your code to your email/i)).toBeInTheDocument();
   });
 
   it("stores the unlock flag and the per-lead code — never the answers — and skips the gate on return", async () => {
@@ -276,7 +277,7 @@ describe("QuizResultIsland", () => {
       "calmisu_quiz_unlocked",
     ]);
     expect(window.localStorage.getItem("calmisu_quiz_promo_code")).toBe(
-      "1234567890"
+      "12345"
     );
     first.unmount();
 
@@ -285,8 +286,8 @@ describe("QuizResultIsland", () => {
     expect(
       screen.queryByText("Your 7-day plan is ready")
     ).not.toBeInTheDocument();
-    // Returning visitor sees their own persisted code, not a fresh submit.
-    expect(screen.getByText("1234567890")).toBeInTheDocument();
+    // Returning visitor still isn't shown the code — only that it exists.
+    expect(screen.getByText(/sent your code to your email/i)).toBeInTheDocument();
   });
 
   it("degrades to pointing at email when the unlock flag exists but no code was stored (pre-change visitor)", async () => {

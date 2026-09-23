@@ -267,7 +267,7 @@ export default function QuizResultIsland() {
           <p className="mt-3 text-foreground font-body text-base font-light text-center leading-[150%]">
             {platform === "ios"
               ? "Tell us where to send it. We'll also let you know the moment Calmisu lands on the App Store."
-              : "Tell us where to send it. You'll also get a personal code for 14 days of Calmisu PRO — free, no card. You'll have 15 days to activate it."}
+              : "Tell us where to send it. You'll also get a personal code for 14 days of Calmisu PRO — free, no card. You'll have 7 days to activate it."}
           </p>
 
           <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
@@ -285,8 +285,8 @@ export default function QuizResultIsland() {
               >
                 {(
                   [
-                    { value: "ios", label: "iPhone" },
                     { value: "android", label: "Android" },
+                    { value: "ios", label: "iPhone" },
                   ] as const
                 ).map((option) => {
                   const chosen = platform === option.value;
@@ -298,7 +298,7 @@ export default function QuizResultIsland() {
                       aria-checked={chosen}
                       onClick={() => choosePlatform(option.value)}
                       className={[
-                        "flex items-center justify-center gap-3 w-full px-4 py-3 rounded-xl border-2 text-center",
+                        "relative flex items-center justify-center gap-3 w-full px-4 py-3 rounded-2xl border-2 text-center",
                         "transition-all duration-150 active:scale-[0.99]",
                         chosen
                           ? "bg-white border-brand"
@@ -307,6 +307,32 @@ export default function QuizResultIsland() {
                     >
                       <span className="font-body text-base sm:text-[17px] text-foreground">
                         {option.label}
+                      </span>
+                      {/* Radiobtn Indicator */}
+                      <span
+                        aria-hidden="true"
+                        className={[
+                          "absolute transform -translate-y-1/2 top-1/2 right-3 shrink-0 w-5 h-5 rounded-md border-2 flex items-center justify-center",
+                          chosen
+                            ? "bg-brand border-brand text-white"
+                            : "border-gray-100",
+                        ].join(" ")}
+                      >
+                        {chosen && (
+                          <svg
+                            className="w-1/2 h-1/2"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth={3}
+                          >
+                            <path
+                              d="M5 13l4 4L19 7"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        )}
                       </span>
                     </button>
                   );
@@ -425,7 +451,8 @@ export default function QuizResultIsland() {
               </h3>
               <p className="mt-2 text-foreground font-body text-base font-light leading-[150%]">
                 You're on the list — we'll email you the moment it's on the App
-                Store. Your plan works on its own until then.
+                Store. Your plan works on its own until then. Can't find our email?
+                Check your spam folder.
               </p>
             </div>
           ) : (
@@ -434,26 +461,24 @@ export default function QuizResultIsland() {
                 14 days of PRO, free
               </h3>
               {promoCode ? (
-                <>
-                  <p className="mt-4 font-body text-2xl tracking-[0.2em] text-brand-dark font-medium">
-                    {promoCode}
-                  </p>
-                  <p className="mt-4 text-foreground font-body text-base font-light leading-[150%]">
-                    Open Calmisu, create an account, and enter this code in
-                    Profile. Activate it within 15 days
-                    {promoExpiresAt
-                      ? ` — by ${new Date(promoExpiresAt).toLocaleDateString(
-                          "en-US",
-                          { year: "numeric", month: "long", day: "numeric" },
-                        )}`
-                      : ""}
-                    . Once activated, you get 14 days of PRO from that moment.
-                  </p>
-                </>
+                <p className="mt-4 text-foreground font-body text-base font-light leading-[150%]">
+                  We sent your code to your email — if you don't see it, check your
+                  spam folder. Open Calmisu, create an
+                  account, and enter it under Profile. Activate it within 7
+                  days
+                  {promoExpiresAt
+                    ? ` — by ${new Date(promoExpiresAt).toLocaleDateString(
+                        "en-US",
+                        { year: "numeric", month: "long", day: "numeric" },
+                      )}`
+                    : ""}
+                  . Once activated, you get 14 days of PRO from that moment.
+                </p>
               ) : (
                 <p className="mt-4 text-foreground font-body text-base font-light leading-[150%]">
                   Check your email for your code — we sent it to you with the
-                  rest of your plan.
+                  rest of your plan. If it's not in your inbox, check your spam
+                  folder.
                 </p>
               )}
               <a

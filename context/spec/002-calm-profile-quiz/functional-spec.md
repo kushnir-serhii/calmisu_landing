@@ -61,7 +61,7 @@ The Calm Profile quiz gives the visitor something of real value first: a short, 
 
 - **As an** Android visitor, **I want** a personal promo code, **so that** I can try PRO for free.
   - **Acceptance Criteria:**
-    - [ ] The code is shown with a copy control. The copy states both clocks: activate within 15 days, and get 14 days of PRO once redeemed.
+    - [ ] The code is shown with a copy control. The copy states both clocks: activate within 7 days (shown as a date, e.g. "by September 30"), and get 14 days of PRO once redeemed.
     - [ ] The copy says plainly that the code is redeemed inside the app after creating an account.
     - [ ] One code per lead, ever. A repeat submission with an unexpired, unredeemed code returns the same code. An expired, unredeemed code is replaced. A redeemed code yields no new code.
     - [ ] Each plan row's Start button opens the app (`calmisu://`) and falls back to Google Play if the app doesn't open within about 1.5s.
@@ -85,10 +85,10 @@ The Calm Profile quiz gives the visitor something of real value first: a short, 
 
 - **As a** lead, **I want** a few useful follow-ups and an easy way out, **so that** I have reasons to come back without being spammed.
   - **Acceptance Criteria:**
-    - [ ] Day 2, 5, 9 and 14 emails send on schedule, each linking to an existing article with a trailing slash.
+    - [ ] Day 2, 5, 6 and 9 emails send on schedule, the content emails (Day 2, 5, 9) each linking to an existing article with a trailing slash.
     - [ ] Only leads who consented under the quiz's plan-and-tips wording receive the sequence. Waitlist sign-ups and pre-sequence leads receive none.
     - [ ] Every email has a working unsubscribe that stops all later sends.
-    - [ ] Day 14 ("Your code expires tomorrow") is skipped when the lead has no code, already redeemed it, or the code isn't actually expiring within the next 48h.
+    - [ ] Day 6 ("Your code expires tomorrow") is skipped when the lead has no code, already redeemed it, or the code isn't actually expiring within the next 48h.
     - [ ] No lead receives the same day's email twice.
 
 ### 2.4 Blog CTAs
@@ -114,7 +114,7 @@ The Calm Profile quiz gives the visitor something of real value first: a short, 
 ### In-Scope
 
 - The `/quiz/` and `/quiz/result/` pages, the quiz data and logic, and the homepage/nav entry points.
-- Lead capture, per-lead promo codes, the Day 0 email and the Day 2/5/9/14 sequence with unsubscribe (backend, `kumo_back-end`).
+- Lead capture, per-lead promo codes, the Day 0 email and the Day 2/5/6/9 sequence with unsubscribe (backend, `kumo_back-end`).
 - Migrating the iOS waitlist to the same capture path.
 - Blog quiz CTAs, funnel analytics, and privacy-policy field updates.
 
@@ -135,3 +135,4 @@ The Calm Profile quiz gives the visitor something of real value first: a short, 
 - [2026-09-22] — Pre-AWOS PROGRESS — The **activation window changed from 7 to 15 days** so the Day 14 "expires tomorrow" email is true. PRO duration stays at 14 days, and the two clocks are always stated separately.
 - [2026-09-22] — Pre-AWOS PROGRESS — Added **`consentScope` / `consentAt`**. The sequence filters on recorded consent rather than `source`, so leads without a recorded scope get no sequence emails.
 - [2026-09-23] — AWOS migration — Rewritten from `context-old/spec/008-calm-profile-quiz/SPEC.md` + `PROGRESS.md`. The criteria describe the behaviour as shipped and are unchecked until `/awos:verify` re-confirms them.
+- [2026-09-23] — Product decision — The **activation window changed from 15 back to 7 days**, and the "expires tomorrow" email moved **from Day 14 to Day 6** so it stays true. Reason: most redemptions happen in the first 24–48h; 7 days is still a real deadline and covers a weekend. PRO duration stays at 14 days, starting at redemption. Nothing had shipped with 15-day codes. Follow-ups considered but not in scope: a Day 3 reminder, a one-time "missed it? get a new code" email, a one-tap apply deep link, and an in-trial reminder around day 10–12 of PRO.

@@ -11,11 +11,11 @@
 This spans two repos:
 
 - **`calmisu_landing` (this repo):** static Astro pages, two React islands (the quiz and the result), a single-source data module, pure logic that encodes the plan into the URL, a capture client in the existing `src/lib/api.ts`, a static blog CTA, and consent-gated analytics events.
-- **`kumo_back-end` (Fastify + Prisma):** a `Lead` model, an unauthenticated rate-limited `POST /leads` endpoint that mints per-lead promo codes, an unsubscribe endpoint, the Day 0 email on capture, and a daily cron for the Day 2/5/9/14 sequence.
+- **`kumo_back-end` (Fastify + Prisma):** a `Lead` model, an unauthenticated rate-limited `POST /leads` endpoint that mints per-lead promo codes, an unsubscribe endpoint, the Day 0 email on capture, and a daily cron for the Day 2/5/6/9 sequence.
 
 Plan state never touches the database. It lives in the URL the user holds.
 
-**Deploy order:** backend first, then landing. The landing's copy promises a 15-day activation window, which the backend must already be minting.
+**Deploy order:** backend first, then landing. The landing's copy promises a 7-day activation window, which the backend must already be minting.
 
 ---
 
@@ -53,17 +53,17 @@ Plan state never touches the database. It lives in the URL the user holds.
 ### Backend — API contracts
 
 - `POST /leads` is unauthenticated, rate-limited `max: 5 / 1 hour` per IP (following the `promo.routes.ts` pattern), and validated with Zod in `leads.schemas.ts`. It upserts on `email`, rejects `consent !== true`, accepts the short plan params as enums (so a caller can't point our email at their own host), and returns `{ ok, promoCode, promoExpiresAt }`.
-  - The promo code: 10 random digits (the redeem schema is `/^\d+$/`), `maxUses: 1`, `note: "quiz"`, `durationDays: 14`, `expiresAt: now + 15 days`, retried on `P2002`.
+  - The promo code: 10 random digits (the redeem schema is `/^\d+$/`), `maxUses: 1`, `note: "quiz"`, `durationDays: 14`, `expiresAt: now + 7 days`, retried on `P2002`.
   - Code decision (`isCodeSpent` / `isCodeReusable`): none → mint; unexpired and unredeemed → reuse; expired and unredeemed → mint; redeemed → `null`.
   - Branching: `quiz` + android/null → code + Day 0 email; `quiz` + ios → no code, Day 0 email with an App Store notice (`awaitingAppStore`); `ios_waitlist` → neither.
 - `GET /leads/unsubscribe?token=` gives an identical response for unknown tokens, so it can't be used to discover which emails are on the list.
 
 ### Backend — email & jobs
 
-- `src/services/email.service.ts`: `sendQuizPlanEmail` (Day 0) and `sendQuizDay2/5/9/14Email`, on the existing transport.
+- `src/services/email.service.ts`: `sendQuizPlanEmail` (Day 0) and `sendQuizDay2/5/6/9Email`, on the existing transport.
 - `src/jobs/quizSequence.ts` `runQuizSequence()`, cron `0 9 * * *` (in `src/app.ts`).
   - A lead is eligible when `consentScope === 'quiz_plan_tips_v1'`, `consent`, not unsubscribed, has no ledger row for the day, and is within the age window `N ≤ ageDays < N + 2`. The query is bounded by `OLDEST_ELIGIBLE_AGE_DAYS`.
-  - Day 14 also requires that the lead has a code, the code is unredeemed, and `expiresAt` falls within the next 48h. It reads the lead's actual code, never the constant.
+  - Day 6 ("expires tomorrow") also requires that the lead has a code, the code is unredeemed, and `expiresAt` falls within the next 48h. It reads the lead's actual code, never the constant.
   - The ledger row is written **before** the send, and the unique constraint acts as the concurrency lock. On a send failure the row is deleted and the error rethrown.
 
 ---
@@ -77,7 +77,7 @@ Plan state never touches the database. It lives in the URL the user holds.
   - *Unlimited PRO through repeat codes* → one code per lead, ever.
   - *Clinical framing* → no scores or diagnosis language, and the disclaimer stays on the result page.
   - *Silent API misconfiguration* → `API_BASE_URL` falls back to `""` if the secret is missing, which turns requests into relative 404s. A build-time assert is on the roadmap.
-  - *Draft email copy* → the Day 2/5/9/14 bodies are agent-written. Julia must rewrite them before a real list receives them. The first new lead gets Day 2 about 48h after the backend deploys.
+  - *Draft email copy* → the Day 2/5/6/9 bodies are agent-written. Julia must rewrite them before a real list receives them. The first new lead gets Day 2 about 48h after the backend deploys.
   - *Blunt deep links* → the app has no per-activity routes, so rows open the app's home screen.
   - *Soft gate* → the plan URL can be edited. Accepted.
   - *Astro parse quirk* → a leading-pipe multiline union type in `.astro` frontmatter fails to parse. Use single-line unions.
@@ -88,6 +88,6 @@ Plan state never touches the database. It lives in the URL the user holds.
 
 - **Landing unit tests (Vitest):** `src/test/quiz.test.ts` covers profile resolution, including the `notSure` tiebreak, `decodePlan` totality, and the encode/decode round-trip.
 - **Landing island tests (Testing Library + jsdom):** `src/test/quizIsland.test.tsx` covers navigation and Back, storage assertions (no answers stored), and the exact `postLead` payload shape.
-- **Backend (`kumo_back-end`):** `test/leads/leads.test.ts` (validation, upsert, rate limit, code rules, platform branching, persisted column list, ignored client `consentScope`) and `test/leads/leadSequence.test.ts` (every eligibility rule, Day 14 suppression, ledger locking). The backend suite is 246/246 green, so any failure is a regression.
+- **Backend (`kumo_back-end`):** `test/leads/leads.test.ts` (validation, upsert, rate limit, code rules, platform branching, persisted column list, ignored client `consentScope`) and `test/leads/leadSequence.test.ts` (every eligibility rule, Day 6 suppression, ledger locking). The backend suite is 246/246 green, so any failure is a regression.
 - **Build checks:** in `dist/`, `/quiz/` is in the sitemap, `/quiz/result/` has noindex and is absent from the sitemap, and the blog pages' `<script>` set is unchanged by the CTA.
 - **Manual/E2E:** a real browser run of the capture from `calmisu.com` (CORS), Firebase DebugView for events, and a test-address run of the sequence.

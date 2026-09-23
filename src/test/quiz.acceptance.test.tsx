@@ -26,7 +26,7 @@ vi.mock("@/lib/analytics", () => ({ track: vi.fn() }));
 vi.mock("@/lib/api", () => ({
   postLead: vi.fn().mockResolvedValue({
     ok: true,
-    promoCode: "1234567890",
+    promoCode: "12345",
     promoExpiresAt: "2026-10-08T00:00:00.000Z",
   }),
 }));
@@ -114,7 +114,7 @@ describe("iPhone path shows no Play Store surface", () => {
         "play.google.com"
       );
     }
-    expect(screen.queryByText("1234567890")).not.toBeInTheDocument();
+    expect(screen.queryByText("12345")).not.toBeInTheDocument();
     expect(screen.getByText("Calmisu is coming to iOS")).toBeInTheDocument();
     // Plan stays fully visible — this is not a further gate.
     expect(
@@ -150,12 +150,12 @@ describe("server error fires no success event", () => {
 });
 
 // ─────────────────────────────────────────────────────────────────────────
-// §2.2 — "The copy states both clocks: activate within 15 days, and get
+// §2.2 — "The copy states both clocks: activate within 7 days, and get
 // 14 days of PRO once redeemed."
 // ─────────────────────────────────────────────────────────────────────────
 describe("promo code copy states both clocks", () => {
   // @spec: 002-calm-profile-quiz @regression
-  it("mentions both the 15-day activation window and the 14-day PRO duration", async () => {
+  it("mentions both the 7-day activation window and the 14-day PRO duration", async () => {
     stubLocation("?p=panic");
     render(<QuizResultIsland />);
 
@@ -166,14 +166,14 @@ describe("promo code copy states both clocks", () => {
     fireEvent.click(screen.getByRole("button", { name: "Send my plan" }));
 
     await waitFor(() =>
-      expect(screen.getByText("1234567890")).toBeInTheDocument()
+      expect(screen.getByText("14 days of PRO, free")).toBeInTheDocument()
     );
 
-    expect(screen.getByText(/15 days/)).toBeInTheDocument();
+    expect(screen.getByText(/Activate it within 7/)).toBeInTheDocument();
     expect(screen.getAllByText(/14 days of PRO/i).length).toBeGreaterThan(0);
-    // The redeem-inside-the-app-after-account-creation claim.
+    // The code itself is never shown on the page — only sent by email.
     expect(
-      screen.getByText(/create an account.*enter this code in\s*Profile/i)
+      screen.getByText(/sent your code to your email.*create an account.*enter it under\s*Profile/i)
     ).toBeInTheDocument();
   });
 });

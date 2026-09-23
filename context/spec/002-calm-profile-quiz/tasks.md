@@ -3,8 +3,8 @@
 > Migrated from the pre-AWOS spec 008 (tasks 1–9). Implementation slices 1–8 are complete. What remains: acceptance-level regression tests (Slice 9) and the release (Slice 10).
 >
 > Release state as of 2026-09-23:
-> - **Backend:** `kumo_back-end` `quiz-sequence` (commit `d32cc93`, the Day 2/5/9/14 cron + 15-day window) exists **locally only**. It isn't pushed and has no PR. `main` has lead capture (PR #70) and platform tracking (PR #71).
-> - **Landing:** `quiz-cta` (15-day copy, privacy field list, blog CTAs) is pushed but **not merged** to `main`.
+> - **Backend:** `kumo_back-end` `quiz-sequence` (commit `d32cc93`, the Day 2/5/9/14 cron + 15-day window; since 2026-09-23, uncommitted: 7-day window + Day 6 reminder) exists **locally only**. It isn't pushed and has no PR. `main` has lead capture (PR #70) and platform tracking (PR #71).
+> - **Landing:** `quiz-cta` (7-day copy, privacy field list, blog CTAs) is pushed but **not merged** to `main`.
 
 - [x] **Slice 1: Quiz data and pure logic**
   - [x] Create `src/data/quiz.ts` with 9 questions, 5 profiles and plan templates, taken verbatim from `CONTENT.md`, with `tools` in the app's `getHomeVariant()` order. **[Agent: general-purpose]**
@@ -35,7 +35,7 @@
   - [x] Verify: with iPhone chosen there are no Play links and no code. `grep -r "no-cors" src/` is empty. The backend suite is green. **[Agent: general-purpose]**
 
 - [x] **Slice 7: Follow-up email sequence (`kumo_back-end`)**
-  - [x] Add `consentScope` / `consentAt` and the `LeadEmail` ledger, `runQuizSequence()` on a `0 9 * * *` cron, Day 2/5/9/14 senders, and the 15-day activation window. Update the landing's 15-day copy and add `consentScope` to the privacy policy. **[Agent: general-purpose]**
+  - [x] Add `consentScope` / `consentAt` and the `LeadEmail` ledger, `runQuizSequence()` on a `0 9 * * *` cron, Day 2/5/9/14 senders, and the 15-day activation window *(changed 2026-09-23 to 7 days + Day 6 reminder — see functional-spec Change Log)*. Update the landing's 15-day copy and add `consentScope` to the privacy policy. **[Agent: general-purpose]**
   - [x] Verify: `test/leads/leadSequence.test.ts` covers every eligibility rule. The backend suite is 246/246 and the landing build is clean. **[Agent: general-purpose]**
 
 - [x] **Slice 8: Blog CTAs and funnel analytics**
@@ -51,7 +51,7 @@
 
 - [ ] **Slice 10: Release**
 
-  > Human prerequisite, not agent work: Julia rewrites the Day 2/5/9/14 email bodies in `kumo_back-end/src/services/email.service.ts` in her own voice. The current text is an agent-written draft. Don't send it to a real list.
+  > Human prerequisite, not agent work: Julia rewrites the Day 2/5/6/9 email bodies in `kumo_back-end/src/services/email.service.ts` in her own voice. The current text is an agent-written draft. Don't send it to a real list.
   - [ ] Push `kumo_back-end` `quiz-sequence`, open the PR, and confirm the suite is green before merge. No new env vars are needed. **[Agent: general-purpose]**
-  - [ ] After the backend has deployed (it mints 15-day codes), merge the landing `quiz-cta` branch to `main`. Deploy the backend first, never the landing first. **[Agent: astro-architect]**
-  - [ ] Verify in production: a quiz submission from `calmisu.com` returns a code expiring in 15 days, the plan email arrives, and a blog post shows its quiz CTA. **[Agent: general-purpose]**
+  - [ ] After the backend has deployed (it mints 7-day codes), merge the landing `quiz-cta` branch to `main`. Deploy the backend first, never the landing first. **[Agent: astro-architect]**
+  - [ ] Verify in production: a quiz submission from `calmisu.com` returns a code expiring in 7 days, the plan email arrives, and a blog post shows its quiz CTA. **[Agent: general-purpose]**

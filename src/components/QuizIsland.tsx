@@ -223,7 +223,7 @@ export default function QuizIsland({ source = "direct" }: Props) {
                 >
                   {chosen && (
                     <svg
-                      className="w-1/2 h-1/2"
+                      className="w-3/4 h-3/4"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"

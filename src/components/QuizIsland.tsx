@@ -39,6 +39,10 @@ export default function QuizIsland({ source = "direct" }: Props) {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
   const headingRef = useRef<HTMLHeadingElement>(null);
+  // Steps whose quiz_question_answered has already fired. In-memory only —
+  // never persisted, alongside answers themselves (see the class doc above).
+  // Without this, Back then re-answering the same question double-counts it.
+  const trackedSteps = useRef<Set<number>>(new Set());
 
   const question = questions[step];
   const total = questions.length;
@@ -87,10 +91,13 @@ export default function QuizIsland({ source = "direct" }: Props) {
   };
 
   const advance = (finalAnswers: Answers) => {
-    track("quiz_question_answered", {
-      index: step + 1,
-      question_id: question.id,
-    });
+    if (!trackedSteps.current.has(step)) {
+      trackedSteps.current.add(step);
+      track("quiz_question_answered", {
+        index: step + 1,
+        question_id: question.id,
+      });
+    }
     if (step < total - 1) setStep(step + 1);
     else complete(finalAnswers);
   };
@@ -197,7 +204,7 @@ export default function QuizIsland({ source = "direct" }: Props) {
                   alt=""
                   width={36}
                   height={36}
-                  className="w-9 h-9 shrink-0"
+                  className="w-6 h-6 shrink-0"
                   loading="eager"
                 />
               )}
@@ -208,7 +215,7 @@ export default function QuizIsland({ source = "direct" }: Props) {
                 <span
                   aria-hidden="true"
                   className={[
-                    "ml-auto shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center",
+                    "ml-auto shrink-0 w-5 h-5 rounded-md border-2 flex items-center justify-center",
                     chosen
                       ? "bg-brand border-brand text-white"
                       : "border-gray-100",
@@ -216,8 +223,7 @@ export default function QuizIsland({ source = "direct" }: Props) {
                 >
                   {chosen && (
                     <svg
-                      width="11"
-                      height="11"
+                      className="w-1/2 h-1/2"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"

@@ -1,0 +1,13 @@
+{
+  "enabledPlugins": {
+    "awos@awos-marketplace": true
+  },
+  "extraKnownMarketplaces": {
+    "awos-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "provectus/awos"
+      }
+    }
+  }
+}

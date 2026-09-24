@@ -139,10 +139,16 @@
       .reveal {
         animation: reveal-section linear both;
         animation-timeline: view();
-        /* Start as the section's top edge reaches the bottom of the viewport,
-           finish once it is 25% of the way up. `cover` keeps the range tied to
-           the element, so a section taller than the viewport still completes. */
-        animation-range: cover 0% cover 25%;
+        /* `entry` finishes once the section is fully visible (its own height
+           determines that point), unlike `cover`, whose end point is a
+           percentage of the section's height *plus extra scroll room below
+           it*. The last section on a page — the CTA/download block, the
+           footer — has no scroll room left below it, so `cover 0% cover 25%`
+           could never reach its end point and froze those sections at
+           partial opacity permanently (a washed-out, low-contrast look from
+           that section to the end of the page). `entry` has no such
+           dependency on trailing content. */
+        animation-range: entry;
       }
     }
   }

@@ -98,6 +98,11 @@ export const PrivacyEn = () => (
         applies
       </li>
       <li>The fact that you gave consent, and when</li>
+      <li>
+        What you agreed to receive when you gave consent — your plan and
+        occasional tips, or a single App Store notification, depending on how
+        you signed up
+      </li>
       <li>The one-time promotional code issued to you, and its expiry date</li>
     </ul>
     <p className="mt-1 leading-snug text-sm">

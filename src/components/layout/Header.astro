@@ -44,16 +44,17 @@ const { progress = false } = Astro.props;
   </a>
 
   <!-- Desktop nav -->
-  <nav class="hidden lg:flex items-center gap-6 xl:gap-16">
+  <nav class="hidden lg:flex items-center gap-6 xl:gap-16" aria-label="Main">
     {
       navLinks.map((link) => (
         <a
           href={link.href}
           target={link.isExternal ? "_blank" : undefined}
           rel={link.isExternal ? "noopener noreferrer" : undefined}
+          aria-current={isLinkActive(link.href) ? "page" : undefined}
           class:list={[
-            "text-center font-body text-base xl:text-xl font-normal leading-[150%] whitespace-nowrap hover:text-brand transition-colors",
-            isLinkActive(link.href) ? "text-brand" : "text-foreground",
+            "text-center font-body text-base xl:text-xl font-normal leading-[150%] whitespace-nowrap hover:text-brand-dark transition-colors",
+            isLinkActive(link.href) ? "text-brand-dark" : "text-foreground",
           ]}
         >
           {link.label}
@@ -88,18 +89,19 @@ const { progress = false } = Astro.props;
   <div
     id="mobile-menu"
     data-menu
-    class="hidden fixed inset-0 top-[61px] z-40 bg-background lg:hidden animate-in fade-in slide-in-from-top-2 duration-200"
+    class="hidden fixed inset-0 top-[var(--header-h,61px)] z-40 bg-background lg:hidden animate-in fade-in slide-in-from-top-2 duration-200"
   >
-    <nav class="flex flex-col items-center gap-2 pt-6 px-5">
+    <nav class="flex flex-col items-center gap-2 pt-6 px-5" aria-label="Main mobile">
       {
         navLinks.map((link) => (
           <a
             href={link.href}
             target={link.isExternal ? "_blank" : undefined}
             rel={link.isExternal ? "noopener noreferrer" : undefined}
+            aria-current={isLinkActive(link.href) ? "page" : undefined}
             class:list={[
-              "w-full text-center py-4 font-body text-xl font-normal leading-[150%] transition-colors rounded-xl hover:bg-muted active:bg-muted hover:text-brand",
-              isLinkActive(link.href) ? "text-brand" : "text-foreground",
+              "w-full text-center py-4 font-body text-xl font-normal leading-[150%] transition-colors rounded-xl hover:bg-muted active:bg-muted hover:text-brand-dark",
+              isLinkActive(link.href) ? "text-brand-dark" : "text-foreground",
             ]}
           >
             {link.label}
@@ -135,8 +137,23 @@ const { progress = false } = Astro.props;
   const iconOpen = header?.querySelector("[data-icon-open]");
   const iconClose = header?.querySelector("[data-icon-close]");
 
+  // The mobile drawer sits under the header, so it needs the header's real
+  // rendered height (which differs by breakpoint) rather than a hardcoded
+  // value — see src/pages/quiz.astro, which sets the same variable the same way.
+  function setHeaderHeightVar() {
+    if (header) {
+      document.documentElement.style.setProperty(
+        "--header-h",
+        header.offsetHeight + "px"
+      );
+    }
+  }
+  setHeaderHeightVar();
+  window.addEventListener("load", setHeaderHeightVar);
+  window.addEventListener("resize", setHeaderHeightVar);
+
   if (toggle && menu) {
-    const setOpen = (open: boolean) => {
+    const setOpen = (open: boolean, returnFocus = false) => {
       menu.classList.toggle("hidden", !open);
       iconOpen?.classList.toggle("hidden", open);
       iconClose?.classList.toggle("hidden", !open);
@@ -144,6 +161,11 @@ const { progress = false } = Astro.props;
       toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
       // Lock body scroll while the drawer is open
       document.body.style.overflow = open ? "hidden" : "";
+      if (open) {
+        menu.querySelector<HTMLAnchorElement>("a")?.focus();
+      } else if (returnFocus) {
+        toggle.focus();
+      }
     };
 
     toggle.addEventListener("click", () =>
@@ -152,5 +174,10 @@ const { progress = false } = Astro.props;
     menu.querySelectorAll("a").forEach((a) =>
       a.addEventListener("click", () => setOpen(false))
     );
+    menu.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        setOpen(false, true);
+      }
+    });
   }
 </script>

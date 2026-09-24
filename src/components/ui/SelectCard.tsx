@@ -12,7 +12,7 @@ export const CheckBox = ({ checked }: CheckBoxProps) => (
     aria-hidden="true"
     className={[
       "shrink-0 w-5 h-5 rounded-md border-2 flex items-center justify-center",
-      checked ? "bg-brand border-brand text-white" : "border-gray-100",
+      checked ? "bg-brand border-brand text-white" : "border-control-border",
     ].join(" ")}
   >
     {checked && <CheckIcon className="w-3/4 h-3/4" />}
@@ -51,8 +51,9 @@ export const SelectCard = ({
 }: SelectCardProps) => {
   const base = [
     "rounded-xl px-4 py-3 border-2 bg-white",
-    "transition-all duration-150 active:scale-[0.99]",
-    selected ? "border-brand" : "border-gray-100 hover:border-brand-200",
+    "transition-all duration-150 motion-safe:active:scale-[0.99]",
+    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+    selected ? "border-brand" : "border-brand-200 hover:border-brand-300",
   ];
 
   if (align === "center") {

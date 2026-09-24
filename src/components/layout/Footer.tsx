@@ -14,9 +14,9 @@ const Footer = () => {
               href={link.href}
               target={link.isExternal ? "_blank" : undefined}
               rel={link.isExternal ? "noopener noreferrer" : undefined}
-              className="text-foreground text-sm sm:text-base md:text-xl font-body leading-[150%] hover:text-brand transition-colors"
+              className="text-foreground text-sm sm:text-base md:text-xl font-body leading-[150%] hover:text-brand transition-colors inline-flex items-center min-h-11"
             >
-              <span className="h-11">{link.label}</span>
+              {link.label}
             </a>
           ))}
         </nav>
@@ -32,17 +32,17 @@ const Footer = () => {
         <CalmisuLogo
           className="block sm:hidden w-full text-[#E8E8EA]"
           strokeWidth={0.5}
-          aria-label="Calmisu"
+          aria-hidden="true"
         />
         {/* Desktop: thicker stroke */}
         <CalmisuLogo
           className="hidden sm:block w-full text-[#E8E8EA]"
           strokeWidth={2}
-          aria-label="Calmisu"
+          aria-hidden="true"
         />
         <img
           src="/images/footer-bamboo.webp"
-          alt="Bamboo illustration"
+          alt=""
           width={1920}
           height={435}
           className="w-full object-cover -mt-[30px] sm:-mt-[60px] md:-mt-[120px]"

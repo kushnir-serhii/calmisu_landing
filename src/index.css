@@ -30,10 +30,15 @@
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
+    /* Error text on white / brand-100 fills (6.5:1 / 5.5:1, WCAG AA). */
+    --destructive-text: 0 70% 42%;
 
     --border: 220 43% 95%;
     --input: 214.3 31.8% 91.4%;
     --ring: 222 33% 53%;
+    /* At-rest boundary for form controls (checkbox, text input) — 3.1:1 on
+       white, the WCAG 1.4.11 minimum for non-text UI. */
+    --control-border: 222 20% 60%;
 
     --radius: 0.5rem;
 

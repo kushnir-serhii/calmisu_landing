@@ -59,7 +59,7 @@ function DeleteAccountForm() {
         <div className="w-full max-w-md bg-background rounded-2xl shadow-sm border border-border p-8 flex flex-col gap-6">
           {mutation.isSuccess ? (
             <div className="flex flex-col items-center gap-4 text-center py-4">
-              <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center text-2xl">
+              <div className="w-14 h-14 rounded-full bg-brand-100 flex items-center justify-center text-2xl text-brand-dark">
                 ✓
               </div>
               <h1 className="font-display text-2xl text-foreground">
@@ -107,7 +107,7 @@ function DeleteAccountForm() {
                 </div>
                 <p className="text-muted-foreground">{t.deletionTimeline}</p>
                 {t.inAppNote && (
-                  <p className="text-sm text-blue-700 bg-blue-50 border border-blue-200 rounded-lg px-3 py-2">
+                  <p className="text-sm text-brand-dark bg-brand-100 border border-control-border rounded-lg px-3 py-2">
                     {t.inAppNote}
                   </p>
                 )}
@@ -143,8 +143,8 @@ function DeleteAccountForm() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="font-body">{t.passwordLabel}</FormLabel>
-                        <FormControl>
-                          <div className="relative">
+                        <div className="relative">
+                          <FormControl>
                             <Input
                               type={showPassword ? "text" : "password"}
                               placeholder="••••••••"
@@ -152,16 +152,21 @@ function DeleteAccountForm() {
                               className="pr-10"
                               {...field}
                             />
-                            <button
-                              type="button"
-                              onClick={() => setShowPassword((v) => !v)}
-                              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                              tabIndex={-1}
-                            >
-                              {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                            </button>
-                          </div>
-                        </FormControl>
+                          </FormControl>
+                          <button
+                            type="button"
+                            onClick={() => setShowPassword((v) => !v)}
+                            aria-label={showPassword ? t.hidePassword : t.showPassword}
+                            aria-pressed={showPassword}
+                            className="absolute right-0 top-1/2 -translate-y-1/2 p-3 rounded-md text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                          >
+                            {showPassword ? (
+                              <EyeOff size={16} aria-hidden="true" />
+                            ) : (
+                              <Eye size={16} aria-hidden="true" />
+                            )}
+                          </button>
+                        </div>
                         <FormMessage />
                       </FormItem>
                     )}

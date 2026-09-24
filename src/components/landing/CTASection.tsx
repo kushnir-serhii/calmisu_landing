@@ -3,10 +3,8 @@ import { Play, Pause } from "lucide-react";
 import { NotifyMe } from "@/components/popups/NotifyMe";
 import riverMeditationAudio from "@/assets/river_meditation.mp3";
 import infinityBg from "@/assets/infinity.webp";
-import { QRCodeGen } from "@/components/ui/QRCodeGen";
 import { DownloadButtons } from "@/components/ui/DownloadButtons";
 import { track } from "@/lib/analytics";
-import { PLAY_URL } from "@/constants/links";
 import { Section, SectionHeading } from "@/components/ui/Section";
 
 const CTASection = () => {
@@ -19,10 +17,12 @@ const CTASection = () => {
       if (isPlaying) {
         audioRef.current.pause();
       } else {
-        audioRef.current.play();
+        // isPlaying is set from the audio element's own onPlay/onPause
+        // events, not toggled here, so a rejected play() (autoplay policy,
+        // decode failure) never leaves the button lying about the state.
+        audioRef.current.play().catch(() => {});
         track("meditation_preview_play", { track_name: "river_flow" });
       }
-      setIsPlaying(!isPlaying);
     }
   };
 
@@ -34,21 +34,21 @@ const CTASection = () => {
           <div className="relative w-full max-w-[320px] sm:max-w-[400px] aspect-square rounded-2xl overflow-hidden shadow-lg">
             <img
               src={infinityBg.src}
-              alt="Bamboo Forest background"
+              alt=""
               width={infinityBg.width}
               height={infinityBg.height}
               className="absolute inset-0 w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-black/10"></div>
             <div className="relative z-10 flex flex-col items-center justify-center h-full p-6 sm:p-8 text-center">
-              <h3 className="text-white text-xl sm:text-2xl font-display font-normal mb-2 drop-shadow-lg">
+              <p className="text-white text-xl sm:text-2xl font-display font-normal mb-2 drop-shadow-lg">
                 River Flow
-              </h3>
+              </p>
               <button
                 onClick={togglePlay}
                 aria-label={isPlaying ? "Pause River Flow preview" : "Play River Flow preview"}
                 aria-pressed={isPlaying}
-                className="w-16 h-16 sm:w-20 sm:h-20 bg-white/10 hover:bg-white/20 backdrop-blur-[10px] rounded-full flex items-center justify-center transition-all duration-300 mb-4 sm:mb-6 touch-manipulation outline-none"
+                className="w-16 h-16 sm:w-20 sm:h-20 bg-white/10 hover:bg-white/20 backdrop-blur-[10px] rounded-full flex items-center justify-center transition-all duration-300 mb-4 sm:mb-6 touch-manipulation focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black/40"
               >
                 {isPlaying ? (
                   <Pause
@@ -71,6 +71,7 @@ const CTASection = () => {
           <audio
             ref={audioRef}
             loop
+            preload="none"
             onPlay={() => setIsPlaying(true)}
             onPause={() => setIsPlaying(false)}
           >
@@ -93,14 +94,24 @@ const CTASection = () => {
             <p className="text-muted-foreground text-center font-body text-sm font-light leading-[140%]">
               Free · No ads · No account needed
             </p>
-            {/* QR code card — desktop only */}
-            <div className="hidden md:flex items-center gap-4 w-full bg-white rounded-2xl px-4 py-3 shadow-sm border border-slate-100 mt-1">
-              <QRCodeGen data={PLAY_URL} size={44} />
+            {/* QR code card — desktop only. Static, pre-generated SVG
+                (public/images/qr-play.svg) encoding PLAY_URL from
+                @/constants/links, so this card doesn't ship a QR-rendering
+                library to every visitor (it's hidden below md anyway).
+                Regenerate the SVG if PLAY_URL ever changes. */}
+            <div className="hidden md:flex items-center gap-4 w-full bg-white rounded-xl px-4 py-3 shadow-sm border border-border mt-1">
+              <img
+                src="/images/qr-play.svg"
+                alt="QR code to Calmisu on Google Play"
+                width={44}
+                height={44}
+                loading="lazy"
+              />
               <div>
-                <p className="text-sm font-medium text-slate-800">
+                <p className="text-sm font-medium text-foreground">
                   Get the Android app
                 </p>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-muted-foreground">
                   Scan with your phone's camera
                 </p>
               </div>

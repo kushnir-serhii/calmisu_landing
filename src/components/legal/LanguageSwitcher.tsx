@@ -33,18 +33,33 @@ export const LanguageSwitcher = ({
   const path = (currentPath ?? "").replace(stripPattern, "");
 
   return (
-    <div className="flex gap-3">
+    <div className="flex gap-3" role="group" aria-label="Language">
       {langs.map((l) => {
         const Flag = flags[l];
-        const className = `flex items-center gap-1 ${l === lang ? "font-bold" : "opacity-40 hover:opacity-100"}`;
+        const isActive = l === lang;
+        const className = `flex items-center gap-1 ${isActive ? "text-foreground font-medium" : "text-muted-foreground hover:text-foreground"}`;
         return onLangChange ? (
-          <button key={l} onClick={() => onLangChange(l)} className={className}>
-            <Flag size={20} />
+          <button
+            key={l}
+            onClick={() => onLangChange(l)}
+            className={className}
+            aria-pressed={isActive}
+          >
+            <span aria-hidden="true">
+              <Flag size={20} />
+            </span>
             {l.toUpperCase()}
           </button>
         ) : (
-          <a key={l} href={`${basePath}/${l}${path}`} className={className}>
-            <Flag size={20} />
+          <a
+            key={l}
+            href={`${basePath}/${l}${path}`}
+            className={className}
+            aria-current={isActive ? "true" : undefined}
+          >
+            <span aria-hidden="true">
+              <Flag size={20} />
+            </span>
             {l.toUpperCase()}
           </a>
         );

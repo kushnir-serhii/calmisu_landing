@@ -92,7 +92,7 @@ describe("QuizIsland", () => {
     stubLocation();
     renderQuiz();
     fireEvent.click(screen.getByText("Panic attacks"));
-    fireEvent.click(screen.getByLabelText("Previous question"));
+    fireEvent.click(screen.getByRole("button", { name: "Back" }));
 
     expect(screen.getByText("What brings you here?")).toBeInTheDocument();
     // The previously chosen card is still the selected one.

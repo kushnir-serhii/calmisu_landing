@@ -6,7 +6,7 @@
  * is chosen by the caller from the post's `tags` (see the tag→variant map
  * in blog/[...slug].astro); copy is CONTENT.md §7 verbatim.
  */
-import { brandButtonClass } from "@/components/ui/BrandButton";
+import { buttonVariants } from "@/components/ui/button";
 
 export type QuizCTAVariant = "panic" | "anxiety" | "racingThoughts" | "sleep" | "default";
 
@@ -55,7 +55,7 @@ const { line, button } = COPY[variant];
 
   <a
     href={`/quiz/?src=${src}`}
-    class={brandButtonClass({ className: "no-underline" })}
+    class={buttonVariants({ variant: "black", size: "xl" })}
   >
     {button}
   </a>

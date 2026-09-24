@@ -2,7 +2,7 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Header from "@/components/layout/Header.astro";
 import Footer from "@/components/layout/Footer";
-import AnimatedSection from "@/components/ui/AnimatedSection";
+import AnimatedSection from "@/components/ui/AnimatedSection.astro";
 import QuizResultIsland from "@/components/quiz/QuizResultIsland";
 
 /**
@@ -36,7 +36,7 @@ import QuizResultIsland from "@/components/quiz/QuizResultIsland";
       </section>
     </main>
 
-    <AnimatedSection client:visible delay={100}>
+    <AnimatedSection>
       <Footer />
     </AnimatedSection>
   </div>

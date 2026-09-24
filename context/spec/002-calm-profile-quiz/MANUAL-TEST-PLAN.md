@@ -79,7 +79,7 @@ The automated suites already cover logic, payloads and DB rules (landing 57/57, 
   **Expect:** it states both clocks separately — activate within **7 days** (with the date, ~7 days from today), **14 days** of PRO once redeemed — says the code was emailed, and that it's redeemed in the app after creating an account. No digits appear on the page.
 - [x] ~~**D5. Copy button.**~~ **Removed 2026-09-23** — no code is displayed on the page anymore, so there is nothing to copy from the landing page (the code lives only in the email).
 - [x] **D6. DB row.** In Prisma Studio → `leads`.
-  **Expect:** one row with only `email, profile, source=quiz, platform=android, locale, consent=true, consentScope=quiz_plan_tips_v1, consentAt` (+ ids/tokens/timestamps). No answer columns. The linked `promo_codes` row has `expiresAt` ≈ now + **7 days**, `durationDays` 14, `maxUses` 1, and `code` is now **5 digits**.
+  **Expect:** one row with only `email, profile, source=quiz, platform=android, locale, consent=true, consentScope=quiz_plan_tips_v1, consentAt` (+ ids/tokens/timestamps). No answer columns. The linked `promo_codes` row has `expiresAt` = **23:59:59.999 UTC on the day 7 days out** (changed 2026-09-24: end of the deadline day, not signup time + 7×24h — so 7 to 8 days from now), `durationDays` 14, `maxUses` 1, and `code` is now **5 digits**. ⚠️ **Re-check** after restarting the backend with the 2026-09-24 change.
 - [ ] **D7. Returning visit.** Reload the same URL.
   **Expect:** gate skipped, plan + code shown. Local Storage holds only `calmisu_quiz_unlocked`, `calmisu_quiz_promo_code`, `calmisu_quiz_promo_expires`.
 - [ ] **D8. Start button, app not installed.** On desktop, click a row's Start.
@@ -105,7 +105,7 @@ The automated suites already cover logic, payloads and DB rules (landing 57/57, 
 - [x] **F1. Same email twice.** Clear Local Storage; resubmit `you+q1@gmail.com` (Android).
   **Expect:** same code as D3; still one lead row.
 - [x] **F2. Expired code is replaced.** In Prisma Studio set that code's `expiresAt` to yesterday; clear storage; resubmit.
-  **Expect:** a new code with a fresh 7-day expiry.
+  **Expect:** a new code with a fresh expiry at the end (UTC) of the day 7 days out.
 - [x] **F3. Redeemed code → no new code.** Mark the current code as used (set its use count to its max, or redeem it in the app against the local backend); resubmit.
   **Expect:** no code shown.
 - [x] **F4. Rate limit.** Submit 6 times within an hour from the same browser.
@@ -119,7 +119,7 @@ The automated suites already cover logic, payloads and DB rules (landing 57/57, 
 
 - [x] **G1. Day 0, Android.** Check `you+q1@…`.
   **Expect:** plan email arrived; its plan link opens your exact plan; it shows your code.
-- [ ] **G2. Day 0, iPhone.** Check `you+q2@…`.
+- [x] **G2. Day 0, iPhone.** Check `you+q2@…`.
   **Expect:** plan email with no code and an App Store notice.
 - [x] **G3. Sequence dry-run.** In Prisma Studio set `you+q1`'s `createdAt` to 2 days ago. From `kumo_back-end`, trigger the job once (ask the chat to write a one-off `tsx` script calling `runQuizSequence(prisma, logger)` from `src/jobs/quizSequence.ts` — don't commit it).
   **Expect:** Day 2 email arrives; a `lead_emails` row for day 2 exists. Run again → no second Day 2 email.
@@ -213,6 +213,11 @@ When K1–K6 pass, run `/awos:verify` to tick the functional-spec criteria and c
 | H1–H2 | Pass | Static check of `npm run build` output: CTA in all 7 posts, 5 distinct button texts, hrefs `/quiz/?src=blog_<slug>`, before the download block |
 | G1 | Pass | Screenshot: Day 0 email has plan link with the exact plan params and a 5-digit code. Caveat: the earlier email (code 51020) says "activate by October 8" = 15 days, so it was minted before the 7-day change, not by the current backend |
 | G3–G6 inbox | Confirmed | Screenshot: Day 0, Day 2 ("Why breathing out longer..."), Day 5 ("Same time, every day") and Day 6 ("Your code expires tomorrow") arrived; Day 2/5 show "2" (q1 + q2 iOS), Day 6 single (q1 only) as expected. **Some emails landed in Gmail spam** — check SPF/DKIM/DMARC for noreply@calmisu.com before launch |
+| F2 / G5 (DB) | Pass | 2026-09-24, Prisma Studio: `30571` expiry edited to 22 Sept → resubmit minted `01467` (created 127 ms after the edit); `01467` expiry set ~24 h ahead → Day 6 email sent 18:33 local (14:33Z) with 01467, "September 24, 2026". Confirms expired-unredeemed → fresh code, and the ≤48 h Day 6 gate |
+| One code per lead | Pass | Each new code replaced the lead's expired one; no daily rotation. The two different codes seen in the inbox (`51020` on `you@`, `30571`/`01467` on `you+q1@`) belong to different leads / an expired-then-reissued code. `51020` and `6271661384` are older 15-day dev codes (expire 8 Oct) |
+| Redeem in app | Pass (partial) | 2026-09-24: redeemed a quiz code in the dev app the day after it was issued → Subscription shows Premium until 8 Oct = redemption date + 14 days (counts from activation, not issue date). Which exact code, and the second-use rejection, not recorded |
+| Expiry rounding | Fixed, automated only | 2026-09-24: `expiresAt` now end of day UTC and emails format dates in UTC. Backend `test/leads` 48/48 pass. **Manual re-check still to do** — D4, D6, F2 and a fresh Day 0 email date |
+| G2 | Pass | Screenshot: `+q2` Day 0 email has the plan link, no code, and "Calmisu isn't on the App Store yet — we'll let you know the moment it lands." |
 | H3 | Not done | CTA is pure Astro markup (no island); Network-tab comparison vs main left to you |
 
 **Known open item:** functional-spec.md §2.1 quotes the trust line as `Free · 2 minutes · No account needed`; the site ships `Free · No account needed · Not a diagnosis`. Decide which is right and fix the spec (or the copy).

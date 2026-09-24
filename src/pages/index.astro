@@ -1,20 +1,20 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import Header from "@/components/Header.astro";
-import HeroSection from "@/components/HeroSection.astro";
-import AnimatedSection from "@/components/AnimatedSection.astro";
-import FeaturesFlow from "@/components/FeaturesFlow";
-import FeaturesScience from "@/components/FeaturesScience";
-import QuizPromo from "@/components/QuizPromo.astro";
-import AnimatedChatSection from "@/components/AnimatedChatSection";
-import AnimatedFAQSection from "@/components/AnimatedFAQSection";
-import AnimatedCTASection from "@/components/AnimatedCTASection";
-import Footer from "@/components/Footer";
-import LatestPosts from "@/components/LatestPosts.astro";
+import Header from "@/components/layout/Header.astro";
+import HeroSection from "@/components/landing/HeroSection.astro";
+import AnimatedSection from "@/components/ui/AnimatedSection.astro";
+import { FeaturesFlow, FeaturesScience } from "@/components/landing/Features";
+import QuizPromo from "@/components/landing/QuizPromo.astro";
+import {
+  AnimatedChatSection,
+  AnimatedFAQSection,
+  AnimatedCTASection,
+} from "@/components/landing/AnimatedSections";
+import Footer from "@/components/layout/Footer";
+import LatestPosts from "@/components/landing/LatestPosts.astro";
 import { faqItems } from "@/data/faq";
+import { PLAY_URL } from "@/constants/links";
 
-const PLAY_URL =
-  "https://play.google.com/store/apps/details?id=com.calmisu.app";
 const site = Astro.site ?? new URL("https://calmisu.com");
 
 // YouTube channel for the entity graph (`sameAs` on Person + Organization).

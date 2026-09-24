@@ -1,4 +1,4 @@
-import { Lang } from "@/components/DeleteAccountIsland";
+import { Lang } from "@/components/account/DeleteAccountIsland";
 
 export const i18n: Record<
   Lang,

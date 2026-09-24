@@ -1,0 +1,46 @@
+---
+import { getCollection } from "astro:content";
+import Section from "@/components/ui/Section.astro";
+import PostCard from "@/components/blog/PostCard.astro";
+
+/**
+ * Three most recent posts, shown on the homepage.
+ *
+ * Card markup deliberately mirrors the secondary grid in src/pages/blog/index.astro
+ * (same aspect ratio, radius, tag pill, hover scale) so the two pages read as one
+ * system. Spacing and type scale follow the other homepage sections
+ * (FeaturesFlow / CTASection).
+ */
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+const posts = allPosts
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+---
+
+{
+  posts.length > 0 && (
+    <Section id="latest" class="scroll-mt-20">
+      <div class="flex flex-col gap-8 md:gap-12 w-full">
+        <div class="flex flex-wrap items-end justify-between gap-4">
+          <h2 class="text-foreground font-display text-3xl sm:text-4xl md:text-5xl lg:text-[60px] font-normal leading-[100%]">
+            Latest from the blog
+          </h2>
+          <a
+            href="/blog/"
+            class="text-foreground font-body text-base sm:text-lg font-normal leading-[150%] hover:text-brand transition-colors no-underline"
+          >
+            All articles
+          </a>
+        </div>
+
+        <ul class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-10 list-none p-0 m-0">
+          {posts.map((post) => (
+            <li>
+              <PostCard post={post} headingTag="h3" showDate />
+            </li>
+          ))}
+        </ul>
+      </div>
+    </Section>
+  )
+}

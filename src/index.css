@@ -122,6 +122,18 @@
   }
 }
 
+/* Shared base typography for a long-form article body. Used by about.astro
+   and blog/[...slug].astro; each keeps its own page-specific extra rules
+   (headings, lists, links, etc.) scoped locally rather than duplicating this
+   base rule too. */
+.article-prose {
+  color: hsl(var(--foreground));
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+  line-height: 1.7;
+  font-size: 1.0625rem;
+}
+
 /* Scroll reveal for the homepage sections.
    The content is visible by default and the animation is layered on top only
    where the browser supports scroll-driven animations. Nothing here depends on

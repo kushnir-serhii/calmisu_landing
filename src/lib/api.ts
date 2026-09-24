@@ -1,4 +1,4 @@
-import { FormValues } from "@/components/DeleteAccountIsland";
+import { FormValues } from "@/components/account/DeleteAccountIsland";
 
 export const API_BASE_URL = import.meta.env.PUBLIC_API_BASE_URL ?? "";
 export async function deleteAccount(values: FormValues): Promise<void> {

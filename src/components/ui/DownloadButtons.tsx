@@ -1,6 +1,5 @@
 import { track } from "@/lib/analytics";
-
-const PLAY_URL = "https://play.google.com/store/apps/details?id=com.calmisu.app";
+import { PLAY_URL } from "@/constants/links";
 
 const AppleIcon = () => (
   <svg

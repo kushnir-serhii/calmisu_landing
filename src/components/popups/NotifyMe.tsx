@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { track } from "@/lib/analytics";
 import { postLead } from "@/lib/api";
+import { CheckIcon } from "@/components/ui/icons";
 
 interface NotifyMeProps {
   isOpen: boolean;
@@ -134,19 +135,7 @@ export const NotifyMe: React.FC<NotifyMeProps> = ({ isOpen, onClose }) => {
         ) : (
           <div className="text-center py-4">
             <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-5 text-green-500">
-              <svg
-                className="w-8 h-8"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={3}
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
+              <CheckIcon className="w-8 h-8" />
             </div>
             <h2 className="text-2xl font-semibold mb-2">You're on the list!</h2>
             <p className="text-slate-500 mb-6 text-sm">

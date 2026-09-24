@@ -1,22 +1,19 @@
 ---
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import AlmaDocsNav from "@/components/alma/AlmaDocsNav.astro";
-import { PrivacyPolicyEn } from "@/components/alma/PrivacyPolicy.en";
-import { PrivacyPolicyEs } from "@/components/alma/PrivacyPolicy.es";
-import { PrivacyPolicyUk } from "@/components/alma/PrivacyPolicy.uk";
+import AlmaDocsNav from "@/components/legal/alma/AlmaDocsNav.astro";
+import LocalizedDocPage from "@/components/legal/LocalizedDocPage.astro";
+import { PrivacyPolicyEn } from "@/components/legal/alma/PrivacyPolicy.en";
+import { PrivacyPolicyEs } from "@/components/legal/alma/PrivacyPolicy.es";
+import { PrivacyPolicyUk } from "@/components/legal/alma/PrivacyPolicy.uk";
+import { ALMA_LANGS as LANGS, langStaticPaths, resolveLang } from "@/lib/i18n";
 
 export function getStaticPaths() {
-  return [
-    { params: { lang: "en" } },
-    { params: { lang: "es" } },
-    { params: { lang: "uk" } },
-  ];
+  return langStaticPaths(LANGS);
 }
 
 const { lang } = Astro.params;
 
 const content = { en: PrivacyPolicyEn, es: PrivacyPolicyEs, uk: PrivacyPolicyUk };
-const current = (content[lang as keyof typeof content] ? lang : "en") as keyof typeof content;
+const current = resolveLang(lang, content);
 const Content = content[current];
 
 const meta = {
@@ -36,37 +33,10 @@ const meta = {
       "Дізнайтеся, як застосунок Alma збирає, використовує та захищає вашу інформацію.",
   },
 }[current];
-
-// hreflang alternates. The URL segment doubles as the ISO 639-1 code for all
-// three languages (en / es / uk), so no mapping table is needed. Hrefs keep the
-// trailing slash to match the canonical Astro emits for directory-format pages.
-const alternates = ["en", "es", "uk"].map((l) => ({
-  hreflang: l,
-  href: new URL(`/alma/${l}/privacy-policy/`, Astro.site).href,
-}));
-const xDefault = new URL("/alma/en/privacy-policy/", Astro.site).href;
 ---
 
-<BaseLayout
-  title={meta.title}
-  description={meta.description}
-  canonicalUrl={Astro.url.href}
-  lang={current}
-  noindexFollow
->
-  <Fragment slot="head">
-    {
-      alternates.map((alt) => (
-        <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
-      ))
-    }
-    <link rel="alternate" hreflang="x-default" href={xDefault} />
-  </Fragment>
+<LocalizedDocPage meta={meta} lang={current} langs={LANGS} path="privacy-policy" basePath="/alma" noindexFollow>
+  <AlmaDocsNav slot="nav" lang={current} current="privacy-policy" currentPath={Astro.url.pathname} />
 
-  <main class="flex flex-col px-2 lg:px-36">
-    <AlmaDocsNav lang={current} current="privacy-policy" currentPath={Astro.url.pathname} />
-    <div>
-      <Content />
-    </div>
-  </main>
-</BaseLayout>
+  <Content />
+</LocalizedDocPage>

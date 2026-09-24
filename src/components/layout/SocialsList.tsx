@@ -26,7 +26,7 @@ export const SocialsList = () => {
             aria-label={name}
             target={"_blank"}
             rel={"noopener noreferrer"}
-            className="text-slate-500 hover:text-black hover:-translate-y-0.5 transition-all duration-200"
+            className="flex size-11 items-center justify-center text-slate-500 hover:text-black hover:-translate-y-0.5 transition-all duration-200"
           >
             <img src={icon} alt={name} width={24} height={24} />
           </a>

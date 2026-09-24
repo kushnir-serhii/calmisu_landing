@@ -6,8 +6,8 @@ import CTASection from "./CTASection";
 
 /**
  * Each of these sections needs its own hydration (ChatSection's scroll
- * listener, FAQSection's Radix Accordion, CTASection's NotifyMe modal +
- * QRCodeGen). Passing any of them as a slotted child of a separately-
+ * listener, FAQSection's Radix Accordion, CTASection's audio player +
+ * NotifyMe modal). Passing any of them as a slotted child of a separately-
  * hydrated AnimatedSection island would slot it in as static HTML and
  * silently kill that interactivity — so each wrapper composes both into a
  * single React tree that gets mounted as one island. They're combined into

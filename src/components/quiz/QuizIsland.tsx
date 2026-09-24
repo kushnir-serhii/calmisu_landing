@@ -3,7 +3,7 @@ import { questions } from "@/data/quiz";
 import { encodePlan, type Answers } from "@/lib/quiz";
 import { track } from "@/lib/analytics";
 import { SelectCard } from "@/components/ui/SelectCard";
-import { BrandButton } from "@/components/ui/BrandButton";
+import { Button } from "@/components/ui/button";
 
 /**
  * The Calm Profile quiz.
@@ -45,6 +45,16 @@ export default function QuizIsland({ source = "direct" }: Props) {
   // never persisted, alongside answers themselves (see the class doc above).
   // Without this, Back then re-answering the same question double-counts it.
   const trackedSteps = useRef<Set<number>>(new Set());
+  // A double tap on the last single-select option must not fire quiz_complete
+  // twice; reset by the pageshow effect below when bfcache restores this page.
+  const completingRef = useRef(false);
+  // Mirrors `step` for the popstate handler, which closes over a stale value
+  // otherwise (it's registered once per "quiz" phase, not per step).
+  const stepRef = useRef(step);
+  stepRef.current = step;
+  // quiz_start must fire only on the first start of this page view —
+  // returning to the intro and pressing Start again must not double-count it.
+  const startedRef = useRef(false);
 
   const question = questions[step];
   const total = questions.length;
@@ -75,9 +85,54 @@ export default function QuizIsland({ source = "direct" }: Props) {
     el.setAttribute("aria-label", `Question ${step + 1} of ${total}`);
   }, [phase, step, total]);
 
+  useEffect(() => {
+    // bfcache can restore this exact page on a Back navigation from the
+    // result page, with `completingRef` still set from the tap that left it —
+    // without resetting it here, the last question would be stuck un-tappable.
+    const onPageShow = (e: Event) => {
+      if ((e as PageTransitionEvent).persisted) completingRef.current = false;
+    };
+    window.addEventListener("pageshow", onPageShow);
+    return () => window.removeEventListener("pageshow", onPageShow);
+  }, []);
+
+  useEffect(() => {
+    // One "guard" history entry, re-pushed after each pop: the system back
+    // gesture / browser Back then steps back a question instead of dropping
+    // the visitor out of the quiz mid-way. On question 1 it returns to the
+    // intro instead (answers stay in memory), and one more Back leaves as
+    // normal, since there is no further guard entry to consume.
+    if (phase !== "quiz") return;
+
+    const pushGuard = () => {
+      try {
+        window.history.pushState({ calmisuQuiz: true }, "");
+      } catch {
+        // Sandboxed or stubbed history — the gesture just leaves as normal.
+      }
+    };
+    pushGuard();
+
+    const onPopState = () => {
+      if (stepRef.current > 0) {
+        setStep((s) => Math.max(0, s - 1));
+        pushGuard();
+      } else {
+        setPhase("intro");
+        delete document.documentElement.dataset.quizStarted;
+        window.scrollTo({ top: 0 });
+      }
+    };
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, [phase]);
+
   /** Leaves the intro and fires the start event on actual start, not on mount. */
   const start = () => {
-    track("quiz_start", { src: source });
+    if (!startedRef.current) {
+      startedRef.current = true;
+      track("quiz_start", { src: source });
+    }
     setPhase("quiz");
     document.documentElement.dataset.quizStarted = "true";
     window.scrollTo({ top: 0 });
@@ -85,6 +140,8 @@ export default function QuizIsland({ source = "direct" }: Props) {
 
   /** Commits the last answer, then leaves for the result page. */
   const complete = (finalAnswers: Answers) => {
+    if (completingRef.current) return;
+    completingRef.current = true;
     const query = encodePlan(finalAnswers);
     track("quiz_complete", {
       profile: new URLSearchParams(query).get("p") ?? "unknown",
@@ -135,26 +192,27 @@ export default function QuizIsland({ source = "direct" }: Props) {
   if (phase === "intro") {
     return (
       <div className="w-full max-w-[640px] mx-auto flex flex-col items-center">
-        <BrandButton onClick={start}>Start the quiz</BrandButton>
+        <Button variant="black" size="xl" onClick={start}>
+          Start the quiz
+        </Button>
         <p className="mt-6 text-center text-muted-foreground font-body text-sm font-light">
-          Your answers stay on this device. We never store them.
+          Free · No account needed · Not a diagnosis
         </p>
       </div>
     );
   }
 
   return (
-    <div className="w-full max-w-[640px] mx-auto h-[calc(100svh-var(--header-h,64px))] flex flex-col justify-start pt-5 sm:pt-8 pb-6">
+    <div className="w-full max-w-[640px] mx-auto min-h-[calc(100svh-var(--header-h,64px))] flex flex-col justify-start pt-5 sm:pt-8 pb-6">
       {/* Back + counter, directly above the question */}
       <div className="flex items-center justify-between mb-4">
         <button
           type="button"
           onClick={() => setStep((s) => Math.max(0, s - 1))}
           disabled={step === 0}
-          className="shrink-0 text-muted-foreground hover:text-foreground disabled:opacity-0 disabled:pointer-events-none transition-colors font-body text-sm"
-          aria-label="Previous question"
+          className="shrink-0 -ml-2 px-2 min-h-11 flex items-center text-muted-foreground hover:text-foreground disabled:opacity-0 disabled:pointer-events-none transition-colors font-body text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-lg"
         >
-          ← Back
+          <span aria-hidden="true">←</span> Back
         </button>
         <span className="shrink-0 text-muted-foreground font-body text-sm tabular-nums">
           {step + 1} of {total}
@@ -187,7 +245,7 @@ export default function QuizIsland({ source = "direct" }: Props) {
               onClick={() => choose(option.id)}
               icon={option.icon}
               indicator={question.multi}
-              aria-pressed={question.multi ? chosen : undefined}
+              aria-pressed={chosen}
             >
               {option.label}
             </SelectCard>
@@ -200,9 +258,14 @@ export default function QuizIsland({ source = "direct" }: Props) {
           bottom, so they land at a predictable place regardless of how many
           options the question above has. */}
       {question.multi && (
-        <BrandButton full className="mt-4" onClick={() => advance(answers)}>
+        <Button
+          variant="black"
+          size="xl"
+          className="mt-4 w-full"
+          onClick={() => advance(answers)}
+        >
           {multiSelection.length === 0 ? "Skip this one" : "Continue"}
-        </BrandButton>
+        </Button>
       )}
 
       <p className="mt-4 text-center text-muted-foreground font-body text-xs font-light">

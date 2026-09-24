@@ -5,7 +5,7 @@ import { postLead } from "@/lib/api";
 import { track } from "@/lib/analytics";
 import { Badge } from "@/components/ui/badge";
 import { SectionHeading } from "@/components/ui/Section";
-import { BrandButton } from "@/components/ui/BrandButton";
+import { Button } from "@/components/ui/button";
 import { NumberedCard, InfoPanel } from "./ResultParts";
 import { PlanGate } from "./PlanGate";
 import { PLAY_URL } from "@/constants/links";
@@ -46,26 +46,67 @@ function useIsIOS() {
   return isIOS;
 }
 
+// Guards the fallback timer/listeners across calls — a second tap must not
+// stack two redirects on top of each other.
+let pendingFallback: number | null = null;
+let pendingCleanup: (() => void) | null = null;
+
 /**
  * Opens the app, falling back to the Play listing when nothing handles the
  * scheme. The app's linking config currently maps only auth routes — there are
  * no per-activity deep links yet — so this opens the app at its default screen.
  * Once the app adds activity routes, extend the scheme URL here.
+ *
+ * If the app takes over, the page is backgrounded (visibilitychange → hidden)
+ * or torn down (pagehide) before the timer fires; either cancels the
+ * fallback. Neither listener uses `once` — the first visibilitychange can be
+ * a "visible" event (e.g. a permission prompt), which would otherwise disarm
+ * the cancel before the app ever opens.
  */
 function openApp(tool: Tool, day: number, profile: string) {
   track("quiz_app_click", { profile, tool, day });
 
-  const timer = window.setTimeout(() => {
+  // A previous tap's timer/listeners may still be pending; clear them first
+  // so this call doesn't end up racing a stale redirect.
+  pendingCleanup?.();
+
+  const onVisibilityChange = () => {
+    if (document.visibilityState === "hidden") cleanup();
+  };
+  // Cancels the fallback too — the whole point of the listeners.
+  const cleanup = () => {
+    if (pendingFallback !== null) window.clearTimeout(pendingFallback);
+    pendingFallback = null;
+    document.removeEventListener("visibilitychange", onVisibilityChange);
+    window.removeEventListener("pagehide", cleanup);
+    pendingCleanup = null;
+  };
+
+  pendingFallback = window.setTimeout(() => {
+    cleanup();
     window.location.href = PLAY_URL;
   }, 1500);
+  pendingCleanup = cleanup;
 
-  // If the app takes over, the page is backgrounded before the timer fires.
-  const cancel = () => {
-    if (document.visibilityState === "hidden") window.clearTimeout(timer);
-  };
-  document.addEventListener("visibilitychange", cancel, { once: true });
+  document.addEventListener("visibilitychange", onVisibilityChange);
+  window.addEventListener("pagehide", cleanup);
 
   window.location.href = "calmisu://";
+}
+
+/** Null for a missing or unparseable date — storage can hold anything. */
+function parseDeadline(iso: string | null): Date | null {
+  if (!iso) return null;
+  const date = new Date(iso);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function formatDeadline(date: Date): string {
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 }
 
 export default function QuizResultIsland() {
@@ -78,6 +119,8 @@ export default function QuizResultIsland() {
   const [promoCode, setPromoCode] = useState<string | null>(null);
   const [promoExpiresAt, setPromoExpiresAt] = useState<string | null>(null);
   const planRef = useRef<HTMLDivElement>(null);
+  // Guards against a double tap on "Send my plan" firing two submits.
+  const submittingRef = useRef(false);
 
   // The visitor's stated phone, not a UA guess — `isIOS` is only the default
   // this starts from. Track whether they've made an explicit choice so the
@@ -130,9 +173,9 @@ export default function QuizResultIsland() {
           The link may be incomplete. The quiz takes about two minutes — your
           profile will be right back.
         </p>
-        <BrandButton href="/quiz/" className="mt-8">
-          Take the quiz
-        </BrandButton>
+        <Button asChild variant="black" size="xl" className="mt-8">
+          <a href="/quiz/">Take the quiz</a>
+        </Button>
       </div>
     );
   }
@@ -140,16 +183,19 @@ export default function QuizResultIsland() {
   const content = profiles[state.profile];
   const [toolA, toolB] = recommendedTools(state);
   const plan = buildPlan(state);
+  const deadline = parseDeadline(promoExpiresAt);
+  const codeExpired = deadline !== null && deadline.getTime() < Date.now();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!consent) return;
+    if (!consent || submittingRef.current) return;
+    submittingRef.current = true;
     setStatus("loading");
     setError("");
 
     try {
       const result = await postLead({
-        email,
+        email: email.trim(),
         profile: state.profile,
         source: "quiz",
         platform,
@@ -198,6 +244,8 @@ export default function QuizResultIsland() {
           ? err.message
           : "Something went wrong. Please try again.",
       );
+    } finally {
+      submittingRef.current = false;
     }
   };
 
@@ -251,7 +299,10 @@ export default function QuizResultIsland() {
           platform={platform}
           onPlatformChange={choosePlatform}
           email={email}
-          onEmailChange={setEmail}
+          onEmailChange={(value) => {
+            setEmail(value);
+            if (status === "error") setStatus("idle");
+          }}
           consent={consent}
           onConsentChange={setConsent}
           status={status}
@@ -279,7 +330,7 @@ export default function QuizResultIsland() {
                   badgeClassName="w-10 h-10 flex-col leading-none text-sm"
                   badge={
                     <>
-                      <span className="text-[10px] opacity-70">Day</span>
+                      <span className="text-xs opacity-70">Day</span>
                       <span className="font-medium">{day.day}</span>
                     </>
                   }
@@ -287,15 +338,16 @@ export default function QuizResultIsland() {
                   titleClassName="text-base sm:text-lg"
                   action={
                     platform !== "ios" && (
-                      <BrandButton
-                        size="sm"
+                      <Button
+                        variant="black"
+                        size="pill"
                         className="shrink-0"
                         onClick={() =>
                           openApp(day.tools[0], day.day, state.profile)
                         }
                       >
                         Start
-                      </BrandButton>
+                      </Button>
                     )
                   }
                 >
@@ -314,19 +366,22 @@ export default function QuizResultIsland() {
               </p>
             </InfoPanel>
           ) : (
-            <InfoPanel title="14 days of PRO, free">
-              {promoCode ? (
+            <InfoPanel
+              title={codeExpired ? "Keep going in the app" : "14 days of PRO, free"}
+            >
+              {codeExpired ? (
+                <p className="mt-4 text-foreground font-body text-base font-light leading-[150%]">
+                  Your code's activation window closed on{" "}
+                  {formatDeadline(deadline as Date)}. The plan above is still
+                  yours to follow in the app.
+                </p>
+              ) : promoCode ? (
                 <p className="mt-4 text-foreground font-body text-base font-light leading-[150%]">
                   We sent your code to your email — if you don't see it, check your
                   spam folder. Open Calmisu, create an
                   account, and enter it under Profile. Activate it within 7
                   days
-                  {promoExpiresAt
-                    ? ` — by ${new Date(promoExpiresAt).toLocaleDateString(
-                        "en-US",
-                        { year: "numeric", month: "long", day: "numeric" },
-                      )}`
-                    : ""}
+                  {deadline ? ` — by ${formatDeadline(deadline)}` : ""}
                   . Once activated, you get 14 days of PRO from that moment.
                 </p>
               ) : (
@@ -336,27 +391,28 @@ export default function QuizResultIsland() {
                   folder.
                 </p>
               )}
-              <BrandButton
-                href={PLAY_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-5"
-                onClick={() =>
-                  track("quiz_app_click", {
-                    profile: state.profile,
-                    tool: "store",
-                    day: 0,
-                  })
-                }
-              >
-                Get Calmisu
-              </BrandButton>
+              <Button asChild variant="black" size="xl" className="mt-5">
+                <a
+                  href={PLAY_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() =>
+                    track("quiz_app_click", {
+                      profile: state.profile,
+                      tool: "store",
+                      day: 0,
+                    })
+                  }
+                >
+                  Get Calmisu
+                </a>
+              </Button>
             </InfoPanel>
           )}
         </div>
       )}
 
-      <p className="mt-12 text-muted-foreground font-body text-sm font-light leading-[150%] text-center">
+      <p className="mt-12 text-muted-foreground font-body text-sm font-normal leading-[150%] text-center">
         Calmisu is a self-help tool, not a substitute for professional mental
         health care. If things feel unmanageable, please talk to a doctor or a
         therapist.

@@ -15,7 +15,7 @@ interface NumberedCardProps {
   className?: string;
 }
 
-/** The `rounded-xl border-2 border-gray-100 bg-white` card with a round
+/** The `rounded-xl border-2 border-brand-200 bg-white` card with a round
  *  bg-brand-100 badge — used for "Your two tools" (number badge) and the
  *  7-day plan (Day N badge, with a trailing action slot). */
 export const NumberedCard = ({
@@ -27,7 +27,7 @@ export const NumberedCard = ({
   action,
   className = "gap-4 p-5",
 }: NumberedCardProps) => (
-  <div className={`flex ${className} rounded-xl border-2 border-gray-100 bg-white`}>
+  <div className={`flex ${className} rounded-xl border-2 border-brand-200 bg-white`}>
     <span
       className={`shrink-0 ${badgeClassName} rounded-full bg-brand-100 text-brand-dark font-body flex items-center justify-center`}
     >

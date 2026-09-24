@@ -11,8 +11,8 @@ import HeroCTA from "./HeroCTA";
     <div class="flex flex-col items-center gap-3 sm:gap-4 w-full">
       <!-- Pill -->
       <div class="flex py-2 sm:py-3 px-3 sm:px-4 justify-center items-center gap-1 rounded-full bg-brand-100">
-        <div class="flex p-1 items-center rounded-full bg-brand-200 animate-[pulse_3s_ease-in-out_infinite]">
-          <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+        <div class="flex p-1 items-center rounded-full bg-brand-200 motion-safe:animate-[pulse_3s_ease-in-out_infinite]">
+          <svg width="8" height="8" viewBox="0 0 8 8" fill="none" aria-hidden="true">
             <circle cx="4" cy="4" r="4" fill="hsl(var(--brand-blue))"></circle>
           </svg>
         </div>
@@ -53,7 +53,7 @@ import HeroCTA from "./HeroCTA";
       width="1440"
       height="736"
       class="absolute w-[100.5%] left-[-0.3%] bottom-0 object-cover"
-      loading="lazy"
+      loading="eager"
     />
     <img
       data-hero-phone
@@ -61,7 +61,7 @@ import HeroCTA from "./HeroCTA";
       alt="Calmisu anxiety app showing the guided breathing screen"
       width="1440"
       height="858"
-      class="absolute w-full left-0 bottom-[5%] object-contain will-change-transform transition-transform duration-100 ease-out"
+      class="absolute w-full left-0 bottom-[5%] object-contain will-change-transform"
       loading="eager"
       fetchpriority="high"
     />
@@ -71,7 +71,7 @@ import HeroCTA from "./HeroCTA";
       alt=""
       width="1187"
       height="747"
-      class="absolute w-2/3 bottom-0 lg:bottom-[10%] object-contain will-change-transform left-0 right-0 mx-auto transition-transform duration-100 ease-out z-10"
+      class="absolute w-2/3 bottom-0 lg:bottom-[10%] object-contain will-change-transform left-0 right-0 mx-auto z-10"
       loading="lazy"
     />
   </div>
@@ -84,7 +84,20 @@ import HeroCTA from "./HeroCTA";
   const cloud = document.querySelector<HTMLElement>("[data-hero-cloud]");
 
   if (section) {
-    const handleScroll = () => {
+    // Parallax is spatial motion, so it stays off (and layers rest in place)
+    // whenever the visitor asks for reduced motion — including mid-session.
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let frame = 0;
+
+    // Writes transforms straight to the DOM, batched to one rAF per frame,
+    // so the layers never lag a scroll event behind (mirrors ChatSection).
+    const apply = () => {
+      frame = 0;
+      if (reduceMotion.matches) {
+        if (phone) phone.style.transform = "";
+        if (cloud) cloud.style.transform = "";
+        return;
+      }
       const scrollProgress = -section.getBoundingClientRect().top;
       if (phone) {
         phone.style.transform = `translateY(${scrollProgress * -0.08}px)`;
@@ -93,6 +106,12 @@ import HeroCTA from "./HeroCTA";
         cloud.style.transform = `translateY(${Math.max(0, scrollProgress * 0.25)}px)`;
       }
     };
-    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(apply);
+    };
+
+    window.addEventListener("scroll", schedule, { passive: true });
+    reduceMotion.addEventListener("change", schedule);
   }
 </script>

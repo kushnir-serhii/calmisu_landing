@@ -33,13 +33,13 @@ export const CookieConsent = () => {
       <div className="flex shrink-0 gap-2">
         <button
           onClick={() => handleChoice("denied")}
-          className="rounded-lg border border-background/30 px-3 py-1 font-medium hover:bg-background/10 transition"
+          className="min-h-11 min-w-11 rounded-lg border border-background/30 px-4 font-medium hover:bg-background/10 transition"
         >
           Decline
         </button>
         <button
           onClick={() => handleChoice("granted")}
-          className="rounded-lg bg-background text-foreground px-3 py-1 font-medium hover:opacity-90 transition"
+          className="min-h-11 min-w-11 rounded-lg bg-background text-foreground px-4 font-medium hover:opacity-90 transition"
         >
           Accept
         </button>

@@ -26,6 +26,7 @@ export default {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
+        "control-border": "hsl(var(--control-border))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
@@ -39,6 +40,7 @@ export default {
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
+          text: "hsl(var(--destructive-text))",
         },
         muted: {
           DEFAULT: "hsl(var(--muted))",

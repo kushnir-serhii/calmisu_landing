@@ -75,7 +75,7 @@ describe("back/forward navigation and analytics counting", () => {
       fireEvent.click(screen.getByText("Start the quiz"));
 
       fireEvent.click(screen.getByText("Panic attacks")); // Q1 -> Q2, tracks index 1
-      fireEvent.click(screen.getByLabelText("Previous question")); // back to Q1
+      fireEvent.click(screen.getByRole("button", { name: "Back" })); // back to Q1
       fireEvent.click(screen.getByText("Panic attacks")); // re-answer Q1 -> Q2 again
 
       const q1Calls = vi

@@ -1,7 +1,7 @@
 import type { FormEvent } from "react";
 import { SectionHeading } from "@/components/ui/Section";
 import { SelectCard } from "@/components/ui/SelectCard";
-import { BrandButton } from "@/components/ui/BrandButton";
+import { Button } from "@/components/ui/button";
 
 interface PlanGateProps {
   platform: "ios" | "android";
@@ -42,7 +42,11 @@ export const PlanGate = ({
           : "Tell us where to send it. You'll also get a personal code for 14 days of Calmisu PRO — free, no card. You'll have 7 days to activate it."}
       </p>
 
-      <form onSubmit={onSubmit} className="mt-6 flex flex-col gap-4">
+      <form
+        onSubmit={onSubmit}
+        aria-busy={status === "loading"}
+        className="mt-6 flex flex-col gap-4"
+      >
         <div>
           <span
             id="quiz-platform-label"
@@ -81,12 +85,21 @@ export const PlanGate = ({
 
         <input
           type="email"
+          id="quiz-email"
+          name="email"
           required
           value={email}
           onChange={(e) => onEmailChange(e.target.value)}
           placeholder="Enter your email address"
           aria-label="Email address"
-          className="w-full px-5 py-3.5 bg-white border-2 border-gray-100 rounded-2xl focus:outline-none focus:border-brand-300 transition-colors font-body text-foreground placeholder:text-muted-foreground"
+          autoComplete="email"
+          inputMode="email"
+          autoCapitalize="none"
+          spellCheck={false}
+          maxLength={254}
+          aria-invalid={status === "error" || undefined}
+          aria-describedby={status === "error" ? "quiz-gate-error" : undefined}
+          className="w-full px-5 py-3.5 bg-white border-2 border-control-border rounded-2xl focus:outline-none focus:border-brand focus-visible:ring-2 focus-visible:ring-ring transition-colors font-body text-foreground placeholder:text-muted-foreground"
         />
 
         <label className="flex items-start gap-3 cursor-pointer">
@@ -98,7 +111,7 @@ export const PlanGate = ({
           />
           {/* This sentence is a factual claim about what the backend
               stores. If the Lead schema changes, change this with it. */}
-          <span className="text-muted-foreground font-body text-sm font-light leading-[150%]">
+          <span className="text-muted-foreground font-body text-sm font-normal leading-[150%]">
             Email me my plan and occasional tips about anxiety. We store
             your email, your profile name, and which phone you use —
             never your answers. Unsubscribe any time.
@@ -106,18 +119,34 @@ export const PlanGate = ({
         </label>
 
         {status === "error" && (
-          <p className="text-destructive font-body text-sm" role="alert">
+          <p
+            id="quiz-gate-error"
+            className="text-destructive-text font-body text-sm"
+            role="alert"
+          >
             {error}
           </p>
         )}
 
-        <BrandButton
+        <Button
           type="submit"
-          full
+          variant="black"
+          size="xl"
+          className="w-full"
           disabled={status === "loading" || !consent}
+          aria-describedby={!consent ? "quiz-gate-consent-hint" : undefined}
         >
-          {status === "loading" ? "Sending..." : "Send my plan"}
-        </BrandButton>
+          {status === "loading" ? "Sending…" : "Send my plan"}
+        </Button>
+
+        {!consent && (
+          <p
+            id="quiz-gate-consent-hint"
+            className="text-center text-muted-foreground font-body text-sm"
+          >
+            Tick the box above to get your plan.
+          </p>
+        )}
 
         {/* Outside the <label> on purpose — a link inside it would toggle
             the checkbox on click as well as follow the href. */}

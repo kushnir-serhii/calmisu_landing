@@ -13,6 +13,8 @@ export const i18n: Record<
     deletionTimeline: string;
     emailLabel: string;
     passwordLabel: string;
+    showPassword: string;
+    hidePassword: string;
     emailPlaceholder: string;
     submit: string;
     submitting: string;
@@ -42,6 +44,8 @@ export const i18n: Record<
       "Your account and all associated data are permanently deleted immediately upon confirmation.",
     emailLabel: "Email",
     passwordLabel: "Password",
+    showPassword: "Show password",
+    hidePassword: "Hide password",
     emailPlaceholder: "you@example.com",
     submit: "Delete my account",
     submitting: "Deleting…",
@@ -72,6 +76,8 @@ export const i18n: Record<
       "Twoje konto i wszystkie powiązane dane są trwale usuwane natychmiast po potwierdzeniu.",
     emailLabel: "Email",
     passwordLabel: "Hasło",
+    showPassword: "Pokaż hasło",
+    hidePassword: "Ukryj hasło",
     emailPlaceholder: "ty@example.com",
     submit: "Usuń moje konto",
     submitting: "Usuwanie…",
@@ -102,6 +108,8 @@ export const i18n: Record<
       "Твій акаунт та всі пов'язані дані будуть назавжди видалені одразу після підтвердження.",
     emailLabel: "Електронна пошта",
     passwordLabel: "Пароль",
+    showPassword: "Показати пароль",
+    hidePassword: "Приховати пароль",
     emailPlaceholder: "ти@example.com",
     submit: "Видалити мій акаунт",
     submitting: "Видалення…",

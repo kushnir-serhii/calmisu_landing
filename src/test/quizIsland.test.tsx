@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import QuizIsland from "@/components/QuizIsland";
-import QuizResultIsland from "@/components/QuizResultIsland";
+import QuizIsland from "@/components/quiz/QuizIsland";
+import QuizResultIsland from "@/components/quiz/QuizResultIsland";
 import { questions, profiles } from "@/data/quiz";
 
 vi.mock("@/lib/analytics", () => ({ track: vi.fn() }));

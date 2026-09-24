@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, fireEvent, waitFor, within } from "@testing-library/react";
-import QuizIsland from "@/components/QuizIsland";
-import QuizResultIsland from "@/components/QuizResultIsland";
+import QuizIsland from "@/components/quiz/QuizIsland";
+import QuizResultIsland from "@/components/quiz/QuizResultIsland";
 
 /**
  * Acceptance-level tests for the Calm Profile quiz (spec 002, Slice 9).

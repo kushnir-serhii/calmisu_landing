@@ -1,8 +1,8 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import Header from "@/components/Header.astro";
-import Footer from "@/components/Footer";
-import { DownloadButtons } from "@/components/ui/DownloadButtons";
+import Header from "@/components/layout/Header.astro";
+import Footer from "@/components/layout/Footer";
+import AppPromoCard from "@/components/blog/AppPromoCard.astro";
 
 const canonicalUrl = new URL("/about/", Astro.site).href;
 
@@ -95,24 +95,12 @@ const jsonLd = {
           </p>
         </div>
 
-        <div class="mt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-6 rounded-3xl bg-brand-100 p-8 sm:p-10">
-          <div class="flex flex-col gap-2">
-            <p class="text-foreground font-display text-xl sm:text-2xl font-normal leading-[120%]">
-              Try the app I made.
-            </p>
-            <p class="text-muted-foreground font-body text-sm sm:text-base max-w-[380px]">
-              Guided breathing, grounding, calligraphy, and meditation — free to
-              download.
-            </p>
-          </div>
-          <DownloadButtons
-            client:load
-            only="android"
-            location="about_cta"
-            widthClass="w-full sm:w-auto"
-            className="shrink-0"
-          />
-        </div>
+        <AppPromoCard
+          class="mt-4"
+          title="Try the app I made."
+          text="Guided breathing, grounding, calligraphy, and meditation — free to download."
+          location="about_cta"
+        />
       </div>
     </main>
 
@@ -121,13 +109,8 @@ const jsonLd = {
 </BaseLayout>
 
 <style>
-  .article-prose {
-    color: hsl(var(--foreground));
-    font-family: "Roboto", sans-serif;
-    font-weight: 300;
-    line-height: 1.7;
-    font-size: 1.0625rem;
-  }
+  /* Base .article-prose rules live in src/index.css (shared with
+     blog/[...slug].astro); only this page's extras stay local. */
   .article-prose :global(h2) {
     font-family: "Orienta", sans-serif;
     font-weight: 400;

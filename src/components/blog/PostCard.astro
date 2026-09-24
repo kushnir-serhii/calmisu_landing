@@ -1,0 +1,60 @@
+---
+import type { CollectionEntry } from "astro:content";
+import TagPill from "./TagPill.astro";
+
+/**
+ * The image + tag + title card used both on the homepage's "Latest from the
+ * blog" grid and on /blog/'s secondary grid. The two call sites differ only
+ * in whether a date shows, the heading level (SEO: one h2 per page), and a
+ * couple of cosmetic details — all exposed as props rather than duplicating
+ * the markup.
+ */
+interface Props {
+  post: CollectionEntry<"blog">;
+  /** One <h2> per page for SEO — LatestPosts uses h3, blog/index's featured
+   *  post already owns the page's one h2 so its grid also uses... actually
+   *  h2 (see call site); kept as a prop rather than hardcoded either way. */
+  headingTag?: "h2" | "h3";
+  showDate?: boolean;
+}
+
+const { post, headingTag: Heading = "h3", showDate = false } = Astro.props;
+
+const dateFormatter = new Intl.DateTimeFormat("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+---
+
+<a
+  href={`/blog/${post.slug}/`}
+  class:list={["group flex flex-col gap-4 no-underline", { "h-full": showDate }]}
+>
+  <div class:list={["relative w-full aspect-[16/10] rounded-2xl overflow-hidden", { "bg-muted": showDate }]}>
+    {post.data.image && (
+      <img
+        src={post.data.image}
+        alt={post.data.imageAlt ?? ""}
+        class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+        loading="lazy"
+      />
+    )}
+    {post.data.tags[0] && <TagPill class="absolute top-3 right-3">{post.data.tags[0]}</TagPill>}
+  </div>
+  <div class="flex flex-col gap-2">
+    <Heading
+      class:list={[
+        "text-foreground font-display text-2xl font-normal leading-[120%]",
+        { "group-hover:text-brand transition-colors": showDate },
+      ]}
+    >
+      {post.data.title}
+    </Heading>
+    {showDate && (
+      <time datetime={post.data.pubDate.toISOString()} class="text-muted-foreground font-body text-sm font-light">
+        {dateFormatter.format(post.data.pubDate)}
+      </time>
+    )}
+  </div>
+</a>

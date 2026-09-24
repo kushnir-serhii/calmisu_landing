@@ -1,24 +1,21 @@
 ---
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import Header from "@/components/Header.astro";
-import Footer from "@/components/Footer";
-import { TermsEn } from "@/components/terms/Terms.en";
-import { TermsPl } from "@/components/terms/Terms.pl";
-import { TermsUa } from "@/components/terms/Terms.ua";
-import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
+import Header from "@/components/layout/Header.astro";
+import Footer from "@/components/layout/Footer";
+import LocalizedDocPage from "@/components/legal/LocalizedDocPage.astro";
+import { LanguageSwitcher } from "@/components/legal/LanguageSwitcher";
+import { TermsEn } from "@/components/legal/calmisu/Terms.en";
+import { TermsPl } from "@/components/legal/calmisu/Terms.pl";
+import { TermsUa } from "@/components/legal/calmisu/Terms.ua";
+import { CALMISU_LANGS as LANGS, langStaticPaths, resolveLang } from "@/lib/i18n";
 
 export function getStaticPaths() {
-  return [
-    { params: { lang: "en" } },
-    { params: { lang: "pl" } },
-    { params: { lang: "uk" } },
-  ];
+  return langStaticPaths(LANGS);
 }
 
 const { lang } = Astro.params;
 
 const content = { en: TermsEn, pl: TermsPl, uk: TermsUa };
-const current = (content[lang as keyof typeof content] ? lang : "en") as keyof typeof content;
+const current = resolveLang(lang, content);
 const Content = content[current];
 
 const meta = {
@@ -35,42 +32,16 @@ const meta = {
     description: "Ознайомтеся з умовами використання додатку Calmisu.",
   },
 }[current];
-
-// hreflang alternates. The URL segment doubles as the ISO 639-1 code for all
-// three languages (en / pl / uk), so no mapping table is needed. Hrefs keep the
-// trailing slash to match the canonical Astro emits for directory-format pages.
-const alternates = ["en", "pl", "uk"].map((l) => ({
-  hreflang: l,
-  href: new URL(`/${l}/terms-of-service/`, Astro.site).href,
-}));
-const xDefault = new URL("/en/terms-of-service/", Astro.site).href;
 ---
 
-<BaseLayout
-  title={meta.title}
-  description={meta.description}
-  canonicalUrl={Astro.url.href}
-  lang={current}
->
-  <Fragment slot="head">
-    {
-      alternates.map((alt) => (
-        <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
-      ))
-    }
-    <link rel="alternate" hreflang="x-default" href={xDefault} />
-  </Fragment>
+<LocalizedDocPage meta={meta} lang={current} langs={LANGS} path="terms-of-service">
+  <Header slot="before-main" />
 
-  <Header />
+  <div class="ml-auto mt-10" slot="nav">
+    <LanguageSwitcher lang={current} langs={LANGS} currentPath={Astro.url.pathname} client:load />
+  </div>
 
-  <main class="flex flex-col px-2 lg:px-36">
-    <div class="ml-auto mt-10">
-      <LanguageSwitcher lang={current} currentPath={Astro.url.pathname} client:load />
-    </div>
-    <div>
-      <Content />
-    </div>
-  </main>
+  <Content />
 
-  <Footer />
-</BaseLayout>
+  <Footer slot="after-main" />
+</LocalizedDocPage>

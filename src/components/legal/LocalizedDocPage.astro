@@ -1,0 +1,66 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+interface Meta {
+  title: string;
+  description: string;
+}
+
+interface Props {
+  meta: Meta;
+  lang: string;
+  langs: readonly string[];
+  /** URL segment after the language code, e.g. "privacy-policy". */
+  path: string;
+  /** "" for Calmisu (root pages), "/alma" for the Alma docs. */
+  basePath?: string;
+  noindexFollow?: boolean;
+  /** Wrap the default slot in a <div> (matches the Privacy/Terms pages; the Alma delete-account page renders its content directly). */
+  wrapContent?: boolean;
+}
+
+const { meta, lang, langs, path, basePath = "", noindexFollow = false, wrapContent = true } = Astro.props;
+
+// hreflang alternates. The URL segment doubles as the ISO 639-1 code for
+// every supported language, so no mapping table is needed. Hrefs keep the
+// trailing slash to match the canonical Astro emits for directory-format pages.
+const alternates = langs.map((l) => ({
+  hreflang: l,
+  href: new URL(`${basePath}/${l}/${path}/`, Astro.site).href,
+}));
+const xDefault = new URL(`${basePath}/en/${path}/`, Astro.site).href;
+---
+
+<BaseLayout
+  title={meta.title}
+  description={meta.description}
+  canonicalUrl={Astro.url.href}
+  lang={lang}
+  noindexFollow={noindexFollow}
+>
+  <Fragment slot="head">
+    {
+      alternates.map((alt) => (
+        <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
+      ))
+    }
+    <link rel="alternate" hreflang="x-default" href={xDefault} />
+  </Fragment>
+
+  <slot name="before-main" />
+
+  <main class="flex flex-col px-2 lg:px-36">
+    <slot name="nav" />
+    {
+      wrapContent ? (
+        <div>
+          <slot />
+        </div>
+      ) : (
+        <slot />
+      )
+    }
+  </main>
+
+  <slot name="after-main" />
+</BaseLayout>

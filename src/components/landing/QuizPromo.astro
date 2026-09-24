@@ -1,0 +1,180 @@
+---
+import Section from "@/components/ui/Section.astro";
+
+/**
+ * Homepage entry point into the quiz.
+ *
+ * Pure markup — no island, so it adds nothing to the page's JS. It sits in the
+ * slot the commented-out ReviewsSection used to occupy (see index.astro);
+ * that component stays disabled.
+ *
+ * Icons are the mobile app's own onboarding artwork, reused here so the quiz
+ * reads as a preview of the app rather than a separate web thing. They orbit
+ * clockwise through a 2×2 grid; the tile in the top-left slot is the lit one
+ * and its name shows in the caption below. The motion is CSS-only (see the
+ * style block) and stops under reduced motion.
+ */
+const icons = [
+  { src: "/images/quiz/thoughts.webp", label: "Racing thoughts" },
+  { src: "/images/quiz/panic.webp", label: "Panic attacks" },
+  { src: "/images/quiz/sleeping.webp", label: "Trouble sleeping" },
+  { src: "/images/quiz/anxiety.webp", label: "Anxiety and stress" },
+];
+---
+
+<Section id="quiz" class="scroll-mt-20">
+  <div
+    class="flex flex-col md:flex-row items-center gap-12 md:gap-8 w-full rounded-2xl sm:rounded-[30px] bg-brand px-6 sm:px-10 lg:px-[100px] py-12 sm:py-16 lg:py-[100px]"
+  >
+    <div class="flex flex-col items-center md:items-start gap-6 w-full md:w-1/2 text-center md:text-left">
+      <span
+        class="px-3 py-1 rounded-full bg-brand-light text-brand-dark font-body text-sm"
+      >
+        9 questions, 3 minutes quiz
+      </span>
+
+      <h2
+        class="text-white font-display text-3xl sm:text-4xl md:text-5xl lg:text-[60px] font-normal leading-[100%] max-w-[520px]"
+      >
+        What patterns does your anxiety follow?
+      </h2>
+
+      <p class="text-white font-body text-base font-normal leading-[150%]">
+        Take a free quiz and get a free 7 day plan.
+      </p>
+
+      <a
+        href="/quiz/?src=homepage"
+        class="cta-btn mt-4 min-w-[200px] bg-black text-white text-center font-body text-lg px-8 py-4 rounded-2xl hover:bg-slate-800 hover:-translate-y-0.5 transition no-underline"
+      >
+        Start now
+      </a>
+    </div>
+
+    <div class="flex flex-col items-center gap-6 w-full md:w-1/2" aria-hidden="true">
+      <div class="quiz-orbit">
+        {
+          icons.map((icon, i) => (
+            <div class={`quiz-orbit-tile quiz-orbit-${i}`}>
+              <img
+                src={icon.src}
+                alt=""
+                width="44"
+                height="44"
+                class="w-1/2 h-1/2"
+                loading="lazy"
+              />
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="quiz-orbit-caption text-white font-body text-base">
+        {
+          icons.map((icon, i) => (
+            <span class={`quiz-orbit-label quiz-orbit-${i}`}>{icon.label}</span>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</Section>
+
+<style>
+  /* A tight 2×2 grid of --t tiles with --gap between them. Slots, clockwise:
+     top-left (lit), top-right, bottom-right, bottom-left. Every tile and every
+     caption label runs the same 4-step loop, offset by a quarter-cycle, so the
+     lit tile and the caption always match. */
+  .quiz-orbit {
+    --t: 88px;
+    --gap: 16px;
+    --step: calc(var(--t) + var(--gap));
+    position: relative;
+    width: calc(var(--t) * 2 + var(--gap));
+    height: calc(var(--t) * 2 + var(--gap));
+  }
+
+  @media (min-width: 1024px) {
+    .quiz-orbit {
+      --t: 116px;
+      --gap: 20px;
+    }
+  }
+
+  .quiz-orbit-tile {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--t);
+    height: var(--t);
+    border-radius: calc(var(--t) * 0.26);
+    /* Unlit tiles are frosted glass; the icon itself stays at full colour. */
+    background: hsl(0 0% 100% / 0.22);
+  }
+
+  .quiz-orbit-caption {
+    display: grid;
+    min-height: 1.5em;
+  }
+
+  .quiz-orbit-label {
+    grid-area: 1 / 1;
+    text-align: center;
+    opacity: 0;
+  }
+
+  /* Static layout (also the reduced-motion fallback). */
+  .quiz-orbit-tile.quiz-orbit-0 {
+    background: hsl(var(--brand-blue-light));
+    box-shadow: 0 12px 32px hsl(222 40% 25% / 0.25);
+  }
+  .quiz-orbit-tile.quiz-orbit-1 { transform: translate(var(--step), 0); }
+  .quiz-orbit-tile.quiz-orbit-2 { transform: translate(var(--step), var(--step)); }
+  .quiz-orbit-tile.quiz-orbit-3 { transform: translate(0, var(--step)); }
+  .quiz-orbit-label.quiz-orbit-0 { opacity: 1; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .quiz-orbit-tile {
+      animation: quiz-orbit 14s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+    }
+    .quiz-orbit-label {
+      animation: quiz-orbit-label 14s ease-in-out infinite;
+    }
+    .quiz-orbit-1 { animation-delay: -3.5s; }
+    .quiz-orbit-2 { animation-delay: -7s; }
+    .quiz-orbit-3 { animation-delay: -10.5s; }
+  }
+
+  /* Hold each slot for 2.8s, glide to the next in 0.7s. */
+  @keyframes quiz-orbit {
+    0%, 20%, 100% {
+      transform: translate(0, 0);
+      background: hsl(var(--brand-blue-light));
+      box-shadow: 0 12px 32px hsl(222 40% 25% / 0.25);
+    }
+    25%, 45% {
+      transform: translate(var(--step), 0);
+      background: hsl(0 0% 100% / 0.22);
+      box-shadow: 0 0 0 hsl(222 40% 25% / 0);
+    }
+    50%, 70% {
+      transform: translate(var(--step), var(--step));
+      background: hsl(0 0% 100% / 0.22);
+      box-shadow: 0 0 0 hsl(222 40% 25% / 0);
+    }
+    75%, 95% {
+      transform: translate(0, var(--step));
+      background: hsl(0 0% 100% / 0.22);
+      box-shadow: 0 0 0 hsl(222 40% 25% / 0);
+    }
+  }
+
+  /* Shown while its tile holds the top-left slot; crossfades on the move. */
+  @keyframes quiz-orbit-label {
+    0%, 20%, 100% { opacity: 1; }
+    24%, 96% { opacity: 0; }
+  }
+</style>

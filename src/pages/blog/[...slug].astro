@@ -1,10 +1,11 @@
 ---
 import { getCollection, type CollectionEntry } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import Header from "@/components/Header.astro";
-import Footer from "@/components/Footer";
-import { DownloadButtons } from "@/components/ui/DownloadButtons";
-import QuizCTA, { type QuizCTAVariant } from "@/components/QuizCTA.astro";
+import Header from "@/components/layout/Header.astro";
+import Footer from "@/components/layout/Footer";
+import TagPill from "@/components/blog/TagPill.astro";
+import AppPromoCard from "@/components/blog/AppPromoCard.astro";
+import QuizCTA, { type QuizCTAVariant } from "@/components/quiz/QuizCTA.astro";
 
 // Tag → variant map (CONTENT.md §7 / SPEC.md Task 7). First matching tag
 // in the post's own tag order wins; an unmapped-tag post falls back to
@@ -147,11 +148,7 @@ const jsonLd = {
         </a>
 
         <div class="flex flex-wrap items-center gap-3 mb-4">
-          {tags[0] && (
-            <span class="text-brand font-body text-xs px-3 py-1 rounded-full bg-brand-100">
-              {tags[0]}
-            </span>
-          )}
+          {tags[0] && <TagPill>{tags[0]}</TagPill>}
           <span class="text-muted-foreground font-body text-sm">
             {readMinutes} min read
           </span>
@@ -212,24 +209,11 @@ const jsonLd = {
 
         <QuizCTA variant={quizCTAVariant} src={`blog_${entry.slug}`} />
 
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6 rounded-3xl bg-brand-100 p-8 sm:p-10">
-          <div class="flex flex-col gap-2">
-            <p class="text-foreground font-display text-xl sm:text-2xl font-normal leading-[120%]">
-              Find your center with Calmisu.
-            </p>
-            <p class="text-muted-foreground font-body text-sm sm:text-base max-w-[380px]">
-              Guided breathing, grounding, calligraphy, and meditation — free
-              to download.
-            </p>
-          </div>
-          <DownloadButtons
-            client:load
-            only="android"
-            location="blog_cta"
-            widthClass="w-full sm:w-auto"
-            className="shrink-0"
-          />
-        </div>
+        <AppPromoCard
+          title="Find your center with Calmisu."
+          text="Guided breathing, grounding, calligraphy, and meditation — free to download."
+          location="blog_cta"
+        />
       </article>
     </main>
 
@@ -246,13 +230,8 @@ const jsonLd = {
    * independent of that plugin. If the plugin is registered later, these
    * rules layer on top harmlessly.
    */
-  .article-prose {
-    color: hsl(var(--foreground));
-    font-family: "Roboto", sans-serif;
-    font-weight: 300;
-    line-height: 1.7;
-    font-size: 1.0625rem;
-  }
+  /* Base .article-prose rules live in src/index.css (shared with
+     about.astro); only this page's extras stay local. */
 
   .article-prose :global(h2) {
     font-family: "Orienta", sans-serif;

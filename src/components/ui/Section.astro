@@ -1,0 +1,25 @@
+---
+/**
+ * Astro mirror of Section.tsx (same class contract), for pages/partials that
+ * render statically and don't want to pull in the React component for a
+ * plain wrapper. Keep the two in sync if the shared classes change.
+ */
+interface Props {
+  id?: string;
+  class?: string;
+  style?: string;
+  /** Overrides the default vertical padding (py-16 sm:py-20 md:py-[120px]). */
+  paddingY?: string;
+}
+
+const {
+  id,
+  class: className = "",
+  style,
+  paddingY = "py-16 sm:py-20 md:py-[120px]",
+} = Astro.props;
+---
+
+<section id={id} style={style} class:list={["w-full px-6 sm:px-8 md:px-16 lg:px-[140px]", paddingY, className]}>
+  <slot />
+</section>

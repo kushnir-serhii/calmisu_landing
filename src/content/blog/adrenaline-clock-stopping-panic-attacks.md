@@ -6,6 +6,7 @@ image: /images/blog/adrenaline-clock.webp
 imageAlt: "A clock face dissolving into a pulse line"
 tags: ["anxiety 101", "panic attacks", "breathing"]
 draft: false
+quizCta: panic
 authorName: "Julia K"
 authorBio: "Product Designer & Creator of Calmisu"
 ---

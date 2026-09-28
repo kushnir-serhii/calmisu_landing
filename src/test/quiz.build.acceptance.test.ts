@@ -90,43 +90,57 @@ describe.skipIf(!distExists)("quiz build output", () => {
   });
 
   // @spec: 002-calm-profile-quiz @regression
-  it("every blog post has a quiz CTA linking /quiz/?src=blog_<slug>, with at least 4 distinct variants, and no added hydration script", () => {
+  it("only posts opted in via frontmatter `quizCta` get a mid-article quiz teaser, with 4 tile deep-links plus a fallback, and it adds no script", () => {
     const blogDir = path.join(DIST, "blog");
     const slugs = readdirSync(blogDir).filter((entry) =>
       existsSync(path.join(blogDir, entry, "index.html"))
     );
     expect(slugs.length).toBeGreaterThan(0);
 
-    const seenLines = new Set<string>();
+    const contentDir = path.join(ROOT, "src/content/blog");
+    const frontmatterOf = (slug: string) =>
+      readFileSync(path.join(contentDir, `${slug}.md`), "utf-8").split(
+        /^---$/m
+      )[1] ?? "";
+
+    const REASON_IDS = ["panic", "anxiety", "racingThoughts", "sleep"];
+    const scriptCountsWithoutFaq: number[] = [];
+
     for (const slug of slugs) {
       const html = read(`blog/${slug}/index.html`);
-      expect(html).toContain(`/quiz/?src=blog_${slug}`);
-      // Each variant has distinct body copy (QuizCTA.astro's COPY map) —
-      // count distinct lines around the CTA as a proxy for distinct variants
-      // without depending on internal class names.
-      const match = html.match(
-        /Two minutes, nine questions[\s\S]{0,400}?<\/p>/
-      );
-      if (match) seenLines.add(match[0]);
-    }
-    expect(seenLines.size).toBeGreaterThanOrEqual(4);
+      const frontmatter = frontmatterOf(slug);
+      const hasQuizCta = /^quizCta:/m.test(frontmatter);
+      const hasFaq = /^faq:/m.test(frontmatter);
 
-    // QuizCTA.astro is static markup (no client:* directive), so it must add
-    // nothing to any blog page's script surface. Rather than hardcode the
-    // count that pre-existing islands/layout scripts happen to produce
-    // today, assert every post has the *same* script-tag count as the rest —
-    // a per-page-varying count would mean something (like a CTA island) is
-    // rendering differently per post — and that no script references the
-    // CTA component by name.
-    const scriptCounts = slugs.map((slug) => {
-      const html = read(`blog/${slug}/index.html`);
-      return (html.match(/<script[^>]*>/g) ?? []).length;
-    });
-    expect(new Set(scriptCounts).size).toBe(1);
+      if (hasQuizCta) {
+        // Astro HTML-escapes the `&` between query params as `&#38;`.
+        const tileLinks = REASON_IDS.filter((id) =>
+          html.includes(`/quiz/?src=blog_${slug}&#38;reason=${id}`)
+        );
+        expect(tileLinks.length).toBe(4);
+        expect(html).toContain(`/quiz/?src=blog_${slug}"`);
+      } else {
+        expect(html).not.toContain(`/quiz/?src=blog_`);
+      }
+
+      // QuizTeaser.astro is static markup (no client:* directive) and must
+      // add nothing to a post's script surface. Posts with a frontmatter
+      // `faq` also mount an FAQAccordion island (a separate, pre-existing
+      // concern — see src/components/ui/FAQAccordion), so they're excluded
+      // from the "same script count" comparison below.
+      if (!hasFaq) {
+        scriptCountsWithoutFaq.push(
+          (html.match(/<script[^>]*>/g) ?? []).length
+        );
+      }
+      expect(html).not.toMatch(/QuizTeaser/i);
+      expect(html).not.toMatch(/QuizCTA/i);
+    }
+
+    expect(new Set(scriptCountsWithoutFaq).size).toBe(1);
 
     const sample = read(`blog/${slugs[0]}/index.html`);
     expect(sample).toContain('type="application/ld+json"');
-    expect(sample).not.toMatch(/QuizCTA/i);
   });
 
   // @spec: 002-calm-profile-quiz @regression

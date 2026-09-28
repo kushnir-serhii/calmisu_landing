@@ -28,6 +28,34 @@ const source = Astro.url.searchParams.get("src") ?? "direct";
   title="What's Your Anxiety Pattern? — 2-Minute Quiz | Calmisu"
   description="Answer 9 quick questions and find out which pattern your anxiety follows — and the two techniques that work fastest for it. Free, no account."
 >
+  <Fragment slot="head">
+    <script is:inline>
+      // Skips the flash of the intro when arriving from a blog QuizTeaser
+      // tile (see src/components/blog/QuizTeaser.astro), which deep-links to
+      // /quiz/?src=...&reason=<id>. This has to run before first paint,
+      // synchronously — QuizIsland's own mount effect (which does the actual
+      // pre-fill) runs too late to avoid the flash on its own. Valid ids are
+      // Q1's option ids from src/data/quiz.ts (questions[0].options);
+      // duplicated here, inline, rather than imported, since a module import
+      // would defeat the point of running before paint.
+      (function () {
+        var validReasonIds = [
+          "panic",
+          "anxiety",
+          "racingThoughts",
+          "sleep",
+          "notSure",
+        ];
+        var reason = new URLSearchParams(window.location.search).get(
+          "reason"
+        );
+        if (reason && validReasonIds.indexOf(reason) !== -1) {
+          document.documentElement.dataset.quizStarted = "true";
+        }
+      })();
+    </script>
+  </Fragment>
+
   <div class="flex flex-col items-center w-full bg-background">
     <Header progress={true} />
 

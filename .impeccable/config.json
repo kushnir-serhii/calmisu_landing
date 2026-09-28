@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "roboto",
+        "files": [
+          "src/components/blog/Citation.astro"
+        ],
+        "createdAt": "2026-09-27T19:27:05.739Z",
+        "reason": "project's established body font (tailwind font-body), used sitewide — not an ad-hoc AI default"
+      }
+    ]
+  }
+}

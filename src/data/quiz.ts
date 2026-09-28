@@ -235,6 +235,16 @@ export const questions: QuizQuestion[] = [
   },
 ];
 
+/**
+ * Q1's icon per resulting profile, for the result page. Derived from Q1
+ * so the two can never drift — keyed by the profile a visitor ends up
+ * with, not the Q1 option they picked (a `notSure` answer can resolve
+ * elsewhere via hints).
+ */
+export const PROFILE_ICONS = Object.fromEntries(
+  questions[0].options.map((o) => [o.profile, o.icon]),
+) as Record<Profile, string>;
+
 export const profiles: Record<Profile, ProfileContent> = {
   panic: {
     name: "The Body Alarm",

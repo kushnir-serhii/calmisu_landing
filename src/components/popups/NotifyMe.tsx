@@ -4,6 +4,8 @@ import { Dialog, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { track } from "@/lib/analytics";
 import { postLead } from "@/lib/api";
 import { CheckIcon } from "@/components/ui/icons";
+import { EmailField } from "@/components/ui/EmailField";
+import { Button } from "@/components/ui/button";
 
 interface NotifyMeProps {
   isOpen: boolean;
@@ -92,23 +94,13 @@ export const NotifyMe: React.FC<NotifyMeProps> = ({ isOpen, onClose }) => {
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label htmlFor="notify-me-email" className="sr-only">
-                    Email address
-                  </label>
-                  <input
+                  <EmailField
                     id="notify-me-email"
-                    type="email"
-                    required
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your email address"
-                    autoComplete="email"
-                    inputMode="email"
-                    autoCapitalize="none"
-                    spellCheck={false}
-                    aria-invalid={status === "error"}
-                    aria-describedby={status === "error" ? "notify-me-email-error" : undefined}
-                    className="w-full px-5 py-3.5 bg-background border border-control-border rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus:border-brand transition text-foreground placeholder-muted-foreground"
+                    onChange={setEmail}
+                    error={status === "error"}
+                    errorId="notify-me-email-error"
+                    bordered
                   />
                   {status === "error" && (
                     <p
@@ -120,13 +112,15 @@ export const NotifyMe: React.FC<NotifyMeProps> = ({ isOpen, onClose }) => {
                     </p>
                   )}
                 </div>
-                <button
+                <Button
                   type="submit"
+                  variant="black"
+                  size="xl"
+                  className="w-full"
                   disabled={status === "loading"}
-                  className="w-full bg-black text-white font-medium py-3.5 rounded-2xl hover:bg-black/80 transition flex justify-center items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  <span>{status === "loading" ? "Sending..." : "Notify Me"}</span>
-                </button>
+                  {status === "loading" ? "Sending..." : "Notify Me"}
+                </Button>
                 <p className="text-muted-foreground text-xs leading-relaxed">
                   We store your email to tell you once Calmisu is on the App
                   Store. Nothing else. Unsubscribe in one click. See our{" "}

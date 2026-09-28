@@ -6,6 +6,7 @@ image: /images/blog/science-of-touching-grass.webp
 imageAlt: "Bare feet standing on grass"
 tags: ["grounding", "anxiety 101", "science"]
 draft: false
+quizCta: anxiety
 authorName: "Julia K"
 authorBio: "Product Designer & Creator of Calmisu."
 ---

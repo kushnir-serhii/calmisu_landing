@@ -6,6 +6,7 @@ image: /images/blog/extended-exhale-breathing-science.webp
 imageAlt: "A slow exhale visualized as a widening line"
 tags: ["breathing", "anxiety 101", "nervous system"]
 draft: false
+quizCta: anxiety
 authorName: "Julia K"
 authorBio: "Product Designer & Creator of Calmisu."
 ---

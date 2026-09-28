@@ -32,7 +32,11 @@ import { Button } from "@/components/ui/button";
  */
 
 interface Props {
-  /** Where the visitor entered from — passed through to `quiz_start`. */
+  /** Where the visitor entered from — passed through to `quiz_start`. Only a
+   *  fallback: quiz.astro is statically built, so `Astro.url.searchParams`
+   *  is always empty at build time and this prop is always "direct". The
+   *  real value is read from `window.location.search` on mount (see the
+   *  effect below) and kept in `sourceRef`. */
   source?: string;
 }
 
@@ -55,6 +59,10 @@ export default function QuizIsland({ source = "direct" }: Props) {
   // quiz_start must fire only on the first start of this page view —
   // returning to the intro and pressing Start again must not double-count it.
   const startedRef = useRef(false);
+  // The real `src`, resolved client-side (see the Props doc above). Starts
+  // as the (always "direct") prop and is corrected in the mount effect
+  // before anything tracks quiz_start.
+  const sourceRef = useRef(source);
 
   const question = questions[step];
   const total = questions.length;
@@ -84,6 +92,48 @@ export default function QuizIsland({ source = "direct" }: Props) {
     el.setAttribute("aria-valuemax", String(total));
     el.setAttribute("aria-label", `Question ${step + 1} of ${total}`);
   }, [phase, step, total]);
+
+  useEffect(() => {
+    // Resolves the real `src` and pre-fills Q1 from a blog teaser tile
+    // (see src/components/blog/QuizTeaser.astro), which deep-links to
+    // `/quiz/?src=...&reason=<optionId>`. Runs once on mount, before the
+    // intro would otherwise flash: quiz.astro's own inline script already
+    // set `data-quiz-started` synchronously in this case, so this effect
+    // only has to make the React state agree with what's on screen.
+    const params = new URLSearchParams(window.location.search);
+    const urlSource = params.get("src");
+    if (urlSource) sourceRef.current = urlSource;
+
+    const reason = params.get("reason");
+    const validReasonIds = questions[0].options.map((option) => option.id);
+    if (reason && validReasonIds.includes(reason)) {
+      setAnswers({ [questions[0].id]: reason });
+      if (!startedRef.current) {
+        startedRef.current = true;
+        track("quiz_start", { src: sourceRef.current });
+      }
+      trackedSteps.current.add(0);
+      track("quiz_question_answered", {
+        index: 1,
+        question_id: questions[0].id,
+      });
+      setPhase("quiz");
+      setStep(1);
+      document.documentElement.dataset.quizStarted = "true";
+
+      // Strip `reason` so reloading (or Back landing back here) doesn't
+      // re-apply it and re-fire these events; `src` stays for attribution.
+      params.delete("reason");
+      const query = params.toString();
+      window.history.replaceState(
+        window.history.state,
+        "",
+        `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`
+      );
+    }
+    // Mount-only: this is a one-time read of the entry URL.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     // bfcache can restore this exact page on a Back navigation from the
@@ -131,7 +181,7 @@ export default function QuizIsland({ source = "direct" }: Props) {
   const start = () => {
     if (!startedRef.current) {
       startedRef.current = true;
-      track("quiz_start", { src: source });
+      track("quiz_start", { src: sourceRef.current });
     }
     setPhase("quiz");
     document.documentElement.dataset.quizStarted = "true";

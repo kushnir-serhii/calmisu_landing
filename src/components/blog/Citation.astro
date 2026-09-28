@@ -1,0 +1,84 @@
+---
+/**
+ * Inline research citation: highlights the cited phrase in brand blue (no
+ * underline) and shows a concise dark tooltip with the study summary on
+ * hover/focus, instead of a separate "(Author, year)" link after the
+ * sentence.
+ *
+ * For use in .astro/.mdx content, e.g. <Citation href="..." tip="...">the
+ * cited phrase</Citation>. Blog posts are plain markdown (no MDX), so their
+ * citations are authored as the same raw `<a class="citation" data-tip="...">`
+ * markup directly in the .md file — markdown can't render Astro components.
+ * That's also why these styles are duplicated in src/pages/blog/[...slug].astro
+ * (`:global(a.citation)`): this component's scoped <style> only reaches
+ * markup Citation.astro itself renders, never raw HTML from markdown.
+ */
+interface Props {
+  href: string;
+  tip: string;
+}
+
+const { href, tip } = Astro.props;
+---
+
+<a href={href} class="citation" data-tip={tip} target="_blank" rel="noopener noreferrer" tabindex="0">
+  <slot />
+</a>
+
+<style>
+  a.citation {
+    color: hsl(var(--brand-blue-dark));
+    font-family: "Roboto", sans-serif;
+    text-decoration: none;
+    cursor: help;
+    position: relative;
+  }
+
+  a.citation:hover {
+    opacity: 1;
+  }
+
+  a.citation::before,
+  a.citation::after {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.15s ease, visibility 0.15s ease;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+  }
+
+  a.citation::after {
+    content: attr(data-tip);
+    bottom: calc(100% + 8px);
+    width: max-content;
+    max-width: 260px;
+    background: hsl(var(--foreground));
+    color: hsl(var(--brand-beige));
+    font-family: "Roboto", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 400;
+    line-height: 1.4;
+    text-align: left;
+    white-space: normal;
+    padding: 0.5rem 0.625rem;
+    border-radius: 0.5rem;
+  }
+
+  a.citation::before {
+    content: "";
+    bottom: calc(100% + 3px);
+    border: 5px solid transparent;
+    border-top-color: hsl(var(--foreground));
+  }
+
+  a.citation:hover::before,
+  a.citation:hover::after,
+  a.citation:focus-visible::before,
+  a.citation:focus-visible::after {
+    opacity: 1;
+    visibility: visible;
+  }
+</style>

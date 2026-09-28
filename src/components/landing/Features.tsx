@@ -44,7 +44,7 @@ const FeatureSplit = ({
   return (
     <Section id={id} className={className} paddingY={paddingY}>
       <div
-        className={`flex ${reverse ? "flex-col-reverse" : ""} lg:flex-row items-center gap-8 md:gap-10 w-full`}
+        className={`flex lg:flex-row items-center gap-8 md:gap-10 w-full ${reverse ? "flex-col-reverse lg:flex-row-reverse" : ""}`}
       >
         {/* Text */}
         <div className="flex flex-col items-start gap-8 md:gap-12 flex-1">
@@ -56,7 +56,10 @@ const FeatureSplit = ({
           </div>
           <div className="flex flex-col items-start gap-4 md:gap-6 w-full">
             {items.map((item, i) => (
-              <div key={i} className="flex items-start sm:items-center gap-3 sm:gap-4 w-full">
+              <div
+                key={i}
+                className="flex items-start sm:items-center gap-3 sm:gap-4 w-full"
+              >
                 <div className="flex w-9 h-9 sm:w-10 sm:h-10 justify-center items-center rounded-lg bg-muted shrink-0 mt-0.5 sm:mt-0">
                   {item.icon}
                 </div>
@@ -85,10 +88,42 @@ const FeatureSplit = ({
 };
 
 const flowFeatures: FeatureItem[] = [
-  { icon: <span className="text-foreground font-body text-lg sm:text-xl font-normal leading-[140%]">1</span>, title: "Guided breathing", text: "exercises activate your parasympathetic nervous system, signaling safety to your body." },
-  { icon: <span className="text-foreground font-body text-lg sm:text-xl font-normal leading-[140%]">2</span>, title: "5-sense grounding", text: "brings you back to the present moment, anchoring you in physical reality." },
-  { icon: <span className="text-foreground font-body text-lg sm:text-xl font-normal leading-[140%]">3</span>, title: "Mindful kanji writing", text: "channels focus and movement into meditative intention, quieting mental chatter." },
-  { icon: <span className="text-foreground font-body text-lg sm:text-xl font-normal leading-[140%]">4</span>, title: "Calming meditation music", text: "seals the practice, letting your system integrate and restore." },
+  {
+    icon: (
+      <span className="text-foreground font-body text-lg sm:text-xl font-normal leading-[140%]">
+        1
+      </span>
+    ),
+    title: "Guided breathing",
+    text: "exercises activate your parasympathetic nervous system, signaling safety to your body.",
+  },
+  {
+    icon: (
+      <span className="text-foreground font-body text-lg sm:text-xl font-normal leading-[140%]">
+        2
+      </span>
+    ),
+    title: "5-sense grounding",
+    text: "brings you back to the present moment, anchoring you in physical reality.",
+  },
+  {
+    icon: (
+      <span className="text-foreground font-body text-lg sm:text-xl font-normal leading-[140%]">
+        3
+      </span>
+    ),
+    title: "Mindful kanji writing",
+    text: "channels focus and movement into meditative intention, quieting mental chatter.",
+  },
+  {
+    icon: (
+      <span className="text-foreground font-body text-lg sm:text-xl font-normal leading-[140%]">
+        4
+      </span>
+    ),
+    title: "Calming meditation music",
+    text: "seals the practice, letting your system integrate and restore.",
+  },
 ];
 
 export const FeaturesFlow = () => (
@@ -106,15 +141,40 @@ export const FeaturesFlow = () => (
 );
 
 const KanjiIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <path d="M4 17.5C5.83333 16 9.6 12 10 8.00003H4.5M12 7.5V3M12 7.5C12.0112 7.58237 12.022 7.66659 12.0322 7.75254M12 7.5C12.0084 7.58397 12.0192 7.66816 12.0322 7.75254M12.0322 7.75254C12.3784 10.6581 12.1672 15.5361 12.0558 17.5678C12.027 18.0929 11.5924 18.5 11.0665 18.5H8.5M12.0322 7.75254C12.2152 8.93665 12.847 10.1578 13.6899 11.3264M20 17.5C18.7452 16.4734 15.648 14.0415 13.6899 11.3264M13.6899 11.3264C14.6266 11.051 17 9.7 19 6.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+    <path
+      d="M4 17.5C5.83333 16 9.6 12 10 8.00003H4.5M12 7.5V3M12 7.5C12.0112 7.58237 12.022 7.66659 12.0322 7.75254M12 7.5C12.0084 7.58397 12.0192 7.66816 12.0322 7.75254M12.0322 7.75254C12.3784 10.6581 12.1672 15.5361 12.0558 17.5678C12.027 18.0929 11.5924 18.5 11.0665 18.5H8.5M12.0322 7.75254C12.2152 8.93665 12.847 10.1578 13.6899 11.3264M20 17.5C18.7452 16.4734 15.648 14.0415 13.6899 11.3264M13.6899 11.3264C14.6266 11.051 17 9.7 19 6.5"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </svg>
 );
 
 const scienceFeatures: FeatureItem[] = [
-  { icon: <Lightbulb size={24} aria-hidden="true" />, title: "Waves of panic usually pass.", text: "Knowing that can take some of the fear out of the fear itself." },
-  { icon: <Wind size={24} aria-hidden="true" />, title: "Slow, steady breathing may stimulate the vagus nerve, ", text: "which can help your body settle." },
-  { icon: <KanjiIcon />, title: "Purposeful physical activity — like calligraphy — ", text: "can help interrupt rumination and bring you back to the present." },
+  {
+    icon: <Lightbulb size={24} aria-hidden="true" />,
+    title: "Waves of panic usually pass.",
+    text: "Knowing that can take some of the fear out of the fear itself.",
+  },
+  {
+    icon: <Wind size={24} aria-hidden="true" />,
+    title: "Slow, steady breathing may stimulate the vagus nerve, ",
+    text: "which can help your body settle.",
+  },
+  {
+    icon: <KanjiIcon />,
+    title: "Purposeful physical activity — like calligraphy — ",
+    text: "can help interrupt rumination and bring you back to the present.",
+  },
 ];
 
 export const FeaturesScience = () => (

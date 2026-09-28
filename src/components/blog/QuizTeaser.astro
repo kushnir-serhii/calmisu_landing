@@ -1,0 +1,129 @@
+---
+import { questions } from "@/data/quiz";
+
+/**
+ * Mid-article quiz teaser.
+ *
+ * Replaces the old end-of-post QuizCTA (a generic card that sat right next
+ * to an identical-looking AppPromoCard — see the Change Log in
+ * context/spec/002-calm-profile-quiz/functional-spec.md). This one is opt-in
+ * per post via frontmatter `quizCta`, sits mid-article, and shows the quiz's
+ * actual first question as tappable tiles rather than a plain "take the
+ * quiz" button — a reader can act on it without leaving the article to find
+ * out what the quiz even asks.
+ *
+ * Pure markup — no client directive, no script. Each tile is a plain link to
+ * `/quiz/?src=...&reason=...`; QuizIsland reads `reason` on mount and opens
+ * straight into Q2 with that choice pre-selected (see QuizIsland.tsx). That
+ * keeps this component's cost on every blog page at zero JS.
+ *
+ * `<aside>` + a styled `<p>` (not an `<h2>`/`<h3>`) so this doesn't add a
+ * heading to the article's own outline — it's a sidebar-ish unit dropped
+ * into the flow, not a section of the post.
+ */
+
+export type QuizTeaserVariant = "panic" | "anxiety" | "racingThoughts" | "sleep" | "default";
+
+interface Props {
+  variant: QuizTeaserVariant;
+  /** e.g. `blog_<slug>` — forwarded to the quiz for `quiz_start` attribution. */
+  src: string;
+}
+
+const HEADLINES: Record<QuizTeaserVariant, string> = {
+  panic: "Panic follows a pattern. Which one is yours?",
+  anxiety: "Which two techniques fit your anxiety?",
+  racingThoughts: "Give a looping mind somewhere else to be.",
+  sleep: "What are your evenings actually doing?",
+  default: "What pattern does your anxiety follow?",
+};
+
+const { variant, src } = Astro.props;
+const headline = HEADLINES[variant];
+
+// Q1's own options, minus "Not sure yet" — the tiles are meant as a fast
+// answer for someone who already knows why they're here; "not sure" gets
+// its own text link below instead.
+const tiles = questions[0].options.filter((option) => option.id !== "notSure");
+---
+
+<aside aria-labelledby="quiz-teaser-heading" class="not-prose my-10 sm:my-12">
+  <div
+    class="flex flex-col rounded-2xl sm:rounded-[30px] bg-brand-dark px-6 sm:px-10 py-8 sm:py-10"
+  >
+    <span
+      class="self-start px-3 py-1 rounded-full bg-brand-light text-brand-dark font-body text-sm"
+    >
+      Free quiz · 9 questions · 2 min
+    </span>
+
+    <p
+      id="quiz-teaser-heading"
+      class="mt-4 text-white font-display text-2xl sm:text-3xl font-normal leading-[110%] max-w-[520px]"
+    >
+      {headline}
+    </p>
+
+    <p class="mt-2 text-white/80 font-body text-base font-light">
+      Start with question one. What brings you here?
+    </p>
+
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6">
+      {
+        tiles.map((option) => (
+          <a
+            href={`/quiz/?src=${src}&reason=${option.id}`}
+            class="teaser-tile flex flex-col items-center justify-center gap-2 min-h-[44px] py-4 px-2 rounded-2xl text-center no-underline transition-[background-color,transform,box-shadow] duration-150 motion-safe:hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-dark"
+            data-lit={option.id === variant ? "true" : undefined}
+          >
+            <img
+              src={option.icon}
+              alt=""
+              width="44"
+              height="44"
+              loading="lazy"
+            />
+            <span class="teaser-tile-label text-white text-sm">
+              {option.label}
+            </span>
+          </a>
+        ))
+      }
+    </div>
+
+    <div class="flex flex-col sm:flex-row items-center sm:justify-between gap-3 mt-6">
+      <a
+        href={`/quiz/?src=${src}`}
+        class="text-white/80 font-body text-sm underline underline-offset-4 hover:text-white transition-colors"
+      >
+        Not sure yet? Start from the top &rarr;
+      </a>
+      <p class="text-white/60 font-body text-xs sm:text-sm">
+        Free · No account needed
+      </p>
+    </div>
+  </div>
+</aside>
+
+<style>
+  /* Resting state is frosted glass over bg-brand-dark, matching the homepage
+     QuizPromo orbit tiles; lit/hover state swaps to the brand blue used
+     there, which only exists as an HSL custom property, not a Tailwind
+     class — hence the scoped rules instead of pure utilities. */
+  .teaser-tile {
+    background: hsl(0 0% 100% / 0.12);
+  }
+
+  .teaser-tile:hover,
+  .teaser-tile:focus-visible,
+  .teaser-tile[data-lit] {
+    background: hsl(var(--brand-blue-light));
+    box-shadow: 0 12px 32px hsl(222 40% 25% / 0.25);
+  }
+
+  .teaser-tile:hover .teaser-tile-label,
+  .teaser-tile:focus-visible .teaser-tile-label,
+  .teaser-tile[data-lit] .teaser-tile-label {
+    color: hsl(var(--brand-dark));
+  }
+</style>

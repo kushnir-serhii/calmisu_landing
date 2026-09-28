@@ -6,6 +6,7 @@ image: /images/blog/calligraphy-as-meditation.webp
 imageAlt: "A brush stroke drying on paper"
 tags: ["mindful practice", "calligraphy", "focus"]
 draft: false
+quizCta: racingThoughts
 authorName: "Julia K"
 authorBio: "Product Designer & Creator of Calmisu."
 ---

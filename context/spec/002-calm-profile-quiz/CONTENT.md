@@ -355,7 +355,31 @@ Every email carries a working unsubscribe link.
 
 ---
 
-## 7. Blog CTA variants
+## 7. Blog quiz teaser variants
+
+*(Retired 2026-09-27 — see the functional-spec.md Change Log. The end-of-post `QuizCTA` card below was replaced by a mid-article, opt-in-via-frontmatter first-question teaser, `src/components/blog/QuizTeaser.astro`. Its copy is the "Current" table; the original CTA table is kept underneath for history.)*
+
+### Current — QuizTeaser.astro
+
+Rendered mid-article (before the post's 3rd `<h2>`) only on posts whose frontmatter sets `quizCta`. Badge is constant, the headline varies by variant, subline is constant.
+
+Badge: `Free quiz · 9 questions · 2 min`
+
+| variant | Headline |
+|---|---|
+| `panic` | Panic follows a pattern. Which one is yours? |
+| `anxiety` | Which two techniques fit your anxiety? |
+| `racingThoughts` | Give a looping mind somewhere else to be. |
+| `sleep` | What are your evenings actually doing? |
+| `default` | What pattern does your anxiety follow? |
+
+Subline: `Start with question one. What brings you here?`
+
+Below that, 4 tiles — Q1's own options (`questions[0].options` in `src/data/quiz.ts`), excluding "Not sure yet" — each linking to `/quiz/?src=blog_<slug>&reason=<optionId>`.
+
+Below the tiles: a text link `Not sure yet? Start from the top →` to `/quiz/?src=blog_<slug>`, and small text `Free · No account needed`.
+
+### Retired — QuizCTA.astro (end-of-post card, tag-derived variant)
 
 Rendered after the post body. Heading is constant, the line under it varies.
 

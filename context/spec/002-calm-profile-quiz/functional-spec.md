@@ -95,9 +95,12 @@ The Calm Profile quiz gives the visitor something of real value first: a short, 
 
 - **As a** reader, **I want** a next step that fits the article I just read, **so that** the blog isn't a dead end.
   - **Acceptance Criteria:**
-    - [ ] Every post shows a quiz CTA between the body and the download block, with the variant picked by the first matching tag (panic / anxiety / sleep / racingThoughts), otherwise `default`.
-    - [ ] At least 4 distinct variants appear across the posts.
-    - [ ] The CTA links to `/quiz/?src=blog_<slug>` and adds no hydration script to blog pages.
+    - [ ] A post shows the quiz teaser only when its frontmatter sets `quizCta` (`panic` / `anxiety` / `racingThoughts` / `sleep` / `default`) — opt-in per post, not derived from tags. Posts without the field show no quiz block at all.
+    - [ ] The teaser renders mid-article, before the post's 3rd `<h2>` (after two full sections); if the post has fewer than 3, it lands before the last one, and if it has none, after the body.
+    - [ ] The teaser shows the quiz's actual Q1 as 4 tappable tiles (all `questions[0].options` except "Not sure yet"), each deep-linking to `/quiz/?src=blog_<slug>&reason=<optionId>`, plus a fallback link to `/quiz/?src=blog_<slug>` for "not sure yet".
+    - [ ] Opening a tile's link opens the quiz already past Q1, with that answer applied — the visitor sees Q2, not the intro or Q1 again.
+    - [ ] The teaser is pure static markup: no client directive, no script added to the page.
+    - [ ] The AppPromoCard still renders at the end of every post regardless of `quizCta`.
 
 ### 2.5 Analytics
 
@@ -136,3 +139,4 @@ The Calm Profile quiz gives the visitor something of real value first: a short, 
 - [2026-09-22] — Pre-AWOS PROGRESS — Added **`consentScope` / `consentAt`**. The sequence filters on recorded consent rather than `source`, so leads without a recorded scope get no sequence emails.
 - [2026-09-23] — AWOS migration — Rewritten from `context-old/spec/008-calm-profile-quiz/SPEC.md` + `PROGRESS.md`. The criteria describe the behaviour as shipped and are unchecked until `/awos:verify` re-confirms them.
 - [2026-09-23] — Product decision — The **activation window changed from 15 back to 7 days**, and the "expires tomorrow" email moved **from Day 14 to Day 6** so it stays true. Reason: most redemptions happen in the first 24–48h; 7 days is still a real deadline and covers a weekend. PRO duration stays at 14 days, starting at redemption. Nothing had shipped with 15-day codes. Follow-ups considered but not in scope: a Day 3 reminder, a one-time "missed it? get a new code" email, a one-tap apply deep link, and an in-trial reminder around day 10–12 of PRO.
+- [2026-09-27] — Product decision — The blog quiz CTA became an **opt-in mid-article first-question teaser**, replacing the end-of-post `QuizCTA` card. Reason: the old card was generic copy sitting right above an AppPromoCard that read almost identically — two near-duplicate cards back to back, at the one point (end of post) a reader was closest to leaving anyway. The new teaser shows the quiz's real Q1 as tappable tiles mid-article (after two sections), and each tile deep-links straight past Q1 into Q2 with that answer applied. Opt-in per post via frontmatter `quizCta`, not tag-derived, so it only appears on posts it's actually written for (3 posts opted in at launch: `adrenaline-clock-stopping-panic-attacks` → panic, `extended-exhale-breathing-science` → anxiety, `calligraphy-as-meditation` → racingThoughts). `QuizCTA.astro` and its tag→variant map were removed. Also fixed a bug found while doing this: `quiz.astro` is statically built, so `Astro.url.searchParams.get("src")` was always null at build time and every quiz session was attributed to `source: "direct"` regardless of entry point; `QuizIsland` now reads `src` from `window.location.search` on mount instead.

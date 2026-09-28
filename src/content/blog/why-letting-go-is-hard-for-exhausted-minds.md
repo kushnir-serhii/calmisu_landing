@@ -6,6 +6,7 @@ image: /images/blog/why-letting-go-is-hard-for-exhausted-minds.webp
 imageAlt: "Thoughts drifting away as clouds"
 tags: ["mindful practice", "meditation", "behind calmisu"]
 draft: false
+quizCta: racingThoughts
 authorName: "Julia K"
 authorBio: "Product Designer & Creator of Calmisu."
 ---

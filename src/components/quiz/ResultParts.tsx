@@ -58,3 +58,33 @@ export const InfoPanel = ({ title, children }: InfoPanelProps) => (
     {children}
   </div>
 );
+
+interface ProfileSummaryCardProps {
+  /** The Q1 icon for the visitor's resulting profile — see `PROFILE_ICONS`. */
+  icon: string;
+  children: ReactNode;
+}
+
+/** The subtitle card under the profile name — a white `border-brand-200`
+ *  card rather than a tinted one, because the five watercolor icons run
+ *  from pale blue to teal to rope-beige and a brand-100/brand-beige fill
+ *  washes at least one of them out. Source art is 132px; display is capped
+ *  at 64px so it stays crisp at 2x. The image is decorative (`alt=""`) —
+ *  the subtitle text carries the meaning — and the card has no hover/focus
+ *  styles since it isn't interactive. */
+export const ProfileSummaryCard = ({ icon, children }: ProfileSummaryCardProps) => (
+  <div className="mt-6 sm:mt-8 flex items-center gap-4 sm:gap-5 p-5 sm:p-6 rounded-2xl border-2 border-brand-200 bg-white text-left">
+    <img
+      src={icon}
+      alt=""
+      width={132}
+      height={132}
+      className="shrink-0 w-14 h-14 sm:w-16 sm:h-16"
+      loading="eager"
+      decoding="async"
+    />
+    <p className="min-w-0 text-foreground font-body text-lg sm:text-xl font-light leading-[145%] text-pretty">
+      {children}
+    </p>
+  </div>
+);

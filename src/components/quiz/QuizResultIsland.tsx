@@ -1,12 +1,18 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { FREQUENCY_LINES, TOOL_LABELS, profiles, type Tool } from "@/data/quiz";
+import {
+  FREQUENCY_LINES,
+  PROFILE_ICONS,
+  TOOL_LABELS,
+  profiles,
+  type Tool,
+} from "@/data/quiz";
 import { buildPlan, decodePlan, recommendedTools } from "@/lib/quiz";
 import { postLead } from "@/lib/api";
 import { track } from "@/lib/analytics";
 import { Badge } from "@/components/ui/badge";
 import { SectionHeading } from "@/components/ui/Section";
 import { Button } from "@/components/ui/button";
-import { NumberedCard, InfoPanel } from "./ResultParts";
+import { NumberedCard, InfoPanel, ProfileSummaryCard } from "./ResultParts";
 import { PlanGate } from "./PlanGate";
 import { PLAY_URL } from "@/constants/links";
 
@@ -261,9 +267,9 @@ export default function QuizResultIsland() {
         <h1 className="mt-3 text-foreground font-display text-4xl sm:text-5xl md:text-6xl font-normal leading-[95%]">
           {content.name}
         </h1>
-        <p className="mt-4 text-foreground font-body text-lg sm:text-xl font-light leading-[150%]">
+        <ProfileSummaryCard icon={PROFILE_ICONS[state.profile]}>
           {content.subtitle}
-        </p>
+        </ProfileSummaryCard>
       </div>
 
       <div className="mt-10 sm:mt-12 flex flex-col gap-5">

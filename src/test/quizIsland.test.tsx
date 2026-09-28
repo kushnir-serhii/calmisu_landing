@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import QuizIsland from "@/components/quiz/QuizIsland";
 import QuizResultIsland from "@/components/quiz/QuizResultIsland";
-import { questions, profiles } from "@/data/quiz";
+import { questions, profiles, PROFILE_ICONS } from "@/data/quiz";
 
 vi.mock("@/lib/analytics", () => ({ track: vi.fn() }));
 vi.mock("@/lib/api", () => ({
@@ -25,6 +25,8 @@ import { postLead } from "@/lib/api";
 function stubLocation(search = "") {
   const location = {
     href: `https://calmisu.com/quiz/${search}`,
+    pathname: "/quiz/",
+    hash: "",
     search,
     assign: vi.fn(),
   };
@@ -149,6 +151,70 @@ describe("QuizIsland", () => {
   });
 });
 
+describe("QuizIsland Q1 prefill from a blog teaser tile", () => {
+  // src/components/blog/QuizTeaser.astro deep-links to
+  // /quiz/?src=blog_<slug>&reason=<optionId>. These cover QuizIsland's
+  // mount effect that reads `reason` (and the real `src`, working around
+  // quiz.astro always building with source="direct") off the URL.
+
+  it("opens straight into Q2 with Q1 pre-answered, and fires the Q1 events once", async () => {
+    stubLocation("?src=blog_adrenaline-clock-stopping-panic-attacks&reason=panic");
+    const { track } = await import("@/lib/analytics");
+    render(<QuizIsland source="direct" />);
+
+    expect(screen.getByText(questions[1].question)).toBeInTheDocument();
+    expect(screen.getByText(`2 of ${questions.length}`)).toBeInTheDocument();
+    expect(track).toHaveBeenCalledWith("quiz_start", {
+      src: "blog_adrenaline-clock-stopping-panic-attacks",
+    });
+    expect(track).toHaveBeenCalledWith("quiz_question_answered", {
+      index: 1,
+      question_id: "reason",
+    });
+    expect(track).toHaveBeenCalledTimes(2);
+  });
+
+  it("keeps Q1's pre-filled answer selected on Back", () => {
+    stubLocation("?src=homepage&reason=sleep");
+    render(<QuizIsland source="direct" />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Back" }));
+
+    expect(screen.getByText("What brings you here?")).toBeInTheDocument();
+    const chosen = screen.getByText("Trouble sleeping").closest("button");
+    expect(chosen?.className).toContain("border-brand");
+  });
+
+  it("strips `reason` from the URL but keeps `src`", () => {
+    stubLocation("?src=blog_x&reason=anxiety");
+    const replaceStateSpy = vi.spyOn(window.history, "replaceState");
+    render(<QuizIsland source="direct" />);
+
+    expect(replaceStateSpy).toHaveBeenCalled();
+    const [, , url] = replaceStateSpy.mock.calls[0];
+    expect(String(url)).toContain("src=blog_x");
+    expect(String(url)).not.toContain("reason=");
+    replaceStateSpy.mockRestore();
+  });
+
+  it("ignores an invalid reason and shows the ordinary intro", async () => {
+    stubLocation("?reason=not-a-real-option");
+    const { track } = await import("@/lib/analytics");
+    render(<QuizIsland source="direct" />);
+
+    expect(screen.getByText("Start the quiz")).toBeInTheDocument();
+    expect(track).not.toHaveBeenCalled();
+  });
+
+  it("falls back to the `source` prop when the URL has no `src`", async () => {
+    stubLocation("?reason=racingThoughts");
+    const { track } = await import("@/lib/analytics");
+    render(<QuizIsland source="nav" />);
+
+    expect(track).toHaveBeenCalledWith("quiz_start", { src: "nav" });
+  });
+});
+
 describe("QuizResultIsland", () => {
   it("shows the fallback when the URL carries no usable profile", () => {
     stubLocation("");
@@ -159,11 +225,16 @@ describe("QuizResultIsland", () => {
 
   it("renders the full profile ungated, and hides the plan", () => {
     stubLocation("?p=sleep&t=night&d=10&f=daily");
-    render(<QuizResultIsland />);
+    const { container } = render(<QuizResultIsland />);
 
     const content = profiles.sleep;
     expect(screen.getByText(content.name)).toBeInTheDocument();
     expect(screen.getByText(content.subtitle)).toBeInTheDocument();
+    // The subtitle card's icon is decorative (alt=""), so it's queried by src.
+    expect(container.querySelector("img")).toHaveAttribute(
+      "src",
+      PROFILE_ICONS.sleep,
+    );
     for (const paragraph of content.why) {
       expect(screen.getByText(paragraph)).toBeInTheDocument();
     }

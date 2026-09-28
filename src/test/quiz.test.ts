@@ -7,7 +7,7 @@ import {
   resolveProfile,
   type Answers,
 } from "@/lib/quiz";
-import { PROFILES, profiles, questions } from "@/data/quiz";
+import { PROFILE_ICONS, PROFILES, profiles, questions } from "@/data/quiz";
 
 const full: Answers = {
   reason: "panic",
@@ -210,5 +210,11 @@ describe("content integrity", () => {
     const mapped = q1.options.map((o) => o.profile);
     expect(new Set(mapped).size).toBe(PROFILES.length);
     for (const option of q1.options) expect(option.icon).toBeTruthy();
+  });
+
+  it("gives every profile a result-page icon, derived from Q1", () => {
+    for (const profile of PROFILES) {
+      expect(PROFILE_ICONS[profile]).toBeTruthy();
+    }
   });
 });

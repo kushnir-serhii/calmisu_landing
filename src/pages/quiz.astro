@@ -25,9 +25,10 @@ const source = Astro.url.searchParams.get("src") ?? "direct";
 ---
 
 <BaseLayout
-  title="What's Your Anxiety Pattern? — 2-Minute Quiz | Calmisu"
+  title="What's Your Anxiety Pattern? — 2 Minute Quiz | Calmisu"
   description="Answer 9 quick questions and find out which pattern your anxiety follows — and the two techniques that work fastest for it. Free, no account."
->
+  ogImage="/images/quiz/quiz_banner.png"
+  >
   <Fragment slot="head">
     <script is:inline>
       // Skips the flash of the intro when arriving from a blog QuizTeaser
@@ -49,7 +50,8 @@ const source = Astro.url.searchParams.get("src") ?? "direct";
         var reason = new URLSearchParams(window.location.search).get(
           "reason"
         );
-        if (reason && validReasonIds.indexOf(reason) !== -1) {
+        var start = new URLSearchParams(window.location.search).get("start");
+        if (start === "1" || (reason && validReasonIds.indexOf(reason) !== -1)) {
           document.documentElement.dataset.quizStarted = "true";
         }
       })();

@@ -75,6 +75,7 @@ export const PlanGate = ({
                   onClick={() => onPlatformChange(option.value)}
                   role="radio"
                   aria-checked={chosen}
+                  indicator
                   radio
                 >
                   {option.label}

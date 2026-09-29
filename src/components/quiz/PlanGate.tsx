@@ -63,7 +63,7 @@ export const PlanGate = ({
             {(
               [
                 { value: "android", label: "Android" },
-                { value: "ios", label: "iPhone" },
+                { value: "ios", label: "iOS" },
               ] as const
             ).map((option) => {
               const chosen = platform === option.value;

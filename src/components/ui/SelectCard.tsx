@@ -18,9 +18,22 @@ export const CheckBox = ({ checked }: CheckBoxProps) => (
     {checked && <CheckIcon className="w-3/4 h-3/4" />}
   </span>
 );
+export const RadioBtn = ({ checked }: CheckBoxProps) => (
+  <span
+    aria-hidden="true"
+    className={[
+      "shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center",
+      checked ? "bg-brand border-brand text-white" : "border-control-border",
+    ].join(" ")}
+  >
+    {checked && <CheckIcon className="w-3/4 h-3/4" />}
+  </span>
+);
 
-interface SelectCardProps
-  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "onClick"> {
+interface SelectCardProps extends Omit<
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  "onClick"
+> {
   selected: boolean;
   onClick: () => void;
   children: ReactNode;
@@ -29,6 +42,7 @@ interface SelectCardProps
   /** Shows the CheckBox indicator (multi-select quiz options, the platform
    *  picker). Single-select quiz options advance immediately and skip it. */
   indicator?: boolean;
+  radio?: boolean;
   /** "left" (icon + label, indicator trailing inline) or "center" (label
    *  centered, indicator absolutely positioned) — see the platform picker. */
   align?: "left" | "center";
@@ -44,6 +58,7 @@ export const SelectCard = ({
   onClick,
   children,
   icon,
+  radio = false,
   indicator = false,
   align = "left",
   className = "",
@@ -74,6 +89,11 @@ export const SelectCard = ({
         {indicator && (
           <span className="absolute transform -translate-y-1/2 top-1/2 right-3">
             <CheckBox checked={selected} />
+          </span>
+        )}
+        {radio && (
+          <span className="absolute transform -translate-y-1/2 top-1/2 right-3">
+            <RadioBtn checked={selected} />
           </span>
         )}
       </button>
@@ -107,6 +127,11 @@ export const SelectCard = ({
       {indicator && (
         <span className="ml-auto">
           <CheckBox checked={selected} />
+        </span>
+      )}
+      {radio && (
+        <span className="absolute transform -translate-y-1/2 top-1/2 right-3">
+          <RadioBtn checked={selected} />
         </span>
       )}
     </button>

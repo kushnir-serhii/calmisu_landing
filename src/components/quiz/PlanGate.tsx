@@ -70,12 +70,12 @@ export const PlanGate = ({
               return (
                 <SelectCard
                   key={option.value}
-                  align="center"
+                  align="left"
                   selected={chosen}
                   onClick={() => onPlatformChange(option.value)}
                   role="radio"
                   aria-checked={chosen}
-                  indicator
+                  radio
                 >
                   {option.label}
                 </SelectCard>

@@ -18,15 +18,17 @@ export const CheckBox = ({ checked }: CheckBoxProps) => (
     {checked && <CheckIcon className="w-3/4 h-3/4" />}
   </span>
 );
+/** The round single-choice indicator — brand ring with a filled inner dot
+ *  when selected. */
 export const RadioBtn = ({ checked }: CheckBoxProps) => (
   <span
     aria-hidden="true"
     className={[
       "shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center",
-      checked ? "bg-brand border-brand text-white" : "border-control-border",
+      checked ? "border-brand" : "border-control-border",
     ].join(" ")}
   >
-    {checked && <CheckIcon className="w-3/4 h-3/4" />}
+    {checked && <span className="w-2.5 h-2.5 rounded-full bg-brand" />}
   </span>
 );
 
@@ -88,12 +90,11 @@ export const SelectCard = ({
         </span>
         {indicator && (
           <span className="absolute transform -translate-y-1/2 top-1/2 right-3">
-            <CheckBox checked={selected} />
-          </span>
-        )}
-        {radio && (
-          <span className="absolute transform -translate-y-1/2 top-1/2 right-3">
-            <RadioBtn checked={selected} />
+            {radio ? (
+                <RadioBtn checked={selected} />
+            ) : 
+            (<CheckBox checked={selected} />)
+            }
           </span>
         )}
       </button>
@@ -126,12 +127,11 @@ export const SelectCard = ({
       </span>
       {indicator && (
         <span className="ml-auto">
-          <CheckBox checked={selected} />
-        </span>
-      )}
-      {radio && (
-        <span className="absolute transform -translate-y-1/2 top-1/2 right-3">
-          <RadioBtn checked={selected} />
+          {radio ? (
+            <RadioBtn checked={selected} />
+          ) : (
+            <CheckBox checked={selected} />
+          )}
         </span>
       )}
     </button>

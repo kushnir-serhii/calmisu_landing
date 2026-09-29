@@ -84,7 +84,7 @@ export default function QuizIsland({ source = "direct" }: Props) {
     if (phase !== "quiz") return;
     document.documentElement.style.setProperty(
       "--quiz-progress",
-      `${((step + 1) / total) * 100}%`
+      `${((step + 1) / total) * 100}%`,
     );
     const el = document.querySelector("[data-quiz-progress]");
     if (!el) return; // Tests render the island without the header present.
@@ -128,11 +128,29 @@ export default function QuizIsland({ source = "direct" }: Props) {
       window.history.replaceState(
         window.history.state,
         "",
-        `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`
+        `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`,
+      );
+    }
+    // `/quiz/?start=1` skips the intro and lands on Q1 with nothing pre-filled
+    // — the shareable "straight into the quiz" link (homepage banner CTA).
+    else if (params.get("start") === "1") {
+      if (!startedRef.current) {
+        startedRef.current = true;
+        track("quiz_start", { src: sourceRef.current });
+      }
+      setPhase("quiz");
+      document.documentElement.dataset.quizStarted = "true";
+
+      // Strip `start` so a reload or Back doesn't re-fire quiz_start.
+      params.delete("start");
+      const query = params.toString();
+      window.history.replaceState(
+        window.history.state,
+        "",
+        `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`,
       );
     }
     // Mount-only: this is a one-time read of the entry URL.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -235,9 +253,7 @@ export default function QuizIsland({ source = "direct" }: Props) {
   };
 
   const isChosen = (optionId: string) =>
-    question.multi
-      ? multiSelection.includes(optionId)
-      : selected === optionId;
+    question.multi ? multiSelection.includes(optionId) : selected === optionId;
 
   if (phase === "intro") {
     return (

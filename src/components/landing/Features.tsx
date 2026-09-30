@@ -44,7 +44,7 @@ const FeatureSplit = ({
   return (
     <Section id={id} className={className} paddingY={paddingY}>
       <div
-        className={`flex lg:flex-row items-center gap-8 md:gap-10 w-full ${reverse ? "flex-col-reverse lg:flex-row-reverse" : ""}`}
+        className={`flex flex-col lg:flex-row items-center gap-8 md:gap-10 w-full ${reverse ? "flex-row-reverse lg:flex-row-reverse" : ""}`}
       >
         {/* Text */}
         <div className="flex flex-col items-start gap-8 md:gap-12 flex-1">
@@ -137,6 +137,7 @@ export const FeaturesFlow = () => (
     imageAlt="Four calming activities: grounding, breathing, mindful kanji calligraphy, and meditation music"
     imageWidth={885}
     imageHeight={884}
+    // reverse
   />
 );
 

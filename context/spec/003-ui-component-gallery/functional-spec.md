@@ -1,14 +1,14 @@
 # Functional Specification: UI Component Gallery
 
 - **Roadmap Item:** Not on the roadmap. Internal tooling: a Storybook-style reference page for the site's shared UI building blocks.
-- **Status:** Draft (amended 2026-10-01 three times, see Change Log)
+- **Status:** Draft (amended 2026-10-01 six times, see Change Log)
 - **Author:** Serhii Kushnir
 
 ---
 
 ## 1. Overview and Rationale (The "Why")
 
-The site is built from a shared set of interface building blocks: buttons, badges, text fields, selectable cards, download buttons, the FAQ accordion, dialogs, toast notifications, section layouts, icons and flags. Today the only way to see what one of them looks like in a given state is to find a real page that happens to use it in that state. For example, to see the email field's error look, you have to fill in the quiz, reach the plan gate and submit a bad address. Some states never appear on any page, like the outline badge or the destructive button. Nobody can see those states at all.
+The site is built from a shared set of interface building blocks: buttons, badges, text fields, selectable cards, the FAQ accordion, dialogs, icons and flags. Today the only way to see what one of them looks like in a given state is to find a real page that happens to use it in that state. For example, to see the email field's error look, you have to fill in the quiz, reach the plan gate and submit a bad address. Some states never appear on any page, like the outline badge or the destructive button. Nobody can see those states at all.
 
 This makes design review slow. Visual regressions also go unnoticed: a style change for the quiz can quietly break the same block somewhere else. And when building something new, it's hard to know what already exists, so near-duplicates get made.
 
@@ -49,7 +49,7 @@ All states of a component appear at the same time, side by side. Interactive blo
 
 Each bullet below is one group on the page, with the states that must appear.
 
-- **Button:** the site has one button building block. The download buttons are made from it too. It keeps only the looks the site actually uses: a dark style, a red destructive style and a store style. The store style carries the Apple or Google Play icon to the right of its text. Its standard size and corners match today's download buttons (54px tall, softly rounded corners). The dark style has exactly the same colour as the store style; the store style only adds the icon. There are two sizes: standard, and a small rounded "pill" size for compact actions such as "Start" in the 7-day plan. Every other style and size (default, outline, secondary, ghost, link; small, large, icon-only, extra-large) is removed. The gallery shows every remaining style at every remaining size, a disabled example of each style, a button with an icon next to its text, and a button that works as a link.
+- **Button:** the site has one button building block and no other. There is no separate download-buttons block: the "Join iOS Waitlist" and "Download for Android" buttons are plain store-style buttons placed directly on each page. It keeps only the looks the site actually uses: a dark style, a red destructive style and a store style. The store style carries the Apple or Google Play icon to the right of its text. Its standard size and corners match today's download buttons (54px tall, softly rounded corners). The dark style has exactly the same colour as the store style; the store style only adds the icon. There are two sizes: standard, and a small rounded "pill" size for compact actions such as "Start" in the 7-day plan. Every other style and size (default, outline, secondary, ghost, link; small, large, icon-only, extra-large) is removed. The gallery shows every remaining style at every remaining size, a disabled example of each style, a button with an icon next to its text, and a button that works as a link.
   - **Acceptance Criteria:**
     - [ ] When the user views the Button group, then they see every remaining style crossed with every remaining size, each labelled, and no examples of removed styles or sizes.
     - [ ] When the user views the Button group, then they see a store button with the Apple icon and one with the Google Play icon, each with the icon to the right of its text.
@@ -57,14 +57,17 @@ Each bullet below is one group on the page, with the states that must appear.
     - [ ] When the user clicks a disabled button example, then nothing happens and its look does not change.
     - [ ] When the user presses Tab to move onto any enabled button example, then a visible focus ring appears around it.
     - [ ] When the user compares a standard-size button in the gallery with the download buttons on the homepage, then they have the same height and corner rounding.
+    - [ ] When the user clicks a store button example in the gallery, then nothing leaves the page, no waitlist sign-up happens and no click is counted in the site's analytics.
 
-- **Buttons on real pages:** every button on the site uses the merged building block, so the main buttons share the download buttons' size and corners. This changes three places on purpose: the quiz's big black buttons and the waitlist popup's "Notify Me" button become 54px tall with the download buttons' corners (today they are a little taller and rounder), and the red "Delete account" button grows from 40px with small corners to the same 54px standard. Download buttons look and behave as they do today: same text, icons, layouts, Google Play link, waitlist dialog and click counting.
+- **Buttons on real pages:** every button on the site uses the merged building block, so the main buttons share the download buttons' size and corners. This changes three places on purpose: the quiz's big black buttons and the waitlist popup's "Notify Me" button become 54px tall with the download buttons' corners (today they are a little taller and rounder), and the red "Delete account" button grows from 40px with small corners to the same 54px standard. The download buttons on the homepage hero, the homepage closing call-to-action and the blog app-promo card are built from the store-style button directly, and they look and behave as they do today: same text, icons, side-by-side or stacked layout, Google Play link, waitlist dialog and click counting.
   - **Acceptance Criteria:**
     - [ ] When the user opens the homepage, then the "Join iOS Waitlist" and "Download for Android" buttons look and behave as before: same text, icon, size and colour, same waitlist dialog and Google Play link.
     - [ ] When the user goes through the quiz (start, answers, plan gate, results), then every main dark button has the standard 54px height, the download buttons' corner rounding and the same colour as the download buttons.
     - [ ] When the user views the 7-day plan on the quiz results, then each "Start" button is still the small rounded pill.
     - [ ] When the user opens the waitlist popup, then the "Notify Me" button has the standard 54px height and the download buttons' corner rounding.
     - [ ] When the user opens the delete-account page, then the red delete button is 54px tall with the download buttons' corner rounding.
+    - [ ] When the user views the homepage closing call-to-action and a blog post's app-promo card, then the download buttons show the same text, icons, layout and links as before.
+    - [ ] When the user clicks "Join iOS Waitlist" or "Download for Android" on the homepage or in a blog post, then the click is counted in the site's analytics as before.
 
 - **Badge:** the site has one badge (small rounded "pill" label) building block, used for every pill on the site. It has a single look: one light-blue fill and dark brand-blue text. It comes in three sizes: small (blog post tags), medium (the "9 questions · about 2 minutes" pills, the quiz intro pill, "Your pattern" on quiz results) and large (the homepage "early access" pill). The badge shows whatever content is placed inside it, not only text. For example, the homepage pill puts its pulsing dot inside the badge before the words. The unused styles (blue, red destructive, outline) are removed. The gallery shows each size, plus a badge with a dot before its text.
   - **Acceptance Criteria:**
@@ -110,11 +113,9 @@ Each bullet below is one group on the page, with the states that must appear.
     - [ ] When the user clicks an unselected example card, then it switches to its selected look, and clicking it again switches it back.
     - [ ] When the user views the indicators sub-section, then they see a checkbox and a radio, each in checked and unchecked state.
 
-- **Download buttons:** both buttons in a row, both stacked in a column, iOS waitlist only, and Android only.
+- **No Download buttons group:** the store buttons are shown only inside the Button group.
   - **Acceptance Criteria:**
-    - [ ] When the user views the Download buttons group, then they see four labelled examples: row, column, iOS only, Android only.
-    - [ ] When the user clicks the "Join iOS Waitlist" example, then nothing leaves the page and no waitlist sign-up happens.
-    - [ ] When the user clicks the "Download for Android" example, then the Google Play page opens in a new tab and no click is counted in the site's analytics.
+    - [ ] When the user views the gallery's group list, then there is no "Download buttons" group.
 
 - **FAQ accordion:** a short list with the first item open and the rest closed.
   - **Acceptance Criteria:**
@@ -127,21 +128,14 @@ Each bullet below is one group on the page, with the states that must appear.
     - [ ] When the user clicks "Open dialog" in the Dialog group, then a dialog appears over a dimmed page, with a title, description, body text and footer buttons.
     - [ ] Given the dialog is open, when the user presses Escape, clicks the close button or clicks the dimmed area, then the dialog closes.
 
-- **Toast notifications:** buttons that each trigger one kind of toast: plain message, message with description, success, error, and one with an action button.
+- **No toast notifications:** the site has no pop-up toast notifications at all. The gallery has no Toasts group.
   - **Acceptance Criteria:**
-    - [ ] When the user clicks each toast trigger button, then the matching toast appears on screen with the correct text and look.
-    - [ ] When the user clicks the action button inside the action toast, then the toast closes.
+    - [ ] When the user views the gallery's group list, then there is no "Toasts" group.
 
-- **Section and section heading:** the standard section with its default spacing, a section with custom vertical spacing, and the heading in its large and small sizes.
+- **Delete-account failure message:** the delete-account page used to show a pop-up toast when deleting the account failed. It now shows the failure as a red message on the page, directly under the delete button, with the same text the toast showed. The message goes away when the user submits again.
   - **Acceptance Criteria:**
-    - [ ] When the user views the Section group, then they see the large section heading and the small block heading, each labelled.
-    - [ ] When the user views the Section group, then they see a sample section with its default spacing and one with reduced spacing, with the section's edges shown by a tinted background or outline so the spacing is visible.
-
-- **Scroll-reveal wrapper:** a sample block that fades in when scrolled into view.
-  - **Acceptance Criteria:**
-    - [ ] When the user scrolls the scroll-reveal example into view, then it animates in.
-    - [ ] Given the user's device is set to reduce motion, when they scroll the example into view, then it appears without animation.
-    - [ ] When the user clicks "Replay" next to the scroll-reveal example, then the animation plays again.
+    - [ ] Given deleting the account fails (for example a wrong password), when the user submits the delete-account form, then a red message with the reason appears directly under the delete button and no pop-up toast appears anywhere on screen.
+    - [ ] Given the red failure message is showing, when the user submits the form again, then the old message disappears while the request runs.
 
 - **Icons and flags:** the check icon, the Apple and Google Play icons, and the 4 language flags (English, Spanish, Polish, Ukrainian), each at small, medium and large size.
   - **Acceptance Criteria:**
@@ -150,9 +144,9 @@ Each bullet below is one group on the page, with the states that must appear.
 
 ### 2.4 Keeping the gallery complete
 
-- When a new building block is added to the shared library, or an existing one gets a new style or state, it must be added to the gallery as part of the same change.
+- When a new building block is added to the shared library, or an existing one gets a new style or state, it must be added to the gallery as part of the same change. Two page-layout helpers are left out of the gallery on purpose: the section wrapper with its heading, and the scroll-reveal animation. They stay on the site but are not shown.
   - **Acceptance Criteria:**
-    - [ ] When the user compares the gallery's group list with the shared component library, then every building block in the library appears in the gallery.
+    - [ ] When the user compares the gallery's group list with the shared component library, then every building block in the library appears in the gallery, except the section wrapper with its heading and the scroll-reveal animation.
 
 ---
 
@@ -163,6 +157,7 @@ Each bullet below is one group on the page, with the states that must appear.
 - One gallery page inside the site, laid out like Storybook, showing every shared building block in every supported state.
 - Linked from the navigation only during local development. On the live site it can be reached by direct address, is never linked, and is excluded from search engines and the sitemap.
 - Live interaction with the examples (clicking, typing, opening, closing). Gallery examples never trigger real effects (sign-ups, analytics events, emails).
+- Removing pop-up toast notifications from the whole site, and showing the delete-account failure as an on-page message instead.
 - Layout that works on phone and desktop screens.
 
 ### Out-of-Scope
@@ -170,8 +165,9 @@ Each bullet below is one group on the page, with the states that must appear.
 - Installing the separate Storybook tool, or any standalone viewer.
 - Live controls or playgrounds for changing a component's text, style or size on the page.
 - Automated visual-difference testing or screenshot comparison.
+- Showing the section wrapper, section heading and scroll-reveal animation in the gallery. They keep working on the site's pages unchanged.
 - Page-specific components outside the shared library (landing sections, quiz screens, legal page parts, popups, layout header/footer).
-- Changing how any existing building block looks or behaves, **except** the Button, Input and Badge merges described in 2.3 (one button block, one input block and one badge block; unused styles, sizes and versions removed). Every other block is shown as it is.
+- Changing how any existing building block looks or behaves, **except** the Button, Input and Badge merges described in 2.3 (one button block, one input block and one badge block; unused styles, sizes and versions removed; the separate download-buttons block removed; toast notifications removed and the delete-account failure shown on the page). Every other block is shown as it is.
 - Password protection or sign-in for the gallery.
 - All roadmap items, including **Dependency Pruning** (removing unused building blocks), **Stronger Build Checks**, **Ship the Sequence**, **Quiz Retention Verdict**, **Open the Exact Exercise**, **Calligraphy Meditation Pillar Page**, **Related Posts & Breadcrumbs**, **Polish & Ukrainian Quiz**, **Social Proof Decision** and **Complete Delete-Account Guidance**. These get their own specs.
 
@@ -196,3 +192,15 @@ Each bullet below is one group on the page, with the states that must appear.
   - The badge shows whatever content is placed inside it. The homepage "early access" pill's pulsing dot goes inside the badge.
   - New requirement "Badges on real pages": hero pill, blog tags, quiz promo and teaser pills, quiz intro and "Your pattern" all use the badge. Blog tags get the darker text. The quiz intro pill becomes medium size.
   - Why: six hand-made pills with near-identical colours become one reusable block.
+- **2026-10-01: Download buttons block removed** (source: user request "use only one button component; leave only the button file and remove DownloadButtons").
+  - The site keeps one button building block and no other. The separate download-buttons block, which put the two store buttons in a row or column, is removed. The homepage hero, homepage closing call-to-action and blog app-promo card now place the store buttons directly. Visitors see no change: same text, icons, layout, links, waitlist dialog and click counting.
+  - The gallery's "Download buttons" group is removed. The store buttons appear only in the Button group, where clicking them does nothing and counts nothing.
+  - Why: the user asked for exactly one button component. This replaces the earlier choice to keep the download buttons as a thin wrapper.
+- **2026-10-01: Section and Scroll-reveal groups removed** (source: user request "I don't need Section and heading, Scroll-reveal on the ui-kit page").
+  - The gallery no longer shows the "Section and heading" and "Scroll-reveal" groups. Their acceptance criteria are removed.
+  - The completeness rule (2.4) now leaves these two layout helpers out on purpose. They are still used on the homepage and quiz pages, and nothing changes there.
+  - Why: they are page-layout helpers, not visual building blocks worth reviewing in the gallery.
+- **2026-10-01: Toast notifications removed from the site** (source: user request "remove toast at all from site", after learning toasts appear only on the delete-account page).
+  - The gallery's Toasts group is removed, and the site no longer has pop-up toasts at all.
+  - The only real toast, the delete-account failure toast, becomes a red message under the delete button with the same text.
+  - Why: toasts were used in one place only, and that one message works as well inline.

@@ -258,7 +258,7 @@ export default function QuizIsland({ source = "direct" }: Props) {
   if (phase === "intro") {
     return (
       <div className="w-full max-w-[640px] mx-auto flex flex-col items-center">
-        <Button variant="black" size="xl" onClick={start}>
+        <Button variant="dark" onClick={start}>
           Start the quiz
         </Button>
         <p className="mt-6 text-center text-muted-foreground font-body text-sm font-light">
@@ -325,8 +325,7 @@ export default function QuizIsland({ source = "direct" }: Props) {
           options the question above has. */}
       {question.multi && (
         <Button
-          variant="black"
-          size="xl"
+          variant="dark"
           className="mt-4 w-full"
           onClick={() => advance(answers)}
         >

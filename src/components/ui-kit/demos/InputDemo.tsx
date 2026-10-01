@@ -5,6 +5,8 @@ import { Label } from "@/components/ui/label";
 import { KitExample } from "../KitExample";
 
 const WITH_LABEL_INPUT_ID = "ui-kit-input-with-label";
+const ERROR_INPUT_ID = "ui-kit-input-error";
+const ERROR_MESSAGE_ID = "ui-kit-input-error-message";
 
 const INPUT_EXAMPLES: { id: string; label: string; render: () => React.ReactNode }[] = [
   {
@@ -23,6 +25,23 @@ const INPUT_EXAMPLES: { id: string; label: string; render: () => React.ReactNode
     render: () => <Input disabled placeholder="Disabled" />,
   },
   {
+    id: "error",
+    label: "Error",
+    render: () => (
+      <div className="flex w-full flex-col gap-2">
+        <Input
+          id={ERROR_INPUT_ID}
+          error
+          aria-describedby={ERROR_MESSAGE_ID}
+          defaultValue="not-an-email"
+        />
+        <p id={ERROR_MESSAGE_ID} role="alert" className="text-destructive-text text-sm">
+          Enter a valid email address.
+        </p>
+      </div>
+    ),
+  },
+  {
     id: "with-label",
     label: "With label",
     render: () => (
@@ -33,9 +52,14 @@ const INPUT_EXAMPLES: { id: string; label: string; render: () => React.ReactNode
     ),
   },
   {
-    id: "file",
-    label: "File picker",
-    render: () => <Input type="file" />,
+    id: "email",
+    label: "Email",
+    render: () => <Input type="email" placeholder="you@example.com" />,
+  },
+  {
+    id: "password",
+    label: "Password",
+    render: () => <Input type="password" defaultValue="secret-password" />,
   },
 ];
 

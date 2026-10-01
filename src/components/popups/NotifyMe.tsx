@@ -4,7 +4,7 @@ import { Dialog, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { track } from "@/lib/analytics";
 import { postLead } from "@/lib/api";
 import { CheckIcon } from "@/components/ui/icons";
-import { EmailField } from "@/components/ui/EmailField";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 interface NotifyMeProps {
@@ -94,13 +94,19 @@ export const NotifyMe: React.FC<NotifyMeProps> = ({ isOpen, onClose }) => {
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <EmailField
+                  <label htmlFor="notify-me-email" className="sr-only">
+                    Email address
+                  </label>
+                  <Input
+                    type="email"
                     id="notify-me-email"
+                    name="email"
+                    required
                     value={email}
-                    onChange={setEmail}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your email address"
                     error={status === "error"}
-                    errorId="notify-me-email-error"
-                    bordered
+                    aria-describedby={status === "error" ? "notify-me-email-error" : undefined}
                   />
                   {status === "error" && (
                     <p
@@ -114,8 +120,7 @@ export const NotifyMe: React.FC<NotifyMeProps> = ({ isOpen, onClose }) => {
                 </div>
                 <Button
                   type="submit"
-                  variant="black"
-                  size="xl"
+                  variant="dark"
                   className="w-full"
                   disabled={status === "loading"}
                 >

@@ -179,7 +179,7 @@ export default function QuizResultIsland() {
           The link may be incomplete. The quiz takes about two minutes — your
           profile will be right back.
         </p>
-        <Button asChild variant="black" size="xl" className="mt-8">
+        <Button asChild variant="dark" className="mt-8">
           <a href="/quiz/">Take the quiz</a>
         </Button>
       </div>
@@ -260,7 +260,8 @@ export default function QuizResultIsland() {
       {/* ── Section A — the profile. Never gated. ───────────────────── */}
       <div className="text-center">
         <Badge
-          className="text-brand-dark font-body text-sm sm:text-base uppercase tracking-wide"
+          size="md"
+          className="uppercase tracking-wide"
         >
           Your pattern
         </Badge>
@@ -345,7 +346,7 @@ export default function QuizResultIsland() {
                   action={
                     platform !== "ios" && (
                       <Button
-                        variant="black"
+                        variant="dark"
                         size="pill"
                         className="shrink-0"
                         onClick={() =>
@@ -397,7 +398,7 @@ export default function QuizResultIsland() {
                   folder.
                 </p>
               )}
-              <Button asChild variant="black" size="xl" className="mt-5">
+              <Button asChild variant="dark" className="mt-5">
                 <a
                   href={PLAY_URL}
                   target="_blank"

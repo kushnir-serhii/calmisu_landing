@@ -1,5 +1,7 @@
 ---
 import { questions } from "@/data/quiz";
+import { badgeVariants } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 /**
  * Mid-article quiz teaser.
@@ -51,9 +53,7 @@ const tiles = questions[0].options.filter((option) => option.id !== "notSure");
   <div
     class="flex flex-col rounded-2xl sm:rounded-[30px] bg-brand-dark px-6 sm:px-10 py-8 sm:py-10"
   >
-    <span
-      class="self-start px-3 py-1 rounded-full bg-brand-light text-brand-dark font-body text-sm"
-    >
+    <span class={cn(badgeVariants({ size: "md" }), "self-start")}>
       Free quiz · 9 questions · 2 min
     </span>
 

@@ -4,16 +4,17 @@ import { UaFlagIcon } from "@/components/ui/flags/UaFlagIcon";
 import { UkFlagIcon } from "@/components/ui/flags/UkFlagIcon";
 import { KitExample } from "../KitExample";
 
-type FlagConfig = {
+type FlagLanguage = {
+  id: string;
   label: string;
-  Icon: React.FC<{ size?: number; className?: string }>;
+  Icon: React.ComponentType<{ size?: number }>;
 };
 
-const FLAG_EXAMPLES: FlagConfig[] = [
-  { label: "English", Icon: UkFlagIcon },
-  { label: "Spanish", Icon: EsFlagIcon },
-  { label: "Polish", Icon: PlFlagIcon },
-  { label: "Ukrainian", Icon: UaFlagIcon },
+const FLAG_EXAMPLES: FlagLanguage[] = [
+  { id: "es", label: "Spanish", Icon: EsFlagIcon },
+  { id: "pl", label: "Polish", Icon: PlFlagIcon },
+  { id: "ua", label: "Ukrainian", Icon: UaFlagIcon },
+  { id: "uk", label: "English (UK)", Icon: UkFlagIcon },
 ];
 
 const FLAG_SIZES = [16, 32, 48];
@@ -21,10 +22,13 @@ const FLAG_SIZES = [16, 32, 48];
 export const FlagsDemo = () => {
   return (
     <>
-      {FLAG_EXAMPLES.flatMap((flag) =>
+      {FLAG_EXAMPLES.map((language) =>
         FLAG_SIZES.map((size) => (
-          <KitExample key={`${flag.label}-${size}`} label={`${flag.label} · ${size}px`}>
-            <flag.Icon size={size} />
+          <KitExample
+            key={`${language.id}-${size}`}
+            label={`${language.label} · ${size}px`}
+          >
+            <language.Icon size={size} />
           </KitExample>
         )),
       )}

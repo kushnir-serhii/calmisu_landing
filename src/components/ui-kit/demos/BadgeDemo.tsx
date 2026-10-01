@@ -1,25 +1,31 @@
-import { Badge, type BadgeProps } from "@/components/ui/badge";
+import type { VariantProps } from "class-variance-authority";
+
+import { Badge, badgeVariants } from "@/components/ui/badge";
+import { PulseDot } from "@/components/ui/PulseDot";
 import { KitExample } from "../KitExample";
 
-// badgeVariants is not exported from ui/badge.tsx, so the variant type comes from BadgeProps (same VariantProps source).
-type BadgeVariant = NonNullable<BadgeProps["variant"]>;
+type BadgeSize = NonNullable<VariantProps<typeof badgeVariants>["size"]>;
 
-// Labels use the prop name, even though default/secondary look swapped. The gallery shows the components as they are.
-const BADGE_VARIANTS: { value: BadgeVariant; label: string }[] = [
-  { value: "default", label: "default" },
-  { value: "secondary", label: "secondary" },
-  { value: "destructive", label: "destructive" },
-  { value: "outline", label: "outline" },
+const BADGE_SIZES: { value: BadgeSize; label: string }[] = [
+  { value: "sm", label: "Small" },
+  { value: "md", label: "Medium" },
+  { value: "lg", label: "Large" },
 ];
 
 export const BadgeDemo = () => {
   return (
     <>
-      {BADGE_VARIANTS.map((variant) => (
-        <KitExample key={variant.value} label={variant.label}>
-          <Badge variant={variant.value}>{variant.label}</Badge>
+      {BADGE_SIZES.map((size) => (
+        <KitExample key={size.value} label={size.label}>
+          <Badge size={size.value}>early access</Badge>
         </KitExample>
       ))}
+      <KitExample label="With dot · Large">
+        <Badge size="lg">
+          <PulseDot />
+          early access
+        </Badge>
+      </KitExample>
     </>
   );
 };

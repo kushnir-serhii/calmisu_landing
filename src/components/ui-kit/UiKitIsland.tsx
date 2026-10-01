@@ -1,12 +1,13 @@
 import { kitGroups } from "./kitGroups";
 import { KitSidebar } from "./KitSidebar";
 import { KitSection } from "./KitSection";
+import { Toaster } from "@/components/ui/sonner";
 
 export const UiKitIsland = () => {
   return (
     <div className="mx-auto w-full max-w-full px-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
-        <h1 className="mb-12 text-4xl font-bold text-foreground">UI Kit</h1>
+        <h1 className="mb-12 font-display text-4xl font-normal text-foreground">UI Kit</h1>
         <div className="flex flex-col gap-6 md:grid md:grid-cols-[200px_minmax(0,1fr)] md:gap-10">
           <div className="md:sticky md:top-[calc(var(--header-h,61px)+1rem)]">
             <KitSidebar />
@@ -18,6 +19,7 @@ export const UiKitIsland = () => {
           </div>
         </div>
       </div>
+      <Toaster />
     </div>
   );
 };

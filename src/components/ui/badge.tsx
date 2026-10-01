@@ -4,34 +4,33 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
-  "inline-flex items-center rounded-full border px-3 py-0.5 text-xs font-base transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+  "inline-flex items-center justify-center gap-1 rounded-full bg-brand-100 text-brand-dark font-body font-normal",
   {
     variants: {
-      variant: {
-        default:
-          "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        secondary:
-          "border-transparent bg-primary text-primary-foreground hover:bg-primary/80",
-        destructive:
-          "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
-        outline: "text-foreground",
+      size: {
+        sm: "px-3 py-1 text-xs",
+        md: "px-3 py-1 text-sm sm:text-base",
+        lg: "px-3 sm:px-4 py-2 sm:py-3 text-base sm:text-lg leading-[150%]",
       },
     },
     defaultVariants: {
-      variant: "default",
+      size: "md",
     },
   },
 );
 
 export interface BadgeProps
   extends
-    React.HTMLAttributes<HTMLDivElement>,
+    React.HTMLAttributes<HTMLSpanElement>,
     VariantProps<typeof badgeVariants> {}
 
-function Badge({ className, variant, ...props }: BadgeProps) {
+function Badge({ className, size, children, ...props }: BadgeProps) {
   return (
-    <div className={cn(badgeVariants({ variant }), className)} {...props} />
+    <span className={cn(badgeVariants({ size }), className)} {...props}>
+      {children}
+    </span>
   );
 }
 
-export { Badge };
+// eslint-disable-next-line react-refresh/only-export-components
+export { Badge, badgeVariants };

@@ -19,4 +19,5 @@ export const navLinks: NavLink[] = [
   { label: "About", href: "/about/" },
   { label: "Privacy Policy", href: "/en/privacy-policy/" },
   { label: "Terms of Service", href: "/en/terms-of-service/" },
+  ...(import.meta.env.DEV ? [{ label: "UI Kit", href: "/ui-kit/" }] : []),
 ];

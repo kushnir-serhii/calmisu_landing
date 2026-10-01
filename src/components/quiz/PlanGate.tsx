@@ -2,7 +2,7 @@ import type { FormEvent } from "react";
 import { SectionHeading } from "@/components/ui/Section";
 import { SelectCard } from "@/components/ui/SelectCard";
 import { Button } from "@/components/ui/button";
-import { EmailField } from "@/components/ui/EmailField";
+import { Input } from "@/components/ui/input";
 
 interface PlanGateProps {
   platform: "ios" | "android";
@@ -85,12 +85,19 @@ export const PlanGate = ({
           </div>
         </div>
 
-        <EmailField
+        <label htmlFor="quiz-email" className="sr-only">
+          Email address
+        </label>
+        <Input
+          type="email"
           id="quiz-email"
+          name="email"
+          required
           value={email}
-          onChange={onEmailChange}
+          onChange={(e) => onEmailChange(e.target.value)}
+          placeholder="Enter your email address"
           error={status === "error"}
-          errorId="quiz-gate-error"
+          aria-describedby={status === "error" ? "quiz-gate-error" : undefined}
         />
 
         <label className="flex items-start gap-3 cursor-pointer">
@@ -121,8 +128,7 @@ export const PlanGate = ({
 
         <Button
           type="submit"
-          variant="black"
-          size="xl"
+          variant="dark"
           className="w-full"
           disabled={status === "loading" || !consent}
           aria-describedby={!consent ? "quiz-gate-consent-hint" : undefined}

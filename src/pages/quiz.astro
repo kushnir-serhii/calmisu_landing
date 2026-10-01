@@ -2,7 +2,7 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Header from "@/components/layout/Header.astro";
 import QuizIsland from "@/components/quiz/QuizIsland";
-import { Badge } from "@/components/ui/badge";
+import { badgeVariants } from "@/components/ui/badge";
 
 /**
  * Quiz entry point.
@@ -70,11 +70,9 @@ const source = Astro.url.searchParams.get("src") ?? "direct";
           data-quiz-intro
           class="flex flex-col items-center gap-4 w-full max-w-[740px] mx-auto text-center mb-12 sm:mb-16"
         >
-          <Badge
-            className="py-2 px-4 text-brand-dark font-body text-sm sm:text-base"
-          >
+          <span class={badgeVariants({ size: "md" })}>
             9 questions · about 2 minutes
-          </Badge>
+          </span>
 
           <h1
             class="text-foreground font-display text-4xl sm:text-5xl md:text-6xl font-normal leading-[95%]"

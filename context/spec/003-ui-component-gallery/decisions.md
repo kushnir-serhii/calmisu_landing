@@ -1,0 +1,92 @@
+# Decisions — 003 UI Component Gallery
+
+- [spec] Q: What form should the "Storybook" take? → A: A page inside the site laid out like Storybook (no separate tool).
+- [spec] TECH-HINT: Build as a page within the existing Astro site using the real components from `src/components/ui`; do not install Storybook.
+- [spec] Q: Who should be able to open it? → A: In dev mode, linked from the site nav; in production live but hidden — reachable only by direct URL.
+- [spec] TECH-HINT: Nav link rendered only in dev (`import.meta.env.DEV`); production page carries noindex and is excluded from the sitemap.
+- [spec] Q: How should states be shown? → A: All states side by side in a labelled grid; interactive parts still work when clicked. No live controls.
+- [spec] Q: Which components should be included? → A: Everything in `src/components/ui`, including layout helpers (Section, AnimatedSection), dialog, toasts, icons and flags.
+- [spec] ASSUMED: Gallery examples must not fire real side effects (analytics events, waitlist sign-ups).
+- [spec] ASSUMED: Page must work at phone width (375px) without horizontal scroll.
+- [spec] Q: What address should the gallery page live at? → A: /ui-kit/
+- [spec] Q: Show hover/focus looks as permanent static examples? → A: No — live only (hover/tab onto the example).
+- [spec] Q: What should clicking the "Join iOS Waitlist" example do? → A: Nothing — no waitlist dialog, no sign-up, no analytics.
+- [tech] Q: How should gallery Download buttons avoid analytics? → A: Extend DownloadButtons with opt-in `trackClicks?: boolean` (default true); gallery passes false.
+- [tech] Q: What should the EmailField error example show? → A: As shipped — no red border; red `text-destructive-text` message under the field, aria-invalid.
+- [tech] Q: Where should the dev-only UI Kit link appear? → A: Header + footer via one `import.meta.env.DEV` entry in navLinks.ts.
+- [tech] ASSUMED: Single island `UiKitIsland` with client:load (SSR markup); page uses `noindex` (nofollow), not noindexFollow.
+- [tech] ASSUMED: Scroll-reveal Replay uses a nested scroll container as the view() timeline; browsers without animation-timeline show static content + a note; ACs verified in Chromium.
+- [tech] ASSUMED: Completeness enforced by a test that globs src/components/ui/** against kitGroups[].covers; new variants are not auto-detected.
+- [tasks] ASSUMED: Tests are wanted (SKIP_TESTS = false); no testing agent is installed, so the Feature Testing & Regression slice uses `general-purpose` (default when question not answered).
+- [tasks] ASSUMED: Component islands/demos go to `react-islands`, page/nav to `astro-architect`, sitemap filter to `content-seo`, 375px/style review to `tailwind-stylist`.
+- [tasks] Q: Keep the plan as saved? → A: Looks good — keep it as saved
+- [implement] Q: First open spec is 002 (only Slice 10 Release left, gated on human email rewrite and outward-facing push/merge). Which spec to implement? → A: 003-ui-component-gallery
+- [implement] ASSUMED: Slice 1 task 1 creates `kitGroups.ts` with the `KitGroup` type and an empty array, because `ButtonDemo` does not exist yet; the Button entry is added when ButtonDemo is created (task 6 already says "Register it in kitGroups.ts"). This keeps typecheck green between tasks.
+- [implement] ASSUMED: `npm run lint` already fails with 5 errors in generated `.astro/content.d.ts` / `.astro/types.d.ts` (plus 2 warnings in ui/form.tsx, ui/sonner.tsx). These existed before this spec; Verify tasks treat lint as passing when no problem is in files this spec touches.
+- [implement] Q: `npm test` fails 6/68 in quiz tests (stale after the quiz title change and the iPhone→iOS rename, commit 400cea4), unrelated to 003. How to handle? → A: Update the quiz tests to match the current code, then continue.
+- [implement] ASSUMED: Slice 3 demos are built in parallel by three agents that do not touch `kitGroups.ts`; a fourth (haiku) agent then registers all four groups in spec order, which avoids concurrent edits to the registry.
+- [implement] Q: AppleIcon/PlayStoreIcon are private to DownloadButtons.tsx; how should the gallery get them? → A: Consolidate buttons: one Button component (like button.tsx, cva variants) that also covers the DownloadButtons store buttons; keep only the styles used today, delete unused ones; iOS / Google Play icons rendered via a prop.
+- [implement] Q: Which styles should the merged Button keep? (used today: black×{xl,pill}, destructive×default, store CTA h-[54px] rounded-xl bg-foreground; unused: default/outline/secondary/ghost/link, sm/lg/icon) → A: "I need mostly use sizes and roundings as DownloadButton" — i.e. standardise sizes/radii on the DownloadButtons look (h-[54px], rounded-xl); exact keep/delete list to settle in the spec amendment.
+- [implement] Q: Store button API? → A: `store="ios" | "android"` prop picks the Apple / Google Play icon (icon on the right); caller supplies label and onClick/href (asChild for the Play link).
+- [implement] Q: What happens to the DownloadButtons wrapper? → A: Keep as a thin composer (layout, ios/android-only, track(), PLAY_URL) that renders two `<Button variant="store">`; callers unchanged; still gets `trackClicks`.
+- [implement] Q: This contradicts spec 003 out-of-scope ("don't change existing blocks") and the 7×6 Button matrix. How to fold it in? → A: Pause the implement run; amend spec first via /awos:spec → /awos:tech → /awos:tasks (Change Log), then resume.
+- [spec] Q: Regular dark buttons identical to the store buttons (colour, height, corners), just without the icon? → A: Yes, identical.
+- [spec] Q: Keep the small "pill" size for compact actions (7-day "Start")? → A: Keep pill; sizes are standard + pill only.
+- [spec] Q: Quiz big black buttons and "Notify Me" change to 54px with the download buttons' corners? → A: Yes, match download.
+- [spec] Q: Red "Delete account" button moves to 54px with the download buttons' corners? → A: Yes, standard size.
+- [spec] TECH-HINT: Button variants after the merge: `dark` (= today's store look, bg-foreground text-background, replaces `black`), `destructive`, `store` (dark + `store="ios"|"android"` icon on the right); sizes `default` (h-[54px] rounded-xl, the DownloadButtons look, replaces `xl` and old default) and `pill`. Delete default/outline/secondary/ghost/link and sm/lg/icon/xl. DownloadButtons stays a thin composer (layout, only, track(), PLAY_URL, trackClicks).
+- [spec] TECH-HINT: ButtonDemo matrix becomes 3 styles × 2 sizes + one disabled example per style + store iOS/Android + with-icon + asChild link.
+- [tech] ASSUMED: Amendment drafted in the orchestrator without Explore/specialist subagents (5 Button call sites, inspected directly).
+- [tech] ASSUMED: Button base typography becomes `font-body font-normal`, size default `text-base sm:text-lg`, so the red delete-account button also changes font size/weight (follows from "standard size").
+- [tech] ASSUMED: AppleIcon/PlayStoreIcon move verbatim to `src/components/ui/AppleIcon.tsx` and `PlayStoreIcon.tsx`; `ui/icons.tsx` stays as is.
+- [tech] ASSUMED: `store` prop appends the icon after children; with `asChild`, Radix `Slottable` keeps the icon inside the `<a>`. Defaults: variant dark, size default.
+- [tech] ASSUMED: Gallery Button group = 3x2 matrix (store cells use iOS) + 3 disabled + Store (Google Play) + With icon + As child = 12 cells.
+- [tech] Q: Hover effect for dark buttons after the merge? → A: Shine like download (dark and store both use `cta-btn`).
+- [tech] Q: Include homepage QuizPromo.astro "Start now" link in the merge? → A: Match it too, via `buttonVariants({ variant: "dark" })` classes in the .astro (4th visible change, keeps white focus ring).
+- [spec] Q: Merge inputs: which look is the standard? → A: Text input look (h-10, thin border, small corners); quiz + waitlist email fields change to it.
+- [spec] Q: Merge gallery "Text input" + "Email field" into one group? → A: "Use only one rounding, use only one" — one Input group, one look, one corner radius.
+- [spec] Q: Keep the unused file-picker input? → A: Remove it.
+- [spec] Q: Error state red border? → A: Add red border (plus existing red message).
+- [spec] ASSUMED: "Only one" also drops EmailField's bordered/borderless variants — the merged input is always bordered.
+- [spec] ASSUMED: Delete-account fields get the red error border too (error look lives in the shared input).
+- [spec] TECH-HINT: Keep `ui/input.tsx` as the single Input (current classes, minus `file:*`); add `error?: boolean` → `aria-invalid` + `border-destructive`; delete `ui/EmailField.tsx`; PlanGate/NotifyMe use `<Input type="email" …>` with the email attrs (autoComplete, inputMode, autoCapitalize, spellCheck, maxLength 254, required) passed as props or defaulted for type="email"; sr-only label stays at call sites. FormControl's aria-invalid in delete-account should drive the same red border.
+- [spec] TECH-HINT: Gallery: replace InputDemo + EmailFieldDemo/EmailFieldExample with one InputDemo; kitGroups entry covers ["input","label"] only; remove "EmailField" cover.
+- [spec] Q: Merge the 6 site pills into one fill + one text colour (dark brand blue)? → A: Yes — one fill, one text colour.
+- [spec] Q: How many badge sizes? → A: 3 — small (blog tag), medium (quiz promo/teaser, quiz intro, "Your pattern"), large (hero "early access").
+- [spec] Q: Hero pulsing dot as a badge option? → A: "Put all content in as children" — badge renders arbitrary children; hero passes its dot as a child.
+- [spec] Q: Remove unused badge styles (secondary/destructive/outline)? → A: Remove them.
+- [spec] ASSUMED: The single fill is one of the near-identical tokens (secondary 220 43% 95%, brand-light 222 43% 95%, brand-100 216 42% 93%); "reads clearly on dark background" for QuizPromo/QuizTeaser.
+- [spec] ASSUMED: "Your pattern" is a medium badge and keeps its uppercase + letter-spacing via a call-site class (text look unchanged).
+- [spec] TECH-HINT: `ui/badge.tsx` cva: drop `variant`, add `size: sm|md|lg` (sm = TagPill: text-xs px-3 py-1; md = text-sm sm:text-base px-3 py-1 → or quiz.astro's py-2 px-4, pick one; lg = Hero: py-2 sm:py-3 px-3 sm:px-4 text-base sm:text-lg gap-1); base = rounded-full bg-brand-100 (or secondary) text-brand-dark font-body inline-flex items-center; render `<span>` with children. Astro callers (HeroSection, QuizPromo, QuizTeaser, TagPill, quiz.astro) use the React Badge server-rendered or a `badgeVariants` class export (like QuizPromo used buttonVariants). TagPill becomes a thin wrapper or is replaced by Badge size="sm". Hero dot stays markup passed as children (motion-safe pulse).
+- [spec] TECH-HINT: BadgeDemo = 3 sizes + "With dot" example; kitGroups Badge entry unchanged in covers.
+- [tech] ASSUMED: Input + Badge amendments drafted in the orchestrator without Explore/specialist subagents (3 Input and 6 Badge call sites, inspected directly), as for the Button amendment.
+- [tech] ASSUMED: `Input` red border keys on `aria-[invalid=true]:border-destructive`, so FormControl-driven delete-account fields need no call-site change; `error` prop just sets aria-invalid.
+- [tech] ASSUMED: `type="email"` defaults autoComplete/inputMode/autoCapitalize/spellCheck/maxLength but NOT `required` (delete-account form has no noValidate; native bubble would replace the zod message). PlanGate/NotifyMe pass `required`.
+- [tech] ASSUMED: Badge fill = `bg-brand-100` (hero/TagPill token; brand-dark text is documented 4.9:1 on it); `brand-light` and `secondary` pills move to it.
+- [tech] ASSUMED: Badge md = `px-3 py-1 text-sm sm:text-base` (QuizPromo/QuizTeaser padding, quiz intro/"Your pattern" text size); QuizPromo/QuizTeaser text grows to base on ≥640px.
+- [tech] ASSUMED: Astro callers (Hero, QuizPromo, QuizTeaser, TagPill, quiz.astro) use `badgeVariants()` classes on a `<span>`, not React `<Badge>`, because @astrojs/react wraps static children in an inline `<astro-static-slot>` that would break the hero's dot + text gap.
+- [tech] ASSUMED: Hero dot extracted to new `ui/PulseDot.tsx` (shared by hero and gallery); kitGroups Badge covers ["badge", "PulseDot"].
+- [tech] ASSUMED: InputDemo keeps its render-function data pattern with uncontrolled `defaultValue` examples; no InputExample component.
+- [tech] Q: Medium badge text size? → A: text-sm sm:text-base (promo/teaser grow on ≥640px).
+- [tech] Q: Single badge fill? → A: brand-100.
+- [tech] Q: How to share the hero pulsing dot? → A: New ui/PulseDot.tsx.
+- [tech] Q: Email attrs on Input type="email"? → A: Defaults without required; PlanGate/NotifyMe pass required.
+- [tasks] ASSUMED: tasks.md re-planned after the Button/Input/Badge amendments (reused the earlier choices: tests wanted, `general-purpose` as QA agent, same specialist mapping). Slices 1–3 stay ticked; merges become new Slices 4–6, old 4–8 become 7–11, tests are Slice 12. `trackClicks` moved into the Button slice (DownloadButtons rebuild).
+- [tasks] Q: Keep the re-planned tasks.md as saved? → A: Looks good — keep it as saved
+- [implement] ASSUMED: `npx astro check` reports 1 pre-existing error in `src/pages/blog/[...slug].astro:239` (FaqItem type); that file and FAQAccordion are untouched by this spec, so Verify tasks don't treat it as a regression.
+- [spec] Q: (user instruction) Keep DownloadButtons as a thin composer? → A: No. Use only one button component: keep only the Button file and remove DownloadButtons. This replaces the earlier [implement] answer "Keep as a thin composer".
+- [spec] ASSUMED: Visitors see no change on hero, CTASection or AppPromoCard (same text, icons, layout, Play link, waitlist dialog, cta_click tracking).
+- [spec] ASSUMED: The gallery's Download buttons group is dropped; store examples in the Button group are inert (no navigation, sign-up or analytics).
+- [spec] TECH-HINT: Delete `ui/DownloadButtons.tsx`, `ui-kit/demos/DownloadButtonsDemo.tsx` and its kitGroups entry (cover "DownloadButtons"). HeroCTA, CTASection and AppPromoCard.astro render `<Button variant="store" store="ios|android">` directly, with their own layout classes, `track("cta_click", …)` and `PLAY_URL` (`asChild` <a>). `trackClicks` goes away. Update the DownloadButtons tests in uiKit.acceptance.test.tsx so they cover the call sites or Button store. AppPromoCard is .astro, so it needs a React island (or an existing one) to keep the onClick tracking and the waitlist dialog.
+- [spec] Q: (user instruction) Show Section/heading and Scroll-reveal on the ui-kit page? → A: No, remove both groups.
+- [spec] ASSUMED: Section, SectionHeading and AnimatedSection stay in the codebase (used on landing and quiz pages); only their gallery groups go away. The completeness rule excludes them.
+- [spec] TECH-HINT: Delete `ui-kit/demos/SectionDemo.tsx` and `AnimatedSectionDemo.tsx` and their kitGroups entries. The completeness test gets an explicit exclusion list: ["Section", "Section.astro", "AnimatedSection", "AnimatedSection.astro"]. Drop their gallery tests in uiKit.acceptance.test.tsx.
+- [spec] Q: Toasts are used only for the delete-account failure. What should the gallery show? → A: Remove toast from the site entirely.
+- [spec] ASSUMED: The delete-account failure (today `toast.error(error.message)`) becomes a red on-page message directly under the delete button, same text, cleared on resubmit. Without it the failure would be invisible.
+- [spec] TECH-HINT: Delete `ui/sonner.tsx`, `ui-kit/demos/ToastDemo.tsx` and the Toasts kitGroups entry; remove `<Sonner />` and the `toast` import from DeleteAccountIsland; render `mutation.error.message` under the submit button (role="alert", `text-destructive-text`, the FormMessage look); `mutation.mutate` already resets the error on resubmit. Uninstall the `sonner` package (and `next-themes` if only sonner used it). Drop the toast tests; fix the "success toasts" wording in the `ui/icons.tsx` comment.
+
+- [tech] ASSUMED: Removal amendments (DownloadButtons, Section/Scroll-reveal groups, toasts) drafted in the orchestrator without Explore/specialist subagents (3 store-button call sites, 1 toast call site, inspected directly), as for the earlier amendments.
+- [tech] ASSUMED: HeroCTA and CTASection inline their store-button containers and width classes verbatim from DownloadButtons' output; the Android `<a>` markup repeating in 3 files is accepted, since a shared store-buttons wrapper would re-create DownloadButtons.
+- [tech] ASSUMED: The Section/AnimatedSection exclusion lives as `KIT_EXCLUDED` exported from kitGroups.ts; the completeness test also fails on stale covers/excluded names.
+- [tech] ASSUMED: `next-themes` is uninstalled with `sonner` (only `ui/sonner.tsx` imports it). Delete-account failure message is `role="alert"` with the FormMessage look, driven by `mutation.isError`, untranslated API message as before.
+- [tech] Q: How should the static blog/about promo card keep Android click tracking without DownloadButtons? → A: Tiny React island `blog/AppPromoAndroidLink.tsx` (Button variant="store" store="android" asChild + track), client:load.

@@ -32,11 +32,13 @@ export default defineConfig({
       //   - the `noindex` prop in src/pages/delete-account.astro
       //   - the `noindexFollow` prop on the /alma/* pages
       //   - the `noindexFollow` prop in src/pages/quiz/result.astro
+      //   - the `noindex` prop in src/pages/ui-kit.astro
       // Note /quiz/ itself IS indexable — only the result page is excluded.
       filter: (page) =>
         !page.startsWith("https://calmisu.com/delete-account") &&
         !page.includes("/alma/") &&
-        !page.startsWith("https://calmisu.com/quiz/result"),
+        !page.startsWith("https://calmisu.com/quiz/result") &&
+        !page.startsWith("https://calmisu.com/ui-kit/"),
     }),
   ],
   vite: {

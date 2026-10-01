@@ -9,7 +9,7 @@ vi.mock("@/lib/api", () => ({
   postLead: vi.fn().mockResolvedValue({
     ok: true,
     promoCode: "12345",
-    promoExpiresAt: "2026-09-29T00:00:00.000Z",
+    promoExpiresAt: "2099-01-01T00:00:00.000Z",
   }),
 }));
 
@@ -287,16 +287,16 @@ describe("QuizResultIsland", () => {
     // No explicit UA override is set here, so jsdom's default UA is not iOS
     // and the default radio choice should be Android.
     const androidRadio = screen.getByRole("radio", { name: "Android" });
-    const iosRadio = screen.getByRole("radio", { name: "iPhone" });
+    const iosRadio = screen.getByRole("radio", { name: "iOS" });
     expect(androidRadio).toHaveAttribute("aria-checked", "true");
     expect(iosRadio).toHaveAttribute("aria-checked", "false");
   });
 
-  it("selecting iPhone sends platform: 'ios' with source: 'quiz' (not 'ios_waitlist')", async () => {
+  it("selecting iOS sends platform: 'ios' with source: 'quiz' (not 'ios_waitlist')", async () => {
     stubLocation("?p=panic");
     render(<QuizResultIsland />);
 
-    fireEvent.click(screen.getByRole("radio", { name: "iPhone" }));
+    fireEvent.click(screen.getByRole("radio", { name: "iOS" }));
     fireEvent.change(screen.getByLabelText("Email address"), {
       target: { value: "ios@example.com" },
     });

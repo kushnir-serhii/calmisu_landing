@@ -58,7 +58,7 @@ describe.skipIf(!distExists)("quiz build output", () => {
   it("/quiz/ has the exact spec title", () => {
     const html = read("quiz/index.html");
     expect(html).toContain(
-      "<title>What&#39;s Your Anxiety Pattern? — 2-Minute Quiz | Calmisu</title>"
+      "<title>What&#39;s Your Anxiety Pattern? 2 Minute Quiz | Calmisu</title>"
     );
   });
 

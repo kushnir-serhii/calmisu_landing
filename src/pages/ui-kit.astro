@@ -1,0 +1,24 @@
+---
+// Utility page, not a marketing page: it ships noindex and is excluded from the
+// sitemap (see the `filter` in astro.config.mjs). Keep the two in sync.
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Header from "@/components/layout/Header.astro";
+import { UiKitIsland } from "@/components/ui-kit/UiKitIsland";
+import Footer from "@/components/layout/Footer";
+---
+
+<BaseLayout
+  title="UI Kit — Calmisu"
+  description="Component gallery for Calmisu UI components."
+  noindex
+>
+  <div class="flex flex-col items-center w-full bg-background">
+    <Header />
+
+    <main class="flex flex-col items-center w-full">
+      <UiKitIsland client:load />
+    </main>
+
+    <Footer />
+  </div>
+</BaseLayout>

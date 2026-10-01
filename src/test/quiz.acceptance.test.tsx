@@ -93,11 +93,11 @@ describe("back/forward navigation and analytics counting", () => {
 // ─────────────────────────────────────────────────────────────────────────
 describe("iPhone path shows no Play Store surface", () => {
   // @spec: 002-calm-profile-quiz @regression
-  it("renders no play.google.com link and no code after unlocking as iPhone", async () => {
+  it("renders no play.google.com link and no code after unlocking as iOS", async () => {
     stubLocation("?p=panic");
     const { container } = render(<QuizResultIsland />);
 
-    fireEvent.click(screen.getByRole("radio", { name: "iPhone" }));
+    fireEvent.click(screen.getByRole("radio", { name: "iOS" }));
     fireEvent.change(screen.getByLabelText("Email address"), {
       target: { value: "ios@example.com" },
     });
